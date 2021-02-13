@@ -46,8 +46,8 @@ let animate = function () {
   if(input.left_mouse_button_released)
     console.log('released')
 
-  console.log("mouse_pos", input.mouse_pos) // on mobile this will represent the position of the primary touch  
-  console.log("normalized mouse pos", input.NDC) // NDC stands for normalized device coordinates
+  console.log("pointer_pos", input.pointer_pos) // on desktop this is mouse position, on mobile this will represent the primary touch position
+  console.log("normalized pointer pos", input.NDC) // NDC stands for normalized device coordinates
 
 
   input.clear(); // call this to prepare for next frame
@@ -75,8 +75,8 @@ input.middle_mouse_button_pressed     //boolean, mouse only
 input.middle_mouse_button_down        //boolean, mouse only
 input.middle_mouse_button_released    //boolean, mouse only
 
-input.mouse_pos                       //{x,y} screen coordinates of the mouse (or primary touch) position
-input.mouse_pos_delta                 //{x,y} difference between previous position and current position.
+input.pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position
+input.pointer_pos_delta               //{x,y} difference between previous position and current position.
 input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
 

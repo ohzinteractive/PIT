@@ -179,7 +179,7 @@ export default class InputController
 
 
 
-  get mouse_pos()
+  get pointer_pos()
   {
     return {
       x: this.active_input_module.pointer_pos.x,
@@ -187,7 +187,7 @@ export default class InputController
     };
   }
 
-  get mouse_pos_delta()
+  get pointer_pos_delta()
   {
     let pos_delta =  this.active_input_module.pointer_pos_delta;
     pos_delta.y *= -1;
@@ -196,20 +196,20 @@ export default class InputController
 
   get NDC()
   {
-    this.check_for_legal_bounds(this.mouse_pos);
+    this.check_for_legal_bounds(this.pointer_pos);
 
     return {
-      x: (this.mouse_pos.x / this.element_bounds.width) * 2 - 1,
-      y: (this.mouse_pos.y / this.element_bounds.height) * 2 - 1
+      x: (this.pointer_pos.x / this.element_bounds.width) * 2 - 1,
+      y: (this.pointer_pos.y / this.element_bounds.height) * 2 - 1
     };
   }
 
   get NDC_delta()
   {
-    this.check_for_legal_bounds(this.mouse_pos);
+    this.check_for_legal_bounds(this.pointer_pos);
     return {
-      x: this.mouse_pos_delta.x / this.element_bounds.width,
-      y: this.mouse_pos_delta.y / this.element_bounds.height
+      x: this.pointer_pos_delta.x / this.element_bounds.width,
+      y: this.pointer_pos_delta.y / this.element_bounds.height
     }
   }
 
