@@ -1,0 +1,22 @@
+{
+  "name": "pit-js",
+  "version": "1.0.0",
+  "description": "Pollable Input",
+  "module": "examples/build/PIT.js",
+  "source": "src/PIT.js",
+  "dependencies": {},
+  "devDependencies": {
+    "parcel": "2.0.0-nightly.514"
+  },
+  "scripts": {
+    "build": "parcel build ./src/PIT.js"
+  },
+  "keywords": [
+    "input",
+    "ohzi",
+    "pollable",
+    "game"
+  ],
+  "author": "OHZI Interactive",
+  "license": "MIT"
+}
