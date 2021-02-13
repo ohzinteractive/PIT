@@ -36,13 +36,13 @@
 			var animate = function () {
 				// console.log("mouse_pos", input.mouse_pos.x, "NDC", input.NDC.x);
 				// console.log("mouse_pos", input.mouse_pos.y, "NDC", input.NDC.y);
-				// console.log("mouse_delta", input.mouse_pos_delta.x, "NDC delta", input.NDC_delta.x);
+				// console.log("mouse_delta", input.NDC.x, "NDC delta", input.NDC_delta.x);
 
 
 				if(input.left_mouse_button_pressed)
 					console.log('pressed')
 
-				if(input.left_mouse_button_down)
+				if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)
 				{
 					cube.rotation.y += input.NDC_delta.x *2
 					console.log('down')
@@ -51,6 +51,9 @@
 				if(input.left_mouse_button_released)
 					console.log('released')
 
+				let scale = cube.scale.x;
+				scale -= input.scroll_delta/10;
+				cube.scale.set(scale, scale, scale);
 
 
 				renderer.render(scene, camera);

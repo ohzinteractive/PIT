@@ -18,19 +18,38 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-    for(let i=0; i< this.pointers.length; i++)
-    {
-      x += this.pointers[i].x;
-      y += this.pointers[i].y;
-    }
 
-    x /= Math.max(1, this.pointers.length);
-    y /= Math.max(1, this.pointers.length);
+    let p = this.pointers.find( p => p.is_primary );
+
+    if(p)
+    {
+      x = p.x;
+      y = p.y;
+    }
 
     return {
       x: x,
       y: y
     }
+  }
+
+  get pointer_pos_delta()
+  {
+    let x = 0;
+    let y = 0;
+
+    let p = this.pointers.find( p => p.is_primary );
+
+    if(p)
+    {
+      x = p.x - p.previous_x
+      y = p.y - p.previous_y
+    }
+ 
+    return {
+      x: x,
+      y: y
+    }  
   }
 
   get pointer_count()
@@ -65,17 +84,22 @@ export default class TouchInputModule
   }
   update_pointer(pointer_id, x, y)
   {
-    let p = this.pointers.find((p)=>{ return p.id === pointer_id});
+    let p = this.pointers.find( p => p.id === pointer_id );
     if(p === undefined)
     {
       p = {
         id: pointer_id,
         x: x,
         y: y,
+        previous_x: x,
+        previous_y: y,
         is_primary: this.pointers.length === 0
       }
       this.pointers.push(p)
     }
+
+    p.previous_x = p.x;
+    p.previous_y = p.y;
 
     p.x = x;
     p.y = y;
@@ -87,7 +111,7 @@ export default class TouchInputModule
 
   remove_pointer(pointer_id)
   {
-    let index = this.pointers.findIndex((p)=>{ return p.id === pointer_id});
+    let index = this.pointers.findIndex( p => p.id === pointer_id );
     if(index !== undefined)
     {
       this.pointers.splice(index, 1);

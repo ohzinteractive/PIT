@@ -46,7 +46,7 @@ let animate = function () {
   if(input.left_mouse_button_released)
     console.log('released')
 
-  console.log("mouse_pos", input.mouse_pos) // on mobile this will represent the center of all active touches  
+  console.log("mouse_pos", input.mouse_pos) // on mobile this will represent the position of the primary touch  
   console.log("normalized mouse pos", input.NDC) // NDC stands for normalized device coordinates
 
 
@@ -75,9 +75,9 @@ input.middle_mouse_button_pressed     //boolean, mouse only
 input.middle_mouse_button_down        //boolean, mouse only
 input.middle_mouse_button_released    //boolean, mouse only
 
-input.mouse_pos                       //{x,y} screen coordinates of the mouse position, or the center of all active touches
+input.mouse_pos                       //{x,y} screen coordinates of the mouse (or primary touch) position
 input.mouse_pos_delta                 //{x,y} difference between previous position and current position.
-input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or center of all active touches
+input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
 
 input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or to pinching on the screen [-1..1]

@@ -18,6 +18,7 @@ export default class MouseInputModule
 
 
     this.pointer_pos = {x: 0, y: 0};
+    this.previous_pointer_pos = {x: 0, y: 0};
 
     this.scroll_delta = 0;
   }
@@ -35,8 +36,12 @@ export default class MouseInputModule
 
   pointer_down(event)
   {
+
     this.pointer_pos.x = event.clientX;
     this.pointer_pos.y = event.clientY;
+
+    this.previous_pointer_pos.x = event.clientX;
+    this.previous_pointer_pos.y = event.clientY;
 
     switch(event.button)
     {
@@ -82,7 +87,7 @@ export default class MouseInputModule
 
   pointer_cancel(event)
   {
-    this.pointer_pos(event)
+    this.pointer_out(event)
   }
   pointer_out(event)
   {
@@ -165,6 +170,22 @@ export default class MouseInputModule
 
     this.scroll_delta = 0;
 
+    this.update_previous_pointer_pos();
+
+  }
+
+  get pointer_pos_delta()
+  {
+    return {
+      x: this.pointer_pos.x - this.previous_pointer_pos.x,
+      y: this.pointer_pos.y - this.previous_pointer_pos.y
+    }
+  }
+
+  update_previous_pointer_pos()
+  {
+    this.previous_pointer_pos.x = this.pointer_pos.x;
+    this.previous_pointer_pos.y = this.pointer_pos.y;
   }
 
 }

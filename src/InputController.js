@@ -18,7 +18,6 @@ export default class InputController
       width: 1,
       height: 1
     };
-    this.last_mouse_pos = {x: 0, y:0};
 
     this.update_element_bounds();
 
@@ -61,7 +60,6 @@ export default class InputController
       if (self.mouse_input_allowed())
       {
         self.mouse_input_module.pointer_down(event);
-        self.update_last_mouse_pos();
         self.set_mouse_input_active()
       }
     }, false);
@@ -96,7 +94,6 @@ export default class InputController
     this.touch_input_module.clear();
     this.mouse_input_module.clear();
 
-    this.update_last_mouse_pos();
   }
 
   update_element_bounds()
@@ -167,6 +164,21 @@ export default class InputController
     return this.mouse_input_module.middle_mouse_button_released;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   get mouse_pos()
   {
     return {
@@ -177,10 +189,9 @@ export default class InputController
 
   get mouse_pos_delta()
   {
-    return {
-      x: this.mouse_pos.x - this.last_mouse_pos.x,
-      y: this.mouse_pos.y - this.last_mouse_pos.y
-    };
+    let pos_delta =  this.active_input_module.pointer_pos_delta;
+    pos_delta.y *= -1;
+    return pos_delta;
   }
 
   get NDC()
@@ -210,12 +221,6 @@ export default class InputController
     }
   }
 
-  update_last_mouse_pos()
-  {
-    this.last_mouse_pos.x = this.mouse_pos.x;
-    this.last_mouse_pos.y = this.mouse_pos.y;
-  }
-
   get scroll_delta()
   {
     return this.active_input_module.scroll_delta;
@@ -223,6 +228,6 @@ export default class InputController
 
   get pointer_count()
   {
-    return this.active_input_module.pointers_count;
+    return this.active_input_module.pointer_count;
   }
 }
