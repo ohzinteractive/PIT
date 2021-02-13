@@ -14,7 +14,7 @@ Currently PIT supports the following:
   - Check for mouse buttons (left right middle)
   - Mouse scroll and touch pinch to zoom merged into the same variable
   - Query amount of active pointers (for mouse always 1 if any button is pressed)
-
+  - Allows to define a subregion that will be used to compute position coordinates
 
 
 ### Dependencies
@@ -63,6 +63,14 @@ animate();
 The API provides the following accesible properties
 
 ```sh
+let input = new InputController(dom_element, subregion_dom_element) 
+// dom_element will be the main element onto which the events will be hooked into.
+// If a subregion_dom_element is provided, then the coordinates will be reported into its 
+// relative space. This will allow you to keep moving the mouse outside the area of interest
+// while still receiving elements of the parent element. Notice that if the mouse goes outside
+// of the subregion, the NDC coordinates will also be outside the [-1..1] range.
+
+
 input.left_mouse_button_pressed       //boolean, works for left mouse button or first touch on the screen (primary touch)
 input.left_mouse_button_down          //boolean, works for left mouse button or first touch on the screen (primary touch)
 input.left_mouse_button_released      //boolean, works for left mouse button or first touch on the screen (primary touch)
@@ -82,6 +90,8 @@ input.NDC_delta                       //{x,y} [-1..1] difference between previou
 
 input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or to pinching on the screen [-1..1]
 input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches 
+
+input.pointer_is_within_bounds        //boolean, true if the mouse or primary touch is contained within the bounds of the subregion
 ```
 
 When a button is pressed on the mouse, or the first finger is put on the screen, the following actions will occur:

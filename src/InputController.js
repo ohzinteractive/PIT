@@ -3,23 +3,23 @@ import TouchInputModule from './TouchInputModule';
 
 export default class InputController
 {
-  constructor(dom_element)
+  constructor(dom_element, sub_region_element)
   {
     this.dom_element = dom_element;
-
+    this.sub_region_element = sub_region_element === undefined? dom_element : sub_region_element;
     this.mouse_input_module = new MouseInputModule();
     this.touch_input_module = new TouchInputModule();
 
     this.active_input_module = this.mouse_input_module;
 
-    this.element_bounds = {
+    this.region_bounds = {
       x: 0,
       y: 0,
       width: 1,
       height: 1
     };
 
-    this.update_element_bounds();
+    this.update_region_bounds();
 
     this.touch_cooldown = new Date() - 1000;
 
@@ -93,16 +93,16 @@ export default class InputController
   {
     this.touch_input_module.clear();
     this.mouse_input_module.clear();
-
+    this.update_region_bounds();
   }
 
-  update_element_bounds()
+  update_region_bounds()
   {
-    let element_bounds = this.dom_element.getBoundingClientRect();
-    this.element_bounds.x = element_bounds.x;
-    this.element_bounds.y = element_bounds.y;
-    this.element_bounds.width = element_bounds.width;
-    this.element_bounds.height = element_bounds.height;
+    let region_bounds = this.sub_region_element.getBoundingClientRect();
+    this.region_bounds.x = region_bounds.left;
+    this.region_bounds.y = region_bounds.top;
+    this.region_bounds.width = region_bounds.width;
+    this.region_bounds.height = region_bounds.height;
   }
 
   mouse_input_allowed()
@@ -181,10 +181,7 @@ export default class InputController
 
   get pointer_pos()
   {
-    return {
-      x: this.active_input_module.pointer_pos.x,
-      y: this.element_bounds.height - this.active_input_module.pointer_pos.y
-    };
+    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
   }
 
   get pointer_pos_delta()
@@ -199,8 +196,8 @@ export default class InputController
     this.check_for_legal_bounds(this.pointer_pos);
 
     return {
-      x: (this.pointer_pos.x / this.element_bounds.width) * 2 - 1,
-      y: (this.pointer_pos.y / this.element_bounds.height) * 2 - 1
+      x: (this.pointer_pos.x / this.region_bounds.width) * 2 - 1,
+      y: (this.pointer_pos.y / this.region_bounds.height) * 2 - 1
     };
   }
 
@@ -208,17 +205,25 @@ export default class InputController
   {
     this.check_for_legal_bounds(this.pointer_pos);
     return {
-      x: this.pointer_pos_delta.x / this.element_bounds.width,
-      y: this.pointer_pos_delta.y / this.element_bounds.height
+      x: this.pointer_pos_delta.x / this.region_bounds.width,
+      y: this.pointer_pos_delta.y / this.region_bounds.height
     }
   }
 
   check_for_legal_bounds()
   {
-    if(this.element_bounds.width === 0 || this.element_bounds.height === 0)
+    if(this.region_bounds.width === 0 || this.region_bounds.height === 0)
     {
-      console.error("Cannot get normalized mouse position for target element due to the element having 0 width or height", this.dom_element, this.element_bounds)
+      console.error("Cannot get normalized mouse position for target element due to the element having 0 width or height", this.dom_element, this.region_bounds)
     }
+  }
+
+  transform_pos_to_subregion(pos)
+  {
+    return {
+      x: pos.x - this.region_bounds.x,
+      y: this.region_bounds.height - (pos.y - this.region_bounds.y ) 
+    };
   }
 
   get scroll_delta()
