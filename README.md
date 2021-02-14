@@ -88,6 +88,10 @@ input.pointer_pos_delta               //{x,y} difference between previous positi
 input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
 
+input.pointer_center                  //{x,y} the center of all active touches. If using mouse, this is the same as pointer_pos
+input.pointer_center_NDC              //{x,y} [-1..1] the center of all active touches. If using mouse, this is the same as pointer_pos
+
+
 input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or to pinching on the screen [-1..1]
 input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches 
 

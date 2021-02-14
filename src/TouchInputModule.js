@@ -57,6 +57,27 @@ export default class TouchInputModule
     return this.pointers.length;
   }
 
+  get pointer_center()
+  {
+    let x = 0;
+    let y = 0;
+
+
+    for(let i=0; i< this.pointers.length; i++)
+    {
+      x += this.pointers[i].x;
+      y += this.pointers[i].y;
+    }
+
+    x /= Math.max(1, this.pointers.length);
+    y /= Math.max(1, this.pointers.length);
+
+    return {
+      x: x,
+      y: y
+    }
+  }
+
   update_pointer_separation()
   {
     if(this.pointers.length === 2)

@@ -167,49 +167,6 @@ export default class InputController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  get pointer_pos()
-  {
-    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
-  }
-
-  get pointer_pos_delta()
-  {
-    let pos_delta =  this.active_input_module.pointer_pos_delta;
-    pos_delta.y *= -1;
-    return pos_delta;
-  }
-
-  get NDC()
-  {
-    this.check_for_legal_bounds(this.pointer_pos);
-
-    return {
-      x: (this.pointer_pos.x / this.region_bounds.width) * 2 - 1,
-      y: (this.pointer_pos.y / this.region_bounds.height) * 2 - 1
-    };
-  }
-
-  get NDC_delta()
-  {
-    this.check_for_legal_bounds(this.pointer_pos);
-    return {
-      x: this.pointer_pos_delta.x / this.region_bounds.width,
-      y: this.pointer_pos_delta.y / this.region_bounds.height
-    }
-  }
-
   check_for_legal_bounds()
   {
     if(this.region_bounds.width === 0 || this.region_bounds.height === 0)
@@ -223,6 +180,15 @@ export default class InputController
     return {
       x: pos.x - this.region_bounds.x,
       y: this.region_bounds.height - (pos.y - this.region_bounds.y ) 
+    };
+  }
+  transform_pos_to_NDC(pos)
+  {
+    this.check_for_legal_bounds();
+
+    return {
+      x: (pos.x / this.region_bounds.width) * 2 - 1,
+      y: (pos.y / this.region_bounds.height) * 2 - 1
     };
   }
 
@@ -241,5 +207,40 @@ export default class InputController
     let ndc = this.NDC;
     return  ndc.x >= -1 && ndc.x <= 1 &&
             ndc.y >= -1 && ndc.y <= 1 
+  }
+
+  get pointer_pos()
+  {
+    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
+  }
+
+  get pointer_pos_delta()
+  {
+    let pos_delta = this.active_input_module.pointer_pos_delta;
+    return {
+      x: pos_delta.x,
+      y: pos_delta.y * -1
+    };
+  }
+
+  get NDC()
+  {
+    return this.transform_pos_to_NDC(this.pointer_pos);
+  }
+
+  get NDC_delta()
+  {
+    this.check_for_legal_bounds();
+    return {
+      x: this.pointer_pos_delta.x / this.region_bounds.width,
+      y: this.pointer_pos_delta.y / this.region_bounds.height
+    }
+  }
+
+  get pointer_center(){
+    return this.transform_pos_to_subregion(this.active_input_module.pointer_center);
+  }
+  get pointer_center_NDC(){
+    return this.transform_pos_to_NDC(this.pointer_center);
   }
 }
