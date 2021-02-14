@@ -235,4 +235,11 @@ export default class InputController
   {
     return this.active_input_module.pointer_count;
   }
+
+  get pointer_is_within_bounds()
+  {
+    let ndc = this.NDC;
+    return  ndc.x >= -1 && ndc.x <= 1 &&
+            ndc.y >= -1 && ndc.y <= 1 
+  }
 }
