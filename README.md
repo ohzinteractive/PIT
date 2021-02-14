@@ -89,7 +89,7 @@ input.NDC                             //{x,y} [-1..1] normalized device coordina
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
 
 input.pointer_center                  //{x,y} the center of all active touches. If using mouse, this is the same as pointer_pos
-input.pointer_center_delta                  //{x,y} the center of all active touches. If using mouse, this is the same as pointer_pos
+input.pointer_center_delta            //{x,y} the center of all active touches. If using mouse, this is the same as pointer_pos
 input.pointer_center_NDC              //{x,y} [-1..1] the center of all active touches. If using mouse, this is the same as pointer_pos
 input.pointer_center_NDC_delta        //{x,y} [-1..1] difference between previous normalized center and current one
 

@@ -2,13 +2,14 @@
 <html>
 	<head>
     <meta charset="utf-8">
+    <meta name="viewport",content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>PIT controller example</title>
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
-	<body>
+	<body style=" position: fixed; touch-action: manipulation;">
 		<script src="three.js"></script>
 		
 		<script type='module'>
@@ -53,9 +54,13 @@
 				// if(input.left_mouse_button_released)
 				// 	console.log('released')
 
-				// let scale = cube.scale.x;
-				// scale -= input.scroll_delta/10;
-				// cube.scale.set(scale, scale, scale);
+
+				if(input.pointer_count === 2)
+				{
+					let scale = cube.scale.x;
+					scale -= input.scroll_delta/10;
+					cube.scale.set(scale, scale, scale);
+				}
 
 
 				renderer.render(scene, camera);
