@@ -42,8 +42,8 @@ export default class TouchInputModule
 
     if(p)
     {
-      x = p.x - p.previous_x
-      y = p.y - p.previous_y
+      x = p.x - p.previous_x;
+      y = p.y - p.previous_y;
     }
  
     return {
@@ -75,6 +75,35 @@ export default class TouchInputModule
     return {
       x: x,
       y: y
+    }
+  }
+  get previous_pointer_center()
+  {
+    let x = 0;
+    let y = 0;
+
+
+    for(let i=0; i< this.pointers.length; i++)
+    {
+      x += this.pointers[i].previous_x;
+      y += this.pointers[i].previous_y;
+    }
+
+    x /= Math.max(1, this.pointers.length);
+    y /= Math.max(1, this.pointers.length);
+
+    return {
+      x: x,
+      y: y
+    }
+  }
+
+  get pointer_center_delta(){
+    let current_center = this.pointer_center;
+    let prev_center = this.previous_pointer_center;
+    return {
+      x: current_center.x - prev_center.x,
+      y: current_center.y - prev_center.y
     }
   }
 

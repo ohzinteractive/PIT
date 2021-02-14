@@ -186,7 +186,9 @@ export default class MouseInputModule
   {
     return this.pointer_pos;
   }
-
+  get pointer_center_delta(){
+    return this.pointer_pos_delta;
+  }
   update_previous_pointer_pos()
   {
     this.previous_pointer_pos.x = this.pointer_pos.x;

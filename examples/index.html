@@ -30,9 +30,7 @@
 			scene.add( cube );
 
 
-			console.log(document.getElementById('cuadrado').getBoundingClientRect())
 			let input = new InputController(document.body);
-			// let input = new InputController(document.body);
 
 			var animate = function () {
 				// console.log(input.pointer_center);
@@ -46,12 +44,11 @@
 				if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)
 				{
 					cube.rotation.y += input.NDC_delta.x *2
-
 					// console.log('down')
 				}
 
 				if(input.pointer_count > 0)
-					cube.position.x = input.pointer_center_NDC.x *3;
+					cube.position.x += input.pointer_center_NDC_delta.x *3;
 
 				// if(input.left_mouse_button_released)
 				// 	console.log('released')
@@ -71,6 +68,6 @@
 			animate();
 		</script>
 
-		<div id='cuadrado' style='left: 200px; top: 200px; width: 200px; height: 200px; background-color: red; position: absolute;'></div>
+		<div id='square' style='left: 200px; top: 200px; width: 200px; height: 200px; background-color: red; position: absolute;'></div>
 	</body>
 </html>

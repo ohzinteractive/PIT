@@ -240,7 +240,25 @@ export default class InputController
   get pointer_center(){
     return this.transform_pos_to_subregion(this.active_input_module.pointer_center);
   }
+
+  get pointer_center_delta(){
+    let center_delta = this.active_input_module.pointer_center_delta;
+    return {
+      x: center_delta.x,
+      y: center_delta.y * -1
+    };
+  }
+
   get pointer_center_NDC(){
     return this.transform_pos_to_NDC(this.pointer_center);
+  }
+  get pointer_center_NDC_delta(){
+    this.check_for_legal_bounds();
+
+    let center_delta = this.pointer_center_delta;
+    return {
+      x: center_delta.x / this.region_bounds.width,
+      y: center_delta.y / this.region_bounds.height
+    }
   }
 }
