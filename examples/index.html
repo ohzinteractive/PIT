@@ -31,7 +31,8 @@
 			scene.add( cube );
 
 
-			let input = new InputController(document.body);
+			let input = new InputController();
+			input.init(document.body);
 
 			var animate = function () {
 				// console.log(input.pointer_center);
@@ -52,7 +53,7 @@
 					cube.position.x += input.pointer_center_NDC_delta.x *3;
 
 				// if(input.left_mouse_button_released)
-				// 	console.log('released')
+				// console.log('released')
 
 
 				if(input.pointer_count === 2)

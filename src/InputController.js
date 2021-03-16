@@ -3,7 +3,7 @@ import TouchInputModule from './TouchInputModule';
 
 export default class InputController
 {
-  constructor(dom_element, sub_region_element)
+  init(dom_element, sub_region_element)
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined? dom_element : sub_region_element;
@@ -25,68 +25,107 @@ export default class InputController
 
     let self = this;
 
-    dom_element.addEventListener('wheel', (event) =>
-    {
-      self.mouse_input_module.scroll(event);
-      self.set_mouse_input_active();
-    });
+    this.bind_events();
+  }
 
-    dom_element.addEventListener('touchstart', (event) =>
-    {
-      self.touch_input_module.pointer_down(event);
-      self.set_touch_input_active();
-    }, { passive: false });
+  bind_events()
+  {
+    this.__binded_on_wheel = this.on_wheel.bind(this);
+    this.dom_element.addEventListener('wheel', this.__binded_on_wheel);
 
-    dom_element.addEventListener('touchmove', (event) =>
-    {
-      self.touch_input_module.pointer_move(event);
-      self.set_touch_input_active();
-    }, { passive: false });
+    this.__binded_on_touchstart = this.on_touchstart.bind(this);
+    this.dom_element.addEventListener('touchstart', this.__binded_on_touchstart, { passive: false });
+    
+    this.__binded_on_touchmove = this.on_touchmove.bind(this);
+    this.dom_element.addEventListener('touchmove', this.__binded_on_touchmove, { passive: false });
+    this.__binded_on_touchcancel = this.on_touchcancel.bind(this);
+    this.dom_element.addEventListener('touchcancel', this.__binded_on_touchcancel, { passive: false });
+    this.__binded_on_touchend = this.on_touchend.bind(this);
+    this.dom_element.addEventListener('touchend', this.__binded_on_touchend, { passive: false });
 
-    dom_element.addEventListener('touchcancel', (event) =>
-    {
-      self.touch_input_module.pointer_cancel(event);
-      self.set_touch_input_active();
-    }, { passive: false });
+    this.__binded_on_mousedown = this.on_mousedown.bind(this);
+    this.dom_element.addEventListener('mousedown', this.__binded_on_mousedown, false);
+    this.__binded_on_mousemove = this.on_mousemove.bind(this);
+    this.dom_element.addEventListener('mousemove', this.__binded_on_mousemove, false);
+    this.__binded_on_mouseup = this.on_mouseup.bind(this);
+    this.dom_element.addEventListener('mouseup', this.__binded_on_mouseup, false);
+  }
 
-    dom_element.addEventListener('touchend', (event) =>
-    {
-      self.touch_input_module.pointer_up(event);
-      self.set_touch_input_active();
-    }, { passive: false });
+  unbind_events()
+  {
+    this.dom_element.removeEventListener('wheel', this.__binded_on_wheel);
 
-    dom_element.addEventListener('mousedown', (event) =>
-    {
-      if (self.mouse_input_allowed())
-      {
-        self.mouse_input_module.pointer_down(event);
-        self.set_mouse_input_active()
-      }
-    }, false);
+    this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart, { passive: false });
+    this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove, { passive: false });
+    this.dom_element.removeEventListener('touchcancel', this.__binded_on_touchcancel, { passive: false });
+    this.dom_element.removeEventListener('touchend', this.__binded_on_touchend, { passive: false });
 
-    dom_element.addEventListener('mousemove', (event) =>
-    {
-      if (self.mouse_input_allowed())
-      {
-        self.mouse_input_module.pointer_move(event);
-        self.set_mouse_input_active()
-      }
-    }, false);
+    this.dom_element.removeEventListener('mousedown', this.__binded_on_mousedown, false);
+    this.dom_element.removeEventListener('mousemove', this.__binded_on_mousemove, false);
+    this.dom_element.removeEventListener('mouseup', this.__binded_on_mouseup, false);
+  }
 
-    dom_element.addEventListener('mouseup', (event) =>
-    {
-      if (self.mouse_input_allowed())
-      {
-        self.mouse_input_module.pointer_up(event);
-        self.set_mouse_input_active()
-      }
-    }, false);
+  on_wheel(event)
+  {
+    this.mouse_input_module.scroll(event);
+    this.set_mouse_input_active();
+  }
 
-    dom_element.addEventListener('mouseleave', (event) =>
+  on_touchstart(event)
+  {
+    this.touch_input_module.pointer_down(event);
+    this.set_touch_input_active();
+  }
+
+  on_touchmove(event)
+  {
+    this.touch_input_module.pointer_move(event);
+    this.set_touch_input_active();
+  }
+
+  on_touchcancel(event)
+  {
+    this.touch_input_module.pointer_cancel(event);
+    this.set_touch_input_active();
+  }
+
+  on_touchend(event)
+  {
+    this.touch_input_module.pointer_up(event);
+    this.set_touch_input_active();
+  }
+
+  on_mousedown(event)
+  {
+    if (this.mouse_input_allowed())
     {
-      self.mouse_input_module.pointer_out(event);
-      self.set_mouse_input_active()
-    }, false);
+      this.mouse_input_module.pointer_down(event);
+      this.set_mouse_input_active();
+    }
+  }
+
+  on_mousemove(event)
+  {
+    if (this.mouse_input_allowed())
+    {
+      this.mouse_input_module.pointer_move(event);
+      this.set_mouse_input_active();
+    }
+  }
+
+  on_mouseup(event)
+  {
+    if (this.mouse_input_allowed())
+    {
+      this.mouse_input_module.pointer_up(event);
+      this.set_mouse_input_active();
+    }
+  }
+
+  on_mouseleave(event)
+  {
+    this.mouse_input_module.pointer_out(event);
+    this.set_mouse_input_active();
   }
 
   clear()
@@ -163,9 +202,6 @@ export default class InputController
   {
     return this.mouse_input_module.middle_mouse_button_released;
   }
-
-
-
 
   check_for_legal_bounds()
   {
@@ -252,6 +288,7 @@ export default class InputController
   get pointer_center_NDC(){
     return this.transform_pos_to_NDC(this.pointer_center);
   }
+
   get pointer_center_NDC_delta(){
     this.check_for_legal_bounds();
 
@@ -260,5 +297,10 @@ export default class InputController
       x: center_delta.x / this.region_bounds.width,
       y: center_delta.y / this.region_bounds.height
     }
+  }
+
+  dispose()
+  {
+    this.unbind_events();
   }
 }

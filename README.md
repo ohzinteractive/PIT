@@ -33,7 +33,8 @@ $ npm install pit-js --save
 ```sh
 import {InputController} from 'pit-js'
 
-let input = new InputController(document.body); //element to listen events on
+let input = new InputController(); 
+input.init(document.body); //element to listen events on
 
 let animate = function () {
 
@@ -137,6 +138,3 @@ License
 ----
 
 MIT
-
-
-
