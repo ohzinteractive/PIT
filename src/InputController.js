@@ -35,7 +35,6 @@ export default class InputController
 
     this.__binded_on_touchstart = this.on_touchstart.bind(this);
     this.dom_element.addEventListener('touchstart', this.__binded_on_touchstart, { passive: false });
-    
     this.__binded_on_touchmove = this.on_touchmove.bind(this);
     this.dom_element.addEventListener('touchmove', this.__binded_on_touchmove, { passive: false });
     this.__binded_on_touchcancel = this.on_touchcancel.bind(this);
@@ -49,6 +48,8 @@ export default class InputController
     this.dom_element.addEventListener('mousemove', this.__binded_on_mousemove, false);
     this.__binded_on_mouseup = this.on_mouseup.bind(this);
     this.dom_element.addEventListener('mouseup', this.__binded_on_mouseup, false);
+    this.__binded_on_mouseleave = this.on_mouseleave.bind(this);
+    this.dom_element.addEventListener('mouseleave', this.__binded_on_mouseleave, false);
   }
 
   unbind_events()
@@ -63,6 +64,7 @@ export default class InputController
     this.dom_element.removeEventListener('mousedown', this.__binded_on_mousedown, false);
     this.dom_element.removeEventListener('mousemove', this.__binded_on_mousemove, false);
     this.dom_element.removeEventListener('mouseup', this.__binded_on_mouseup, false);
+    this.dom_element.removeEventListener('mouseleave', this.__binded_on_mouseleave, false);
   }
 
   on_wheel(event)
