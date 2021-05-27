@@ -45,11 +45,11 @@ export default class TouchInputModule
       x = p.x - p.previous_x;
       y = p.y - p.previous_y;
     }
- 
+
     return {
       x: x,
       y: y
-    }  
+    }
   }
 
   get pointer_count()
@@ -118,7 +118,7 @@ export default class TouchInputModule
       let y1 = this.pointers[1].y;
 
       let distance = Math.sqrt(Math.pow(x0 - x1,2) + Math.pow(y0 - y1, 2));
-      
+
       if(this.previous_separation_distance === undefined)
         this.previous_separation_distance = distance;
 
@@ -132,6 +132,7 @@ export default class TouchInputModule
       this.scroll_delta = 0;
     }
   }
+
   update_pointer(pointer_id, x, y)
   {
     let p = this.pointers.find( p => p.id === pointer_id );
@@ -171,7 +172,7 @@ export default class TouchInputModule
 
   pointer_down(event)
   {
-    if (event.scale !== 1) { event.preventDefault(); }
+    if (event.scale && event.scale !== 1) { event.preventDefault(); }
 
     let touches = event.changedTouches;
     for(let i=0; i< touches.length; i++)
@@ -183,13 +184,12 @@ export default class TouchInputModule
         this.left_mouse_button_pressed = true;
         this.left_mouse_button_down    = true;
       }
-    } 
-    
+    }
   }
 
   pointer_up(event)
   {
-    if (event.scale !== 1) { event.preventDefault(); }
+    if (event.scale && event.scale !== 1) { event.preventDefault(); }
 
     let touches = event.changedTouches;
     for(let i=0; i< touches.length; i++)
@@ -204,14 +204,12 @@ export default class TouchInputModule
       }
       this.remove_pointer(p.id);
     }
-
-    
   }
 
   pointer_move(event)
   {
-    if (event.scale !== 1) { event.preventDefault(); }
-    
+    if (event.scale && event.scale !== 1) { event.preventDefault(); }
+
     let touches = event.changedTouches;
     for(let i=0; i< touches.length; i++)
     {
@@ -224,9 +222,9 @@ export default class TouchInputModule
   {
     this.pointer_out(event);
   }
+
   pointer_out(event)
   {
-    
     let touches = event.changedTouches;
     for(let i=0; i< touches.length; i++)
     {
@@ -240,7 +238,6 @@ export default class TouchInputModule
 
       this.remove_pointer(p.id);
     }
-    
   }
 
   clear()

@@ -25,14 +25,13 @@ export default class MouseInputModule
 
   get pointer_count()
   {
-    if(this.left_mouse_button_down  || 
-       this.right_mouse_button_down || 
+    if(this.left_mouse_button_down  ||
+       this.right_mouse_button_down ||
        this.middle_mouse_button_down  )
       return 1;
     else
       return 0;
   }
-
 
   pointer_down(event)
   {
@@ -89,6 +88,7 @@ export default class MouseInputModule
   {
     this.pointer_out(event)
   }
+
   pointer_out(event)
   {
     if(this.left_mouse_button_down)
@@ -107,7 +107,7 @@ export default class MouseInputModule
       this.right_mouse_button_released = true;
     }
   }
-  
+
   scroll(event)
   {
     this.pointer_pos.x = event.clientX;
@@ -171,7 +171,6 @@ export default class MouseInputModule
     this.scroll_delta = 0;
 
     this.update_previous_pointer_pos();
-
   }
 
   get pointer_pos_delta()
@@ -186,13 +185,14 @@ export default class MouseInputModule
   {
     return this.pointer_pos;
   }
+
   get pointer_center_delta(){
     return this.pointer_pos_delta;
   }
+
   update_previous_pointer_pos()
   {
     this.previous_pointer_pos.x = this.pointer_pos.x;
     this.previous_pointer_pos.y = this.pointer_pos.y;
   }
-
 }

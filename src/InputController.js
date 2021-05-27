@@ -217,7 +217,7 @@ export default class InputController
   {
     return {
       x: pos.x - this.region_bounds.x,
-      y: this.region_bounds.height - (pos.y - this.region_bounds.y ) 
+      y: this.region_bounds.height - (pos.y - this.region_bounds.y )
     };
   }
   transform_pos_to_NDC(pos)
@@ -244,7 +244,7 @@ export default class InputController
   {
     let ndc = this.NDC;
     return  ndc.x >= -1 && ndc.x <= 1 &&
-            ndc.y >= -1 && ndc.y <= 1 
+            ndc.y >= -1 && ndc.y <= 1
   }
 
   get pointer_pos()
