@@ -2,7 +2,7 @@
 
 
 
-PIT is a tiny javascript library that allows you to check for input in a pollable manner. 
+PIT is a tiny javascript library (made mainly to be used with WebGL applications) that allows you to check for input in a pollable manner. 
 
 It is common in websites to handle input in an event-based way, but sometimes for highly interactive applications that have an update loop running every frame it is a lot easier to check for input instead of juggling around with the events. 
 
