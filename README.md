@@ -85,6 +85,7 @@ input.middle_mouse_button_down        //boolean, mouse only
 input.middle_mouse_button_released    //boolean, mouse only
 
 input.pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position
+input.html_pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position, where the origin is in the upper left corner (browser coordinates)
 input.pointer_pos_delta               //{x,y} difference between previous position and current position.
 input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
@@ -99,6 +100,7 @@ input.scroll_delta                    //float - this is equivalent to the mouse 
 input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches 
 
 input.pointer_is_within_bounds        //boolean, true if the mouse or primary touch is contained within the bounds of the subregion
+input.pointer_is_over_element(html_element) //boolean, true if the pointer is over an html element
 ```
 
 When a button is pressed on the mouse, or the first finger is put on the screen, the following actions will occur:
