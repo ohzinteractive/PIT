@@ -247,9 +247,28 @@ export default class InputController
             ndc.y >= -1 && ndc.y <= 1
   }
 
+  pointer_is_over_element(elem) {
+
+    let rect = elem.getBoundingClientRect();
+    let pos = this.html_pointer_pos;
+
+    return  pos.x > rect.left &&
+            pos.x < rect.left + rect.width &&
+            pos.y > rect.top &&
+            pos.y < rect.top + rect.height;
+ }
+
   get pointer_pos()
   {
     return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
+  }
+
+  get html_pointer_pos()
+  {
+    return {
+      x: this.active_input_module.pointer_pos.x,
+      y: this.active_input_module.pointer_pos.y
+    }
   }
 
   get pointer_pos_delta()
