@@ -6,7 +6,7 @@ export default class InputController
   init(dom_element, sub_region_element)
   {
     this.dom_element = dom_element;
-    this.sub_region_element = sub_region_element === undefined? dom_element : sub_region_element;
+    this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
     this.mouse_input_module = new MouseInputModule();
     this.touch_input_module = new TouchInputModule();
 
@@ -23,24 +23,22 @@ export default class InputController
 
     this.touch_cooldown = new Date() - 1000;
 
-    let self = this;
-
     this.bind_events();
   }
 
   bind_events()
   {
     this.__binded_on_wheel = this.on_wheel.bind(this);
-    this.dom_element.addEventListener('wheel', this.__binded_on_wheel);
+    this.dom_element.addEventListener('wheel', this.__binded_on_wheel, { passive: true });
 
     this.__binded_on_touchstart = this.on_touchstart.bind(this);
-    this.dom_element.addEventListener('touchstart', this.__binded_on_touchstart, { passive: false });
+    this.dom_element.addEventListener('touchstart', this.__binded_on_touchstart, { passive: true });
     this.__binded_on_touchmove = this.on_touchmove.bind(this);
-    this.dom_element.addEventListener('touchmove', this.__binded_on_touchmove, { passive: false });
+    this.dom_element.addEventListener('touchmove', this.__binded_on_touchmove, { passive: true });
     this.__binded_on_touchcancel = this.on_touchcancel.bind(this);
-    this.dom_element.addEventListener('touchcancel', this.__binded_on_touchcancel, { passive: false });
+    this.dom_element.addEventListener('touchcancel', this.__binded_on_touchcancel, { passive: true });
     this.__binded_on_touchend = this.on_touchend.bind(this);
-    this.dom_element.addEventListener('touchend', this.__binded_on_touchend, { passive: false });
+    this.dom_element.addEventListener('touchend', this.__binded_on_touchend, { passive: true });
 
     this.__binded_on_mousedown = this.on_mousedown.bind(this);
     this.dom_element.addEventListener('mousedown', this.__binded_on_mousedown, false);
@@ -54,12 +52,12 @@ export default class InputController
 
   unbind_events()
   {
-    this.dom_element.removeEventListener('wheel', this.__binded_on_wheel);
+    this.dom_element.removeEventListener('wheel', this.__binded_on_wheel, { passive: true });
 
-    this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart, { passive: false });
-    this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove, { passive: false });
-    this.dom_element.removeEventListener('touchcancel', this.__binded_on_touchcancel, { passive: false });
-    this.dom_element.removeEventListener('touchend', this.__binded_on_touchend, { passive: false });
+    this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart, { passive: true });
+    this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove, { passive: true });
+    this.dom_element.removeEventListener('touchcancel', this.__binded_on_touchcancel, { passive: true });
+    this.dom_element.removeEventListener('touchend', this.__binded_on_touchend, { passive: true });
 
     this.dom_element.removeEventListener('mousedown', this.__binded_on_mousedown, false);
     this.dom_element.removeEventListener('mousemove', this.__binded_on_mousemove, false);
@@ -155,6 +153,7 @@ export default class InputController
   {
     this.active_input_module = this.mouse_input_module;
   }
+
   set_touch_input_active()
   {
     this.active_input_module = this.touch_input_module;
@@ -190,6 +189,7 @@ export default class InputController
   {
     return this.mouse_input_module.right_mouse_button_released;
   }
+
   get middle_mouse_button_pressed()
   {
     return this.mouse_input_module.middle_mouse_button_pressed;
@@ -207,9 +207,9 @@ export default class InputController
 
   check_for_legal_bounds()
   {
-    if(this.region_bounds.width === 0 || this.region_bounds.height === 0)
+    if (this.region_bounds.width === 0 || this.region_bounds.height === 0)
     {
-      console.error("Cannot get normalized mouse position for target element due to the element having 0 width or height", this.dom_element, this.region_bounds)
+      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.region_bounds);
     }
   }
 
@@ -217,9 +217,10 @@ export default class InputController
   {
     return {
       x: pos.x - this.region_bounds.x,
-      y: this.region_bounds.height - (pos.y - this.region_bounds.y )
+      y: this.region_bounds.height - (pos.y - this.region_bounds.y)
     };
   }
+
   transform_pos_to_NDC(pos)
   {
     this.check_for_legal_bounds();
@@ -244,11 +245,11 @@ export default class InputController
   {
     let ndc = this.NDC;
     return  ndc.x >= -1 && ndc.x <= 1 &&
-            ndc.y >= -1 && ndc.y <= 1
+            ndc.y >= -1 && ndc.y <= 1;
   }
 
-  pointer_is_over_element(elem) {
-
+  pointer_is_over_element(elem)
+  {
     let rect = elem.getBoundingClientRect();
     let pos = this.html_pointer_pos;
 
@@ -256,7 +257,7 @@ export default class InputController
             pos.x < rect.left + rect.width &&
             pos.y > rect.top &&
             pos.y < rect.top + rect.height;
- }
+  }
 
   get pointer_pos()
   {
@@ -268,7 +269,7 @@ export default class InputController
     return {
       x: this.active_input_module.pointer_pos.x,
       y: this.active_input_module.pointer_pos.y
-    }
+    };
   }
 
   get pointer_pos_delta()
@@ -291,14 +292,16 @@ export default class InputController
     return {
       x: this.pointer_pos_delta.x / this.region_bounds.width,
       y: this.pointer_pos_delta.y / this.region_bounds.height
-    }
+    };
   }
 
-  get pointer_center(){
+  get pointer_center()
+  {
     return this.transform_pos_to_subregion(this.active_input_module.pointer_center);
   }
 
-  get pointer_center_delta(){
+  get pointer_center_delta()
+  {
     let center_delta = this.active_input_module.pointer_center_delta;
     return {
       x: center_delta.x,
@@ -306,18 +309,20 @@ export default class InputController
     };
   }
 
-  get pointer_center_NDC(){
+  get pointer_center_NDC()
+  {
     return this.transform_pos_to_NDC(this.pointer_center);
   }
 
-  get pointer_center_NDC_delta(){
+  get pointer_center_NDC_delta()
+  {
     this.check_for_legal_bounds();
 
     let center_delta = this.pointer_center_delta;
     return {
       x: center_delta.x / this.region_bounds.width,
       y: center_delta.y / this.region_bounds.height
-    }
+    };
   }
 
   dispose()
