@@ -16,65 +16,67 @@ export default class MouseInputModule
     this.middle_mouse_button_down     = false;
     this.middle_mouse_button_released = false;
 
-
-    this.pointer_pos = {x: 0, y: 0};
-    this.previous_pointer_pos = {x: 0, y: 0};
+    this.pointer_pos = { x: 0, y: 0 };
+    this.previous_pointer_pos = { x: 0, y: 0 };
 
     this.scroll_delta = 0;
   }
 
   get pointer_count()
   {
-    if(this.left_mouse_button_down  ||
+    if (this.left_mouse_button_down  ||
        this.right_mouse_button_down ||
-       this.middle_mouse_button_down  )
+       this.middle_mouse_button_down)
+    {
       return 1;
+    }
     else
+    {
       return 0;
+    }
   }
 
   pointer_down(event)
   {
-
     this.pointer_pos.x = event.clientX;
     this.pointer_pos.y = event.clientY;
 
     this.previous_pointer_pos.x = event.clientX;
     this.previous_pointer_pos.y = event.clientY;
 
-    switch(event.button)
+    switch (event.button)
     {
-      case 0:
-        this.left_mouse_button_pressed = true;
-        this.left_mouse_button_down    = true;
-        break;
-      case 1:
-        this.middle_mouse_button_pressed = true;
-        this.middle_mouse_button_down    = true;
-        break;
-      case 2:
-        this.right_mouse_button_pressed = true;
-        this.right_mouse_button_down    = true;
-        break;
+    case 0:
+      this.left_mouse_button_pressed = true;
+      this.left_mouse_button_down    = true;
+      break;
+    case 1:
+      this.middle_mouse_button_pressed = true;
+      this.middle_mouse_button_down    = true;
+      break;
+    case 2:
+      this.right_mouse_button_pressed = true;
+      this.right_mouse_button_down    = true;
+      break;
     }
   }
 
   pointer_up(event)
   {
-    switch(event.button)
+    switch (event.button)
     {
-      case 0:
-        this.left_mouse_button_released = true;
-        this.left_mouse_button_down     = false;
-        break;
-      case 1:
-        this.middle_mouse_button_released = true;
-        this.middle_mouse_button_down     = false;
-        break;
-      case 2:
-        this.right_mouse_button_released = true;
-        this.right_mouse_button_down     = false;
-        break;
+    case 0:
+      this.left_mouse_button_released = true;
+      this.left_mouse_button_down     = false;
+      break;
+    case 1:
+      this.middle_mouse_button_released = true;
+      this.middle_mouse_button_down     = false;
+      break;
+    case 2:
+      this.right_mouse_button_released = true;
+      this.right_mouse_button_down     = false;
+      break;
     }
   }
 
@@ -86,22 +88,22 @@ export default class MouseInputModule
 
   pointer_cancel(event)
   {
-    this.pointer_out(event)
+    this.pointer_out(event);
   }
 
   pointer_out(event)
   {
-    if(this.left_mouse_button_down)
+    if (this.left_mouse_button_down)
     {
       this.left_mouse_button_down     = false;
       this.left_mouse_button_released = true;
     }
-    if(this.middle_mouse_button_down)
+    if (this.middle_mouse_button_down)
     {
       this.middle_mouse_button_down     = false;
       this.middle_mouse_button_released = true;
     }
-    if(this.right_mouse_button_down)
+    if (this.right_mouse_button_down)
     {
       this.right_mouse_button_down     = false;
       this.right_mouse_button_released = true;
@@ -178,7 +180,7 @@ export default class MouseInputModule
     return {
       x: this.pointer_pos.x - this.previous_pointer_pos.x,
       y: this.pointer_pos.y - this.previous_pointer_pos.y
-    }
+    };
   }
 
   get pointer_center()
@@ -186,7 +188,8 @@ export default class MouseInputModule
     return this.pointer_pos;
   }
 
-  get pointer_center_delta(){
+  get pointer_center_delta()
+  {
     return this.pointer_pos_delta;
   }
 

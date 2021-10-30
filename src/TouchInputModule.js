@@ -6,7 +6,6 @@ export default class TouchInputModule
     this.left_mouse_button_down     = false;
     this.left_mouse_button_released = false;
 
-
     this.pointers = [];
 
     this.previous_separation_distance = undefined;
@@ -18,9 +17,9 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-    let p = this.pointers.find( p => p.is_primary );
+    let p = this.pointers.find(p => p.is_primary);
 
-    if(p)
+    if (p)
     {
       x = p.x;
       y = p.y;
@@ -29,7 +28,7 @@ export default class TouchInputModule
     return {
       x: x,
       y: y
-    }
+    };
   }
 
   get pointer_pos_delta()
@@ -37,9 +36,9 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-    let p = this.pointers.find( p => p.is_primary );
+    let p = this.pointers.find(p => p.is_primary);
 
-    if(p)
+    if (p)
     {
       x = p.x - p.previous_x;
       y = p.y - p.previous_y;
@@ -48,7 +47,7 @@ export default class TouchInputModule
     return {
       x: x,
       y: y
-    }
+    };
   }
 
   get pointer_count()
@@ -61,8 +60,7 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-
-    for(let i=0; i< this.pointers.length; i++)
+    for (let i = 0; i < this.pointers.length; i++)
     {
       x += this.pointers[i].x;
       y += this.pointers[i].y;
@@ -74,15 +72,15 @@ export default class TouchInputModule
     return {
       x: x,
       y: y
-    }
+    };
   }
+
   get previous_pointer_center()
   {
     let x = 0;
     let y = 0;
 
-
-    for(let i=0; i< this.pointers.length; i++)
+    for (let i = 0; i < this.pointers.length; i++)
     {
       x += this.pointers[i].previous_x;
       y += this.pointers[i].previous_y;
@@ -94,21 +92,22 @@ export default class TouchInputModule
     return {
       x: x,
       y: y
-    }
+    };
   }
 
-  get pointer_center_delta(){
+  get pointer_center_delta()
+  {
     let current_center = this.pointer_center;
     let prev_center = this.previous_pointer_center;
     return {
       x: current_center.x - prev_center.x,
       y: current_center.y - prev_center.y
-    }
+    };
   }
 
   update_pointer_separation()
   {
-    if(this.pointers.length === 2)
+    if (this.pointers.length === 2)
     {
       let x0 = this.pointers[0].x;
       let y0 = this.pointers[0].y;
@@ -116,13 +115,15 @@ export default class TouchInputModule
       let x1 = this.pointers[1].x;
       let y1 = this.pointers[1].y;
 
-      let distance = Math.sqrt(Math.pow(x0 - x1,2) + Math.pow(y0 - y1, 2));
+      let distance = Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
 
-      if(this.previous_separation_distance === undefined)
+      if (this.previous_separation_distance === undefined)
+      {
         this.previous_separation_distance = distance;
+      }
 
       let sensitivity = 0.15;
-      this.scroll_delta = - (distance - this.previous_separation_distance) * sensitivity;
+      this.scroll_delta = -(distance - this.previous_separation_distance) * sensitivity;
       this.previous_separation_distance = distance;
     }
     else
@@ -134,8 +135,8 @@ export default class TouchInputModule
 
   update_pointer(pointer_id, x, y)
   {
-    let p = this.pointers.find( p => p.id === pointer_id );
-    if(p === undefined)
+    let p = this.pointers.find(p => p.id === pointer_id);
+    if (p === undefined)
     {
       p = {
         id: pointer_id,
@@ -144,8 +145,8 @@ export default class TouchInputModule
         previous_x: x,
         previous_y: y,
         is_primary: this.pointers.length === 0
-      }
-      this.pointers.push(p)
+      };
+      this.pointers.push(p);
     }
 
     p.previous_x = p.x;
@@ -161,8 +162,8 @@ export default class TouchInputModule
 
   remove_pointer(pointer_id)
   {
-    let index = this.pointers.findIndex( p => p.id === pointer_id );
-    if(index !== undefined)
+    let index = this.pointers.findIndex(p => p.id === pointer_id);
+    if (index !== undefined)
     {
       this.pointers.splice(index, 1);
     }
@@ -173,11 +174,11 @@ export default class TouchInputModule
   {
     let touches = event.changedTouches;
 
-    for(let i=0; i< touches.length; i++)
+    for (let i = 0; i < touches.length; i++)
     {
       let touch = touches[i];
       let p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
-      if(p.is_primary)
+      if (p.is_primary)
       {
         this.left_mouse_button_pressed = true;
         this.left_mouse_button_down    = true;
@@ -189,12 +190,12 @@ export default class TouchInputModule
   {
     let touches = event.changedTouches;
 
-    for(let i=0; i< touches.length; i++)
+    for (let i = 0; i < touches.length; i++)
     {
       let touch = touches[i];
       let p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
 
-      if(p.is_primary)
+      if (p.is_primary)
       {
         this.left_mouse_button_released = true;
         this.left_mouse_button_down     = false;
@@ -207,10 +208,10 @@ export default class TouchInputModule
   {
     let touches = event.changedTouches;
 
-    for(let i=0; i< touches.length; i++)
+    for (let i = 0; i < touches.length; i++)
     {
       let touch = touches[i];
-      this.update_pointer(touch.identifier, touch.clientX, touch.clientY)
+      this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
     }
   }
 
@@ -222,11 +223,11 @@ export default class TouchInputModule
   pointer_out(event)
   {
     let touches = event.changedTouches;
-    for(let i=0; i< touches.length; i++)
+    for (let i = 0; i < touches.length; i++)
     {
       let touch = touches[i];
-      let p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY)
-      if(this.left_mouse_button_down && p.is_primary)
+      let p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+      if (this.left_mouse_button_down && p.is_primary)
       {
         this.left_mouse_button_down     = false;
         this.left_mouse_button_released = true;
