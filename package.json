@@ -1,6 +1,6 @@
 {
   "name": "pit-js",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Pollable Input",
   "module": "examples/build/PIT.js",
   "source": "src/PIT.js",
@@ -8,10 +8,13 @@
     "examples/build"
   ],
   "devDependencies": {
-    "parcel": "2.0.0-nightly.514"
+    "rollup": "^2.44.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "standardx": "^7.0.0"
   },
   "scripts": {
-    "build": "parcel build ./src/PIT.js"
+    "build": "rollup -c"
   },
   "keywords": [
     "input",

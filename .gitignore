@@ -32,4 +32,5 @@ bower_components/
 *.msi
 *.apk
 
-# Parcel output folder.
+# Rollup output folder.
+build
