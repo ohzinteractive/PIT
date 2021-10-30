@@ -18,7 +18,6 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-
     let p = this.pointers.find( p => p.is_primary );
 
     if(p)
@@ -172,9 +171,8 @@ export default class TouchInputModule
 
   pointer_down(event)
   {
-    if (event.scale && event.scale !== 1) { event.preventDefault(); }
-
     let touches = event.changedTouches;
+
     for(let i=0; i< touches.length; i++)
     {
       let touch = touches[i];
@@ -189,9 +187,8 @@ export default class TouchInputModule
 
   pointer_up(event)
   {
-    if (event.scale && event.scale !== 1) { event.preventDefault(); }
-
     let touches = event.changedTouches;
+
     for(let i=0; i< touches.length; i++)
     {
       let touch = touches[i];
@@ -208,9 +205,8 @@ export default class TouchInputModule
 
   pointer_move(event)
   {
-    if (event.scale && event.scale !== 1) { event.preventDefault(); }
-
     let touches = event.changedTouches;
+
     for(let i=0; i< touches.length; i++)
     {
       let touch = touches[i];
