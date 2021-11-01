@@ -10,25 +10,21 @@ export default class TouchInputModule
 
     this.previous_separation_distance = undefined;
     this.scroll_delta = 0;
+
+    this.previous_pointer_pos = { x: 0, y: 0 };
   }
 
   get pointer_pos()
   {
-    let x = 0;
-    let y = 0;
-
-    let p = this.pointers.find(p => p.is_primary);
+    const p = this.pointers.find(p => p.is_primary);
 
     if (p)
     {
-      x = p.x;
-      y = p.y;
+      this.previous_pointer_pos = { x: p.x, y: p.y };
+      return this.previous_pointer_pos;
     }
 
-    return {
-      x: x,
-      y: y
-    };
+    return this.previous_pointer_pos;
   }
 
   get pointer_pos_delta()
@@ -36,7 +32,7 @@ export default class TouchInputModule
     let x = 0;
     let y = 0;
 
-    let p = this.pointers.find(p => p.is_primary);
+    const p = this.pointers.find(p => p.is_primary);
 
     if (p)
     {
