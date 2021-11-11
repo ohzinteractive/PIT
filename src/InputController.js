@@ -137,7 +137,8 @@ export default class InputController
 
   update_region_bounds()
   {
-    let region_bounds = this.sub_region_element.getBoundingClientRect();
+    const region_bounds = this.sub_region_element.getBoundingClientRect();
+
     this.region_bounds.x = region_bounds.left;
     this.region_bounds.y = region_bounds.top;
     this.region_bounds.width = region_bounds.width;
@@ -243,15 +244,16 @@ export default class InputController
 
   get pointer_is_within_bounds()
   {
-    let ndc = this.NDC;
+    const ndc = this.NDC;
+
     return  ndc.x >= -1 && ndc.x <= 1 &&
             ndc.y >= -1 && ndc.y <= 1;
   }
 
   pointer_is_over_element(elem)
   {
-    let rect = elem.getBoundingClientRect();
-    let pos = this.html_pointer_pos;
+    const rect = elem.getBoundingClientRect();
+    const pos = this.html_pointer_pos;
 
     return  pos.x > rect.left &&
             pos.x < rect.left + rect.width &&
@@ -274,7 +276,8 @@ export default class InputController
 
   get pointer_pos_delta()
   {
-    let pos_delta = this.active_input_module.pointer_pos_delta;
+    const pos_delta = this.active_input_module.pointer_pos_delta;
+
     return {
       x: pos_delta.x,
       y: pos_delta.y * -1
@@ -302,7 +305,8 @@ export default class InputController
 
   get pointer_center_delta()
   {
-    let center_delta = this.active_input_module.pointer_center_delta;
+    const center_delta = this.active_input_module.pointer_center_delta;
+
     return {
       x: center_delta.x,
       y: center_delta.y * -1
@@ -318,7 +322,8 @@ export default class InputController
   {
     this.check_for_legal_bounds();
 
-    let center_delta = this.pointer_center_delta;
+    const center_delta = this.pointer_center_delta;
+
     return {
       x: center_delta.x / this.region_bounds.width,
       y: center_delta.y / this.region_bounds.height
