@@ -10,14 +10,12 @@ export default class TouchInputModule
 
     this.previous_separation_distance = undefined;
     this.scroll_delta = 0;
-
-    this.previous_primary_pointer_pos = { x: 0, y: 0 };
   }
 
   get pointer_pos()
   {
-    let x = this.previous_primary_pointer_pos.x;
-    let y = this.previous_primary_pointer_pos.y;
+    let x = 0;
+    let y = 0;
 
     const p = this.pointers.find(p => p.is_primary);
 
@@ -42,8 +40,8 @@ export default class TouchInputModule
 
     if (p)
     {
-      x = p.x - this.previous_primary_pointer_pos.x;
-      y = p.y - this.previous_primary_pointer_pos.y;
+      x = p.x - p.previous_x;
+      y = p.y - p.previous_y;
     }
     return {
       x: x,
@@ -153,12 +151,6 @@ export default class TouchInputModule
       this.pointers.push(p);
     }
 
-    if (p.is_primary)
-    {
-      this.previous_primary_pointer_pos.x = p.x;
-      this.previous_primary_pointer_pos.y = p.y;
-    }
-
     p.previous_x = p.x;
     p.previous_y = p.y;
 
@@ -256,5 +248,13 @@ export default class TouchInputModule
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_released = false;
     this.scroll_delta = 0;
+
+    for (let i = 0; i < this.pointers.length; i++)
+    {
+      const p = this.pointers[i];
+
+      p.previous_x = p.x;
+      p.previous_y = p.y;
+    }
   }
 }
