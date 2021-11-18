@@ -19,11 +19,12 @@ export default class InputController
       height: 1
     };
 
-    this.update_region_bounds();
-
     this.touch_cooldown = new Date() - 1000;
 
     this.bind_events();
+
+    this.resize_observer = new ResizeObserver(this.update_region_bounds.bind(this));
+    this.resize_observer.observe(this.sub_region_element);
   }
 
   bind_events()
@@ -132,17 +133,17 @@ export default class InputController
   {
     this.touch_input_module.clear();
     this.mouse_input_module.clear();
-    this.update_region_bounds();
   }
 
-  update_region_bounds()
+  update_region_bounds(entries)
   {
-    const region_bounds = this.sub_region_element.getBoundingClientRect();
-
-    this.region_bounds.x = region_bounds.left;
-    this.region_bounds.y = region_bounds.top;
-    this.region_bounds.width = region_bounds.width;
-    this.region_bounds.height = region_bounds.height;
+    for (let entry of entries)
+    {
+      this.region_bounds.x = entry.contentRect.x;
+      this.region_bounds.y = entry.contentRect.y;
+      this.region_bounds.width = entry.contentRect.width;
+      this.region_bounds.height = entry.contentRect.height;
+    }
   }
 
   mouse_input_allowed()
