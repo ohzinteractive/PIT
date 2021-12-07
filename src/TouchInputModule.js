@@ -1,3 +1,7 @@
+import {Vector2} from './Vector2';
+// import Logger from './utilities/Logger';
+import Pointer from './Pointer';
+
 export default class TouchInputModule
 {
   constructor()
@@ -9,46 +13,61 @@ export default class TouchInputModule
     this.pointers = [];
 
     this.previous_separation_distance = undefined;
-    this.scroll_delta = 0;
+    this.zoom_delta = 0;
 
     this.previous_primary_pointer_pos = { x: 0, y: 0 };
+
+    // this.update_pointer(7, 5, 5)
+    // this.update_pointer(6, 5, 5)
+    // this.update_pointer(5, 5, 5)
+    // console.log(this.pointer_pos_delta)
+    // this.remove_pointer(7)
+    // const p = this.pointers.find(p => this.is_primary_pointer(p));
+    // console.log(p)
+    // this.update_pointer(5, 10, 5)
+
+    // this.update_pointer(6, 20, 20)
+    // this.update_pointer(6, 25, 25)
+    // this.pointers[0].distance_to(this.pointers[1])
+  }
+
+  get scroll_delta()
+  {
+    if(this.pointers.length === 1)
+      return this.pointers[0].get_position_delta().y*0.03;
+    return 0;
   }
 
   get pointer_pos()
   {
-    let x = this.previous_primary_pointer_pos.x;
-    let y = this.previous_primary_pointer_pos.y;
+    const position = new Vector2();
+    position.x = this.previous_primary_pointer_pos.x;
+    position.y = this.previous_primary_pointer_pos.y;
 
-    const p = this.pointers.find(p => p.is_primary);
-
-    if (p)
+    if( this.pointers.length > 0)
     {
-      x = p.x;
-      y = p.y;
+      position.set(0,0);
+      for(let i=0; i< this.pointers.length; i++)
+      {
+        position.add(this.pointers[i].position);
+      }
+      position.divideScalar(Math.max(1, this.pointers.length));
     }
 
-    return {
-      x: x,
-      y: y
-    };
+    return position;
   }
 
   get pointer_pos_delta()
   {
-    let x = 0;
-    let y = 0;
+    const position = new Vector2();
 
-    const p = this.pointers.find(p => p.is_primary);
-
-    if (p)
+    for(let i=0; i< this.pointers.length; i++)
     {
-      x = p.x - p.previous_x;
-      y = p.y - p.previous_y;
+      position.add(this.pointers[i].get_position_delta());
     }
-    return {
-      x: x,
-      y: y
-    };
+
+    position.divideScalar(Math.max(1, this.pointers.length));
+    return position;
   }
 
   get pointer_count()
@@ -58,42 +77,30 @@ export default class TouchInputModule
 
   get pointer_center()
   {
-    let x = 0;
-    let y = 0;
+    const center = new Vector2();
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      x += this.pointers[i].x;
-      y += this.pointers[i].y;
+      center.add(this.pointers[i].position);
     }
 
-    x /= Math.max(1, this.pointers.length);
-    y /= Math.max(1, this.pointers.length);
+    center.divideScalar(Math.max(1, this.pointers.length));
 
-    return {
-      x: x,
-      y: y
-    };
+    return center;
   }
 
   get previous_pointer_center()
   {
-    let x = 0;
-    let y = 0;
+    const center = new Vector2();
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      x += this.pointers[i].previous_x;
-      y += this.pointers[i].previous_y;
+      center.add(this.pointers[i].previous_position);
     }
 
-    x /= Math.max(1, this.pointers.length);
-    y /= Math.max(1, this.pointers.length);
+    center.divideScalar(Math.max(1, this.pointers.length));
 
-    return {
-      x: x,
-      y: y
-    };
+    return center;
   }
 
   get pointer_center_delta()
@@ -101,72 +108,71 @@ export default class TouchInputModule
     const current_center = this.pointer_center;
     const prev_center = this.previous_pointer_center;
 
-    return {
-      x: current_center.x - prev_center.x,
-      y: current_center.y - prev_center.y
-    };
+    return current_center.clone().sub(prev_center);
   }
 
   update_pointer_separation()
   {
     if (this.pointers.length === 2)
     {
-      const x0 = this.pointers[0].x;
-      const y0 = this.pointers[0].y;
+      const p0 = this.pointers[0];
+      const p1 = this.pointers[1];
 
-      const x1 = this.pointers[1].x;
-      const y1 = this.pointers[1].y;
 
-      const distance = Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+      const distance          = p0.distance_to(p1);
+      const previous_distance = p0.previous_distance_to(p1);
+
 
       if (this.previous_separation_distance === undefined)
       {
         this.previous_separation_distance = distance;
       }
 
-      const sensitivity = 0.15;
-      this.scroll_delta = -(distance - this.previous_separation_distance) * sensitivity;
+      const sensitivity = 0.1;
+      this.zoom_delta = -(distance - previous_distance) * sensitivity;
+
       this.previous_separation_distance = distance;
     }
     else
     {
       this.previous_separation_distance = undefined;
-      this.scroll_delta = 0;
+      this.zoom_delta = 0;
     }
+  }
+
+  pointers_moving_away_from_each_other()
+  {
+    if (this.pointers.length !== 2)
+      return false;
   }
 
   update_pointer(pointer_id, x, y)
   {
-    let p = this.pointers.find(p => p.id === pointer_id);
 
+    let p = this.pointers.find(pointer => pointer.id === pointer_id);
     if (p === undefined)
     {
-      p = {
-        id: pointer_id,
-        x: x,
-        y: y,
-        previous_x: x,
-        previous_y: y,
-        is_primary: this.pointers.length === 0
-      };
 
+      // const is_primary = this.pointers.length === 0;
+      p = new Pointer(pointer_id, x, y);
       this.pointers.push(p);
+
     }
-
-    p.previous_x = p.x;
-    p.previous_y = p.y;
-
-    if (p.is_primary)
+    else
     {
-      this.previous_primary_pointer_pos.x = p.x;
-      this.previous_primary_pointer_pos.y = p.y;
+      p.set_position(x,y);
     }
 
-    p.x = x;
-    p.y = y;
+    if (this.is_primary_pointer(p))
+    {
+      this.previous_primary_pointer_pos.x = p.position.x;
+      this.previous_primary_pointer_pos.y = p.position.y;
+    }
+
 
     this.update_pointer_separation();
 
+    // console.log(p)
     return p;
   }
 
@@ -181,6 +187,11 @@ export default class TouchInputModule
     this.update_pointer_separation();
   }
 
+  is_primary_pointer(pointer)
+  {
+    return this.pointers[0] === pointer;
+  }
+
   pointer_down(event)
   {
     const touches = event.changedTouches;
@@ -190,7 +201,7 @@ export default class TouchInputModule
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
 
-      if (p.is_primary)
+      if (this.is_primary_pointer(p))
       {
         this.left_mouse_button_pressed = true;
         this.left_mouse_button_down    = true;
@@ -207,7 +218,7 @@ export default class TouchInputModule
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
 
-      if (p.is_primary)
+      if (this.is_primary_pointer(p))
       {
         this.left_mouse_button_released = true;
         this.left_mouse_button_down     = false;
@@ -241,7 +252,7 @@ export default class TouchInputModule
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
 
-      if (this.left_mouse_button_down && p.is_primary)
+      if (this.left_mouse_button_down && this.is_primary_pointer(p))
       {
         this.left_mouse_button_down     = false;
         this.left_mouse_button_released = true;
@@ -255,14 +266,11 @@ export default class TouchInputModule
   {
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_released = false;
-    this.scroll_delta = 0;
+    this.zoom_delta = 0;
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      const p = this.pointers[i];
-
-      p.previous_x = p.x;
-      p.previous_y = p.y;
+      this.pointers[i].reset_previous_position()
     }
   }
 }

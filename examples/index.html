@@ -9,7 +9,10 @@
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
-	<body style=" position: fixed; touch-action: manipulation;">
+	<body style=" position: fixed; touch-action: pan-x pan-y;">
+
+    <div id='square' style='left: -100px; top: -100px; width: 200px; height: 200px; background-color: red; position: absolute;'></div>
+
 		<script src="three.js"></script>
 		
 		<script type='module'>
@@ -28,12 +31,15 @@
 			var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
 			var material = new THREE.MeshNormalMaterial();
 			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+			// scene.add( cube );
 
 
 			let input = new InputController();
 			input.init(document.body);
 
+      let elem = document.querySelector('#square')
+
+      let scale = 1;
 			var animate = function () {
 				// console.log(input.pointer_center);
 				// console.log("mouse_pos", input.mouse_pos.y, "NDC", input.NDC.y);
@@ -42,12 +48,20 @@
 
 				// if(input.left_mouse_button_pressed)
 					// console.log('pressed')
+        let x = (input.NDC.x * 0.5 + 0.5)* window.innerWidth;
+        let y = (1-(input.NDC.y * 0.5 + 0.5))* window.innerHeight;
+
+        scale += input.zoom_delta*0.1;
+
+        elem.style.transform = "translate("+x+"px, "+y+"px) scale("+scale+")";
+        // elem.style.transform = "translate("+x+"px, "+y+"px); scale("+scale+");";
 
 				if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)
 				{
 					cube.rotation.y += input.NDC_delta.x *2
 					// console.log('down')
 				}
+        // console.log(input.html_NDC);
 
 				if(input.pointer_count > 0)
 					cube.position.x += input.pointer_center_NDC_delta.x *3;
@@ -74,6 +88,6 @@
 			animate();
 		</script>
 
-		<div id='square' style='left: 200px; top: 200px; width: 200px; height: 200px; background-color: red; position: absolute;'></div>
+
 	</body>
 </html>

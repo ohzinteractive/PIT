@@ -12,7 +12,8 @@ Currently PIT supports the following:
   - Query mouse/touch position
   - Query mouse/touch normalized position (the position in the range [-1..1])
   - Check for mouse buttons (left right middle)
-  - Mouse scroll and touch pinch to zoom merged into the same variable
+  - Scroll for mouse and touch (mapped to wheel mouse and one finger drag respectively)
+  - Zoom for mouse and touch (mapped to wheel mouse and two finger pinch respectively)
   - Query amount of active pointers (for mouse always 1 if any button is pressed)
   - Allows to define a subregion that will be used to compute position coordinates
 
@@ -88,6 +89,7 @@ input.pointer_pos                     //{x,y} screen coordinates of the mouse (o
 input.html_pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position, where the origin is in the upper left corner (browser coordinates)
 input.pointer_pos_delta               //{x,y} difference between previous position and current position.
 input.NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch
+input.html_NDC                             //{x,y} [-1..1] normalized device coordinates for mouse or primary touch, but in browser space (upper left corner maps to <-1,-1>)
 input.NDC_delta                       //{x,y} [-1..1] difference between previous normalized position and current normalized position
 
 input.pointer_center                  //{x,y} the center of all active touches. If using mouse, this is the same as pointer_pos
@@ -96,7 +98,8 @@ input.pointer_center_NDC              //{x,y} [-1..1] the center of all active t
 input.pointer_center_NDC_delta        //{x,y} [-1..1] difference between previous normalized center and current one
 
 
-input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or to pinching on the screen [-1..1]
+input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or dragging with one finger [-x..x] measured in pixels
+input.zoom_delta                      // float - this is equivalent to the mouse wheel (-1, 0, 1) or pinching with two fingers [-x..x] measured in pixels
 input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches 
 
 input.pointer_is_within_bounds        //boolean, true if the mouse or primary touch is contained within the bounds of the subregion

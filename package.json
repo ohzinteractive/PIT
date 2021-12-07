@@ -1,6 +1,6 @@
 {
   "name": "pit-js",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Pollable Input",
   "module": "examples/build/PIT.js",
   "source": "src/PIT.js",
@@ -14,14 +14,22 @@
     "standardx": "^7.0.0"
   },
   "scripts": {
+    "start": "rollup -w -c",
     "build": "rollup -c"
   },
   "keywords": [
     "input",
     "ohzi",
     "pollable",
-    "game"
+    "polling",
+    "game",
+    "controls",
+    "mouse",
+    "touch",
+    "mobile"
   ],
   "author": "OHZI Interactive",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+  }
 }

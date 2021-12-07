@@ -1,5 +1,6 @@
 import MouseInputModule from './MouseInputModule';
 import TouchInputModule from './TouchInputModule';
+// import Logger from './utilities/Logger';
 
 export default class InputController
 {
@@ -238,6 +239,11 @@ export default class InputController
     return this.active_input_module.scroll_delta;
   }
 
+  get zoom_delta()
+  {
+    return this.active_input_module.zoom_delta;
+  }
+
   get pointer_count()
   {
     return this.active_input_module.pointer_count;
@@ -288,6 +294,11 @@ export default class InputController
   get NDC()
   {
     return this.transform_pos_to_NDC(this.pointer_pos);
+  }
+
+  get html_NDC()
+  {
+    return this.transform_pos_to_NDC(this.html_pointer_pos);
   }
 
   get NDC_delta()

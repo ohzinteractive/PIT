@@ -159,6 +159,11 @@ export default class MouseInputModule
     }
   }
 
+  get zoom_delta()
+  {
+    return this.scroll_delta;
+  }
+
   clear()
   {
     this.left_mouse_button_pressed  = false;
