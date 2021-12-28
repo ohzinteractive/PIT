@@ -40,6 +40,9 @@
       let elem = document.querySelector('#square')
 
       let scale = 1;
+
+      let ndc_pos = new THREE.Vector2();
+
 			var animate = function () {
 				// console.log(input.pointer_center);
 				// console.log("mouse_pos", input.mouse_pos.y, "NDC", input.NDC.y);
@@ -51,9 +54,11 @@
         let x = (input.NDC.x * 0.5 + 0.5)* window.innerWidth;
         let y = (1-(input.NDC.y * 0.5 + 0.5))* window.innerHeight;
 
-        scale += input.zoom_delta*0.1;
+        // scale += input.zoom_delta*0.1;
 
-        elem.style.transform = "translate("+x+"px, "+y+"px) scale("+scale+")";
+        ndc_pos.x += input.NDC_delta.x*500;
+        ndc_pos.y += input.NDC_delta.y*-500;
+        elem.style.transform = "translate("+ndc_pos.x+"px, "+ndc_pos.y+"px) scale("+scale+")";
         // elem.style.transform = "translate("+x+"px, "+y+"px); scale("+scale+");";
 
 				if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)

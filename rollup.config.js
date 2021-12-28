@@ -3,11 +3,24 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default [
   {
-    input: './src/PIT.js',
+    input: './src/index.js',
+    output: [
+      {
+        file: 'examples/build/PIT.module.js',
+        format: 'es',
+        sourcemap: true
+      }
+    ],
+    plugins: [
+      sourcemaps()
+    ]
+  },
+  {
+    input: './src/index.js',
     output: [
       {
         file: 'examples/build/PIT.js',
-        format: 'es',
+        format: 'commonjs',
         sourcemap: true
       }
     ],
