@@ -85,6 +85,8 @@ input.middle_mouse_button_pressed     //boolean, mouse only
 input.middle_mouse_button_down        //boolean, mouse only
 input.middle_mouse_button_released    //boolean, mouse only
 
+input.clicked                         //boolean, mouse and primary touch
+
 input.pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position
 input.html_pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position, where the origin is in the upper left corner (browser coordinates)
 input.pointer_pos_delta               //{x,y} difference between previous position and current position.

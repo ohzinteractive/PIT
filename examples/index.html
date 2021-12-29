@@ -17,7 +17,7 @@
 		
 		<script type='module'>
 
-			import {InputController} from './build/PIT.js';
+			import {InputController} from './build/PIT.module.js';
 
 			var scene  = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -44,6 +44,11 @@
       let ndc_pos = new THREE.Vector2();
 
 			var animate = function () {
+
+        if(input.clicked)
+        {
+          console.log('clicked')
+        }
 				// console.log(input.pointer_center);
 				// console.log("mouse_pos", input.mouse_pos.y, "NDC", input.NDC.y);
 				// console.log("mouse_delta", input.NDC.x, "NDC delta", input.NDC_delta.x);

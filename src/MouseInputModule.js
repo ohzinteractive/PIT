@@ -20,6 +20,9 @@ export default class MouseInputModule
     this.previous_pointer_pos = { x: 0, y: 0 };
 
     this.scroll_delta = 0;
+
+    this.elapsed_time_since_pressed = 0;
+    this.click_triggered = false;
   }
 
   get pointer_count()
@@ -36,6 +39,11 @@ export default class MouseInputModule
     }
   }
 
+  get clicked()
+  {
+    return this.click_triggered;
+  }
+
   pointer_down(event)
   {
     this.pointer_pos.x = event.clientX;
@@ -49,6 +57,7 @@ export default class MouseInputModule
     case 0:
       this.left_mouse_button_pressed = true;
       this.left_mouse_button_down    = true;
+      this.elapsed_time_since_pressed = new Date();
       break;
     case 1:
       this.middle_mouse_button_pressed = true;
@@ -68,6 +77,7 @@ export default class MouseInputModule
     case 0:
       this.left_mouse_button_released = true;
       this.left_mouse_button_down     = false;
+      this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200
       break;
     case 1:
       this.middle_mouse_button_released = true;
@@ -178,6 +188,12 @@ export default class MouseInputModule
     this.scroll_delta = 0;
 
     this.update_previous_pointer_pos();
+
+    if(this.clicked)
+    {
+      this.elapsed_time_since_pressed = 0;
+      this.click_triggered = false;
+    }
   }
 
   get pointer_pos_delta()
