@@ -44,6 +44,11 @@ export default class MouseInputModule
     return this.click_triggered;
   }
 
+  get is_touchscreen()
+  {
+    return false;
+  }
+
   pointer_down(event)
   {
     this.pointer_pos.x = event.clientX;

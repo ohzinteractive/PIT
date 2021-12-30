@@ -117,6 +117,11 @@ class MouseInputModule
     return this.click_triggered;
   }
 
+  get is_touchscreen()
+  {
+    return false;
+  }
+
   pointer_down(event)
   {
     this.pointer_pos.x = event.clientX;
@@ -589,6 +594,11 @@ class TouchInputModule
     return this.click_triggered;
   }
 
+  get is_touchscreen()
+  {
+    return true;
+  }
+
   get scroll_delta()
   {
     if(this.pointers.length === 1)
@@ -1051,6 +1061,11 @@ class InputController
   get clicked()
   {
     return this.active_input_module.clicked;
+  }
+
+  get is_touchscreen()
+  {
+    return this.active_input_module.is_touchscreen;
   }
 
   check_for_legal_bounds()

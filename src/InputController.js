@@ -213,6 +213,11 @@ export default class InputController
     return this.active_input_module.clicked;
   }
 
+  get is_touchscreen()
+  {
+    return this.active_input_module.is_touchscreen;
+  }
+
   check_for_legal_bounds()
   {
     if (this.region_bounds.width === 0 || this.region_bounds.height === 0)

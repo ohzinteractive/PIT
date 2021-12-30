@@ -39,6 +39,11 @@ export default class TouchInputModule
     return this.click_triggered;
   }
 
+  get is_touchscreen()
+  {
+    return true;
+  }
+
   get scroll_delta()
   {
     if(this.pointers.length === 1)
