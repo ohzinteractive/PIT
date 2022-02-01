@@ -1,4 +1,4 @@
-import {Vector2} from './Vector2';
+import { Vector2 } from './Vector2';
 // import Logger from './utilities/Logger';
 import Pointer from './Pointer';
 
@@ -31,7 +31,6 @@ export default class TouchInputModule
     // this.pointers[0].distance_to(this.pointers[1])
     this.elapsed_time_since_pressed = 0;
     this.click_triggered = false;
-
   }
 
   get clicked()
@@ -46,8 +45,10 @@ export default class TouchInputModule
 
   get scroll_delta()
   {
-    if(this.pointers.length === 1)
-      return this.pointers[0].get_position_delta().y*0.03;
+    if (this.pointers.length === 1)
+    {
+      return this.pointers[0].get_position_delta().y * 0.03;
+    }
     return 0;
   }
 
@@ -57,10 +58,10 @@ export default class TouchInputModule
     position.x = this.previous_primary_pointer_pos.x;
     position.y = this.previous_primary_pointer_pos.y;
 
-    if( this.pointers.length > 0)
+    if (this.pointers.length > 0)
     {
-      position.set(0,0);
-      for(let i=0; i< this.pointers.length; i++)
+      position.set(0, 0);
+      for (let i = 0; i < this.pointers.length; i++)
       {
         position.add(this.pointers[i].position);
       }
@@ -74,7 +75,7 @@ export default class TouchInputModule
   {
     const position = new Vector2();
 
-    for(let i=0; i< this.pointers.length; i++)
+    for (let i = 0; i < this.pointers.length; i++)
     {
       position.add(this.pointers[i].get_position_delta());
     }
@@ -131,10 +132,8 @@ export default class TouchInputModule
       const p0 = this.pointers[0];
       const p1 = this.pointers[1];
 
-
       const distance          = p0.distance_to(p1);
       const previous_distance = p0.previous_distance_to(p1);
-
 
       if (this.previous_separation_distance === undefined)
       {
@@ -156,24 +155,23 @@ export default class TouchInputModule
   pointers_moving_away_from_each_other()
   {
     if (this.pointers.length !== 2)
+    {
       return false;
+    }
   }
 
   update_pointer(pointer_id, x, y)
   {
-
     let p = this.pointers.find(pointer => pointer.id === pointer_id);
     if (p === undefined)
     {
-
       // const is_primary = this.pointers.length === 0;
       p = new Pointer(pointer_id, x, y);
       this.pointers.push(p);
-
     }
     else
     {
-      p.set_position(x,y);
+      p.set_position(x, y);
     }
 
     if (this.is_primary_pointer(p))
@@ -181,7 +179,6 @@ export default class TouchInputModule
       this.previous_primary_pointer_pos.x = p.position.x;
       this.previous_primary_pointer_pos.y = p.position.y;
     }
-
 
     this.update_pointer_separation();
 
@@ -285,9 +282,9 @@ export default class TouchInputModule
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      this.pointers[i].reset_previous_position()
+      this.pointers[i].reset_previous_position();
     }
-    if(this.clicked)
+    if (this.clicked)
     {
       this.elapsed_time_since_pressed = 0;
       this.click_triggered = false;

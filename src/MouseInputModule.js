@@ -82,7 +82,7 @@ export default class MouseInputModule
     case 0:
       this.left_mouse_button_released = true;
       this.left_mouse_button_down     = false;
-      this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200
+      this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200;
       break;
     case 1:
       this.middle_mouse_button_released = true;
@@ -194,7 +194,7 @@ export default class MouseInputModule
 
     this.update_previous_pointer_pos();
 
-    if(this.clicked)
+    if (this.clicked)
     {
       this.elapsed_time_since_pressed = 0;
       this.click_triggered = false;

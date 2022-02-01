@@ -25,7 +25,7 @@
     "build": "rollup -c",
     "create-tag": "cross-var git tag -a \"v$npm_package_version\" -m \"Release Version $npm_package_version\" && cross-var git push origin \"v$npm_package_version\"",
     "update-version": "cross-var echo \"v$npm_package_version\" > .version",
-    "fix-syntax": "standardx --fix",
+    "fix-syntax": "standardx --fix || echo 'Done'",
     "generate-types": "npx -p typescript tsc src/components/sdf_text/SDFTextBatch.js --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
   "keywords": [

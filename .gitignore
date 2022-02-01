@@ -33,4 +33,3 @@ bower_components/
 *.apk
 
 # Rollup output folder.
-build

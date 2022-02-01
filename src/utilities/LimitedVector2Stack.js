@@ -1,5 +1,5 @@
 import LimitedStack from './LimitedStack';
-import {Vector2} from '../Vector2';
+import { Vector2 } from '../Vector2';
 
 export default class LimitedVector2Stack extends LimitedStack
 {
@@ -12,7 +12,7 @@ export default class LimitedVector2Stack extends LimitedStack
 
   set_from_stack(vector2_stack)
   {
-    for(let i=0; i< this.array.length; i++)
+    for (let i = 0; i < this.array.length; i++)
     {
       this.array[i].copy(vector2_stack.array[i]);
     }
@@ -28,12 +28,12 @@ export default class LimitedVector2Stack extends LimitedStack
 
   update_average()
   {
-    this.average.set(0,0);
-    for (let i = 0; i < this.array.length; i++) {
+    this.average.set(0, 0);
+    for (let i = 0; i < this.array.length; i++)
+    {
       this.average.add(this.array[i]);
     }
 
     this.average.divideScalar(Math.max(1, this.array.length));
   }
-
 }

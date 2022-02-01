@@ -16,18 +16,19 @@ export default class LimitedStack
   {
     return this.array.length();
   }
-  
+
   set_from_stack(stack)
   {
-    for(let i=0; i< this.array.length; i++)
+    for (let i = 0; i < this.array.length; i++)
     {
       this.array[i] = stack.array[i];
     }
   }
+
   push(elem)
   {
     this.array.unshift(elem);
-    if(this.array.length > this.max_size)
+    if (this.array.length > this.max_size)
     {
       this.array.pop();
     }

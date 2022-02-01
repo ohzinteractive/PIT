@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 class MathUtilities
 {
   static clamp(value, min, max)
@@ -1189,5 +1185,5 @@ class InputController
   }
 }
 
-exports.InputController = InputController;
-// # sourceMappingURL=PIT.js.map
+export { InputController };
+// # sourceMappingURL=PIT.module.js.map
