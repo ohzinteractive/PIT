@@ -40,5 +40,10 @@
     "mobile"
   ],
   "author": "OHZI Interactive",
-  "license": "MIT"
+  "license": "MIT",
+  "standardx": {
+    "ignore": [
+      "/examples/**/*"
+    ]
+  }
 }

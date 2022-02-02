@@ -67,7 +67,7 @@ class OS
   }
 }
 
-let OS$1 = new OS();
+var OS$1 = new OS();
 
 class MouseInputModule
 {
@@ -203,7 +203,7 @@ class MouseInputModule
     {
       // User is pinching
       if (event.ctrlKey)
-        ;
+      ;
       else
       {
         // User is using the touchpad
@@ -1186,4 +1186,4 @@ class InputController
 }
 
 export { InputController };
-// # sourceMappingURL=PIT.module.js.map
+//# sourceMappingURL=PIT.module.js.map
