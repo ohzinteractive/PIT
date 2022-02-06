@@ -1,6 +1,6 @@
 {
   "name": "pit-js",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Pollable Input",
   "module": "examples/build/PIT.module.js",
   "main": "examples/build/PIT.js",
@@ -23,6 +23,8 @@
   "scripts": {
     "start": "rollup -w -c",
     "build": "rollup -c",
+    "preinstall": "yarn config-hooks",
+    "config-hooks": "git config core.hooksPath git_hooks",
     "create-tag": "cross-var git tag -a \"v$npm_package_version\" -m \"Release Version $npm_package_version\" && cross-var git push origin \"v$npm_package_version\"",
     "update-version": "cross-var echo \"v$npm_package_version\" > .version",
     "fix-syntax": "standardx --fix || echo 'Done'",
