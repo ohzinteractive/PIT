@@ -136,15 +136,14 @@ export default class InputController
     this.mouse_input_module.clear();
   }
 
-  update_region_bounds(entries)
+  update_region_bounds()
   {
-    for (let entry of entries)
-    {
-      this.region_bounds.x = entry.contentRect.x;
-      this.region_bounds.y = entry.contentRect.y;
-      this.region_bounds.width = entry.contentRect.width;
-      this.region_bounds.height = entry.contentRect.height;
-    }
+    const region_bounds = this.sub_region_element.getBoundingClientRect();
+
+    this.region_bounds.x = region_bounds.left;
+    this.region_bounds.y = region_bounds.top;
+    this.region_bounds.width = region_bounds.width;
+    this.region_bounds.height = region_bounds.height;
   }
 
   mouse_input_allowed()
@@ -226,11 +225,19 @@ export default class InputController
     }
   }
 
+  invert_y(pos)
+  {
+    return {
+      x: pos.x,
+      y: this.region_bounds.height - pos.y
+    };
+  }
+
   transform_pos_to_subregion(pos)
   {
     return {
       x: pos.x - this.region_bounds.x,
-      y: this.region_bounds.height - (pos.y - this.region_bounds.y)
+      y: pos.y - this.region_bounds.y
     };
   }
 
@@ -280,15 +287,12 @@ export default class InputController
 
   get pointer_pos()
   {
-    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
+    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_pos));
   }
 
   get html_pointer_pos()
   {
-    return {
-      x: this.active_input_module.pointer_pos.x,
-      y: this.active_input_module.pointer_pos.y
-    };
+    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
   }
 
   get pointer_pos_delta()
@@ -322,7 +326,7 @@ export default class InputController
 
   get pointer_center()
   {
-    return this.transform_pos_to_subregion(this.active_input_module.pointer_center);
+    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_center));
   }
 
   get pointer_center_delta()
