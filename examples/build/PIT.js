@@ -93,9 +93,6 @@ class MouseInputModule
     this.previous_pointer_pos = { x: 0, y: 0 };
 
     this.scroll_delta = 0;
-
-    this.elapsed_time_since_pressed = 0;
-    this.click_triggered = false;
   }
 
   get pointer_count()
@@ -110,11 +107,6 @@ class MouseInputModule
     {
       return 0;
     }
-  }
-
-  get clicked()
-  {
-    return this.click_triggered;
   }
 
   get is_touchscreen()
@@ -135,7 +127,6 @@ class MouseInputModule
     case 0:
       this.left_mouse_button_pressed = true;
       this.left_mouse_button_down    = true;
-      this.elapsed_time_since_pressed = new Date();
       break;
     case 1:
       this.middle_mouse_button_pressed = true;
@@ -155,7 +146,6 @@ class MouseInputModule
     case 0:
       this.left_mouse_button_released = true;
       this.left_mouse_button_down     = false;
-      this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200;
       break;
     case 1:
       this.middle_mouse_button_released = true;
@@ -261,12 +251,6 @@ class MouseInputModule
     this.scroll_delta = 0;
 
     this.update_previous_pointer_pos();
-
-    if (this.clicked)
-    {
-      this.elapsed_time_since_pressed = 0;
-      this.click_triggered = false;
-    }
   }
 
   get pointer_pos_delta()
@@ -568,13 +552,6 @@ class TouchInputModule
     // this.update_pointer(6, 20, 20)
     // this.update_pointer(6, 25, 25)
     // this.pointers[0].distance_to(this.pointers[1])
-    this.elapsed_time_since_pressed = 0;
-    this.click_triggered = false;
-  }
-
-  get clicked()
-  {
-    return this.click_triggered;
   }
 
   get is_touchscreen()
@@ -754,7 +731,6 @@ class TouchInputModule
       {
         this.left_mouse_button_pressed = true;
         this.left_mouse_button_down    = true;
-        this.elapsed_time_since_pressed = new Date();
       }
     }
   }
@@ -772,7 +748,6 @@ class TouchInputModule
       {
         this.left_mouse_button_released = true;
         this.left_mouse_button_down     = false;
-        this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200;
       }
       this.remove_pointer(p.id);
     }
@@ -822,11 +797,6 @@ class TouchInputModule
     for (let i = 0; i < this.pointers.length; i++)
     {
       this.pointers[i].reset_previous_position();
-    }
-    if (this.clicked)
-    {
-      this.elapsed_time_since_pressed = 0;
-      this.click_triggered = false;
     }
   }
 }
@@ -1036,11 +1006,6 @@ class InputController
   get middle_mouse_button_released()
   {
     return this.mouse_input_module.middle_mouse_button_released;
-  }
-
-  get clicked()
-  {
-    return this.active_input_module.clicked;
   }
 
   get is_touchscreen()

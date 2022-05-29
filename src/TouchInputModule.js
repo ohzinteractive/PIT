@@ -29,13 +29,6 @@ export default class TouchInputModule
     // this.update_pointer(6, 20, 20)
     // this.update_pointer(6, 25, 25)
     // this.pointers[0].distance_to(this.pointers[1])
-    this.elapsed_time_since_pressed = 0;
-    this.click_triggered = false;
-  }
-
-  get clicked()
-  {
-    return this.click_triggered;
   }
 
   get is_touchscreen()
@@ -215,7 +208,6 @@ export default class TouchInputModule
       {
         this.left_mouse_button_pressed = true;
         this.left_mouse_button_down    = true;
-        this.elapsed_time_since_pressed = new Date();
       }
     }
   }
@@ -233,7 +225,6 @@ export default class TouchInputModule
       {
         this.left_mouse_button_released = true;
         this.left_mouse_button_down     = false;
-        this.click_triggered = (new Date() - this.elapsed_time_since_pressed) < 200;
       }
       this.remove_pointer(p.id);
     }
@@ -283,11 +274,6 @@ export default class TouchInputModule
     for (let i = 0; i < this.pointers.length; i++)
     {
       this.pointers[i].reset_previous_position();
-    }
-    if (this.clicked)
-    {
-      this.elapsed_time_since_pressed = 0;
-      this.click_triggered = false;
     }
   }
 }

@@ -207,11 +207,6 @@ export default class InputController
     return this.mouse_input_module.middle_mouse_button_released;
   }
 
-  get clicked()
-  {
-    return this.active_input_module.clicked;
-  }
-
   get is_touchscreen()
   {
     return this.active_input_module.is_touchscreen;

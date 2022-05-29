@@ -2,9 +2,9 @@
 
 
 
-PIT is a tiny javascript library (made mainly to be used with WebGL applications) that allows you to check for input in a pollable manner. 
+PIT is a tiny javascript library (made mainly to be used with WebGL applications) that allows you to check for input in a pollable manner.
 
-It is common in websites to handle input in an event-based way, but sometimes for highly interactive applications that have an update loop running every frame it is a lot easier to check for input instead of juggling around with the events. 
+It is common in websites to handle input in an event-based way, but sometimes for highly interactive applications that have an update loop running every frame it is a lot easier to check for input instead of juggling around with the events.
 
 Currently PIT supports the following:
 
@@ -34,7 +34,7 @@ $ npm install pit-js --save
 ```sh
 import {InputController} from 'pit-js'
 
-let input = new InputController(); 
+let input = new InputController();
 input.init(document.body); //element to listen events on
 
 let animate = function () {
@@ -65,9 +65,9 @@ animate();
 The API provides the following accesible properties
 
 ```sh
-let input = new InputController(dom_element, subregion_dom_element) 
+let input = new InputController(dom_element, subregion_dom_element)
 // dom_element will be the main element onto which the events will be hooked into.
-// If a subregion_dom_element is provided, then the coordinates will be reported into its 
+// If a subregion_dom_element is provided, then the coordinates will be reported into its
 // relative space. This will allow you to keep moving the mouse outside the area of interest
 // while still receiving elements of the parent element. Notice that if the mouse goes outside
 // of the subregion, the NDC coordinates will also be outside the [-1..1] range.
@@ -85,8 +85,6 @@ input.middle_mouse_button_pressed     //boolean, mouse only
 input.middle_mouse_button_down        //boolean, mouse only
 input.middle_mouse_button_released    //boolean, mouse only
 
-input.clicked                         //boolean, mouse and primary touch
-
 input.pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position
 input.html_pointer_pos                     //{x,y} screen coordinates of the mouse (or primary touch) position, where the origin is in the upper left corner (browser coordinates)
 input.pointer_pos_delta               //{x,y} difference between previous position and current position.
@@ -102,7 +100,7 @@ input.pointer_center_NDC_delta        //{x,y} [-1..1] difference between previou
 
 input.scroll_delta                    //float - this is equivalent to the mouse wheel (-1, 0, 1) or dragging with one finger [-x..x] measured in pixels
 input.zoom_delta                      // float - this is equivalent to the mouse wheel (-1, 0, 1) or pinching with two fingers [-x..x] measured in pixels
-input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches 
+input.pointer_count                   //int - returns 1 if any mouse button is down, or return the amount of active touches
 
 input.pointer_is_within_bounds        //boolean, true if the mouse or primary touch is contained within the bounds of the subregion
 input.pointer_is_over_element(html_element) //boolean, true if the pointer is over an html element
@@ -137,10 +135,10 @@ You can check out the examples folder, all you need to do is set up an http serv
 ```sh
 npm install -g http-server
 cd examples
-http-server -p 80 
+http-server -p 80
 ```
  This will mount an http server on the examples folder on port 80
- 
+
 License
 ----
 
