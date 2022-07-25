@@ -1,5 +1,6 @@
 import MouseInputModule from './MouseInputModule';
 import TouchInputModule from './TouchInputModule';
+import OS from './utilities/OS';
 // import Logger from './utilities/Logger';
 
 export default class InputController
@@ -21,6 +22,8 @@ export default class InputController
     };
 
     this.touch_cooldown = new Date() - 1000;
+
+    OS.init();
 
     this.bind_events();
 
