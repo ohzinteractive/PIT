@@ -15,7 +15,7 @@ export default class TouchInputModule
     this.previous_separation_distance = undefined;
     this.zoom_delta = 0;
 
-    this.previous_primary_pointer_pos = { x: 0, y: 0 };
+    this.previous_primary_pointer_pos = new Vector2();
 
     // this.update_pointer(7, 5, 5)
     // this.update_pointer(6, 5, 5)
@@ -43,6 +43,27 @@ export default class TouchInputModule
       return this.pointers[0].get_position_delta().y * 0.03;
     }
     return 0;
+  }
+
+  get_pointer_pos(index)
+  {
+    const position = new Vector2();
+
+    if(index < this.pointers.length)
+    {
+      position.copy(this.pointers[index].position);
+    }
+    return position;
+  }
+  get_pointer_pos_delta(index)
+  {
+    const position = new Vector2();
+
+    if(index < this.pointers.length)
+    {
+      position.copy(this.pointers[index].get_position_delta());
+    }
+    return position;
   }
 
   get pointer_pos()

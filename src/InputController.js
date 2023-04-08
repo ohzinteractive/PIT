@@ -1,5 +1,6 @@
 import MouseInputModule from './MouseInputModule';
 import TouchInputModule from './TouchInputModule';
+import { Vector2 } from './Vector2';
 import OS from './utilities/OS';
 // import Logger from './utilities/Logger';
 
@@ -225,28 +226,34 @@ export default class InputController
 
   invert_y(pos)
   {
-    return {
-      x: pos.x,
-      y: this.region_bounds.height - pos.y
-    };
+    const vec = new Vector2();
+    vec.copy(pos);
+
+    vec.y = this.region_bounds.height - vec.y;
+    return vec;
   }
 
   transform_pos_to_subregion(pos)
   {
-    return {
-      x: pos.x - this.region_bounds.x,
-      y: pos.y - this.region_bounds.y
-    };
+    const vec = new Vector2();
+    vec.copy(pos);
+
+    vec.x -= this.region_bounds.x;
+    vec.y -= this.region_bounds.y;
+
+    return vec;
   }
 
   transform_pos_to_NDC(pos)
   {
     this.check_for_legal_bounds();
 
-    return {
-      x: (pos.x / this.region_bounds.width) * 2 - 1,
-      y: (pos.y / this.region_bounds.height) * 2 - 1
-    };
+    const vec = new Vector2();
+    vec.copy(pos);
+
+    vec.x = (vec.x / this.region_bounds.width) * 2 - 1;
+    vec.y = (vec.y / this.region_bounds.height) * 2 - 1;
+    return vec;
   }
 
   get scroll_delta()
@@ -285,7 +292,7 @@ export default class InputController
 
   get pointer_pos()
   {
-    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_pos));
+    return this.get_pointer_pos(0);
   }
 
   get html_pointer_pos()
@@ -295,17 +302,12 @@ export default class InputController
 
   get pointer_pos_delta()
   {
-    const pos_delta = this.active_input_module.pointer_pos_delta;
-
-    return {
-      x: pos_delta.x,
-      y: pos_delta.y * -1
-    };
+    return this.get_pointer_pos_delta(0)
   }
 
   get NDC()
   {
-    return this.transform_pos_to_NDC(this.pointer_pos);
+    return this.get_pointer_NDC(0);
   }
 
   get html_NDC()
@@ -352,6 +354,31 @@ export default class InputController
       x: center_delta.x / this.region_bounds.width,
       y: center_delta.y / this.region_bounds.height
     };
+  }
+
+  get_pointer_pos(index)
+  {
+    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.get_pointer_pos(index)));
+  }
+  get_pointer_pos_delta(index)
+  {
+    const pos_delta = this.active_input_module.get_pointer_pos_delta(index);
+    pos_delta.y *= -1;
+    return pos_delta;
+  }
+
+  get_pointer_NDC(index)
+  {
+    return this.transform_pos_to_NDC(this.get_pointer_pos(index));
+  }
+
+  get_pointer_NDC_delta(index)
+  {
+    this.check_for_legal_bounds();
+    const delta = this.get_pointer_pos_delta(index);
+    delta.x /= this.region_bounds.width;
+    delta.y /= this.region_bounds.height;
+    return delta;
   }
 
   dispose()
