@@ -1,4 +1,5 @@
 import MouseInputModule from './MouseInputModule';
+import { Region } from './Region';
 import TouchInputModule from './TouchInputModule';
 import { Vector2 } from './Vector2';
 import OS from './utilities/OS';
@@ -10,26 +11,17 @@ export default class InputController
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
-    this.mouse_input_module = new MouseInputModule();
-    this.touch_input_module = new TouchInputModule();
+    this.region = new Region(this.sub_region_element);
+    this.mouse_input_module = new MouseInputModule(this.region);
+    this.touch_input_module = new TouchInputModule(this.region);
 
     this.active_input_module = this.mouse_input_module;
-
-    this.region_bounds = {
-      x: 0,
-      y: 0,
-      width: 1,
-      height: 1
-    };
 
     this.touch_cooldown = new Date() - 1000;
 
     OS.init();
 
     this.bind_events();
-
-    this.resize_observer = new ResizeObserver(this.update_region_bounds.bind(this));
-    this.resize_observer.observe(this.sub_region_element);
   }
 
   bind_events()
@@ -140,16 +132,6 @@ export default class InputController
     this.mouse_input_module.clear();
   }
 
-  update_region_bounds()
-  {
-    const region_bounds = this.sub_region_element.getBoundingClientRect();
-
-    this.region_bounds.x = region_bounds.left;
-    this.region_bounds.y = region_bounds.top;
-    this.region_bounds.width = region_bounds.width;
-    this.region_bounds.height = region_bounds.height;
-  }
-
   mouse_input_allowed()
   {
     return (new Date() - this.touch_cooldown) / 1000 > 0.75;
@@ -216,46 +198,6 @@ export default class InputController
     return this.active_input_module.is_touchscreen;
   }
 
-  check_for_legal_bounds()
-  {
-    if (this.region_bounds.width === 0 || this.region_bounds.height === 0)
-    {
-      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.region_bounds);
-    }
-  }
-
-  invert_y(pos)
-  {
-    const vec = new Vector2();
-    vec.copy(pos);
-
-    vec.y = this.region_bounds.height - vec.y;
-    return vec;
-  }
-
-  transform_pos_to_subregion(pos)
-  {
-    const vec = new Vector2();
-    vec.copy(pos);
-
-    vec.x -= this.region_bounds.x;
-    vec.y -= this.region_bounds.y;
-
-    return vec;
-  }
-
-  transform_pos_to_NDC(pos)
-  {
-    this.check_for_legal_bounds();
-
-    const vec = new Vector2();
-    vec.copy(pos);
-
-    vec.x = (vec.x / this.region_bounds.width) * 2 - 1;
-    vec.y = (vec.y / this.region_bounds.height) * 2 - 1;
-    return vec;
-  }
-
   get scroll_delta()
   {
     return this.active_input_module.scroll_delta;
@@ -292,36 +234,27 @@ export default class InputController
 
   get pointer_pos()
   {
-    return this.get_pointer_pos(0);
-  }
-
-  get html_pointer_pos()
-  {
-    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
+    return this.active_input_module.get_primary_pointer_position();
   }
 
   get pointer_pos_delta()
   {
-    return this.get_pointer_pos_delta(0)
+    return this.get_pointer_pos_delta(0);
   }
 
   get NDC()
   {
-    return this.get_pointer_NDC(0);
+    return this.active_input_module.get_primary_pointer().NDC;
   }
 
   get html_NDC()
   {
-    return this.transform_pos_to_NDC(this.html_pointer_pos);
+    return this.active_input_module.get_primary_pointer().html_NDC;
   }
 
   get NDC_delta()
   {
-    this.check_for_legal_bounds();
-    return {
-      x: this.pointer_pos_delta.x / this.region_bounds.width,
-      y: this.pointer_pos_delta.y / this.region_bounds.height
-    };
+    return this.active_input_module.get_primary_pointer().NDC_delta;
   }
 
   get pointer_center()
@@ -356,10 +289,11 @@ export default class InputController
     };
   }
 
-  get_pointer_pos(index)
+  get_pointer_pos()
   {
-    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.get_pointer_pos(index)));
+    return this.invert_y(this.active_input_module.get_primary_pointer_position(index));
   }
+
   get_pointer_pos_delta(index)
   {
     const pos_delta = this.active_input_module.get_pointer_pos_delta(index);
@@ -369,7 +303,7 @@ export default class InputController
 
   get_pointer_NDC(index)
   {
-    return this.transform_pos_to_NDC(this.get_pointer_pos(index));
+    return this.transform_pos_to_NDC(this.get_pointer_pos());
   }
 
   get_pointer_NDC_delta(index)

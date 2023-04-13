@@ -2,282 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-class MathUtilities
-{
-  static clamp(value, min, max)
-  {
-    return Math.max(min, Math.min(max, value));
-  }
-
-  static is_int(n)
-  {
-    return Number(n) === n && n % 1 === 0;
-  }
-}
-
-class OS
-{
-  init()
-  {
-    this.operating_systems = {
-      ANDROID: 'android',
-      IOS: 'ios',
-      LINUX: 'linux',
-      MAC: 'mac',
-      WINDOWS: 'windows'
-    };
-
-    this.is_mobile = !!(navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/));
-    this.is_ipad = !!(navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
-    this.is_ios = !!navigator.userAgent.match(/(iPhone|iPod|iPad)/) || this.is_ipad;
-
-    this.is_android = this.get_os() === this.operating_systems.ANDROID;
-    this.is_linux = this.get_os() === this.operating_systems.LINUX;
-    this.is_mac = this.get_os() === this.operating_systems.MAC;
-    this.is_windows = this.get_os() === this.operating_systems.WINDOWS;
-  }
-
-  get_os()
-  {
-    const userAgent = window.navigator.userAgent;
-    const platform = window.navigator.platform;
-    const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
-    const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-    const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-    let os = null;
-
-    if (macosPlatforms.indexOf(platform) !== -1)
-    {
-      os = this.operating_systems.MAC;
-    }
-    else if (iosPlatforms.indexOf(platform) !== -1)
-    {
-      os = this.operating_systems.IOS;
-    }
-    else if (windowsPlatforms.indexOf(platform) !== -1)
-    {
-      os = this.operating_systems.WINDOWS;
-    }
-    else if (/Android/.test(userAgent))
-    {
-      os = this.operating_systems.ANDROID;
-    }
-    else if (!os && /Linux/.test(platform))
-    {
-      os = this.operating_systems.LINUX;
-    }
-
-    return os;
-  }
-}
-
-var OS$1 = new OS();
-
-class MouseInputModule
-{
-  constructor()
-  {
-    this.left_mouse_button_pressed  = false;
-    this.left_mouse_button_down     = false;
-    this.left_mouse_button_released = false;
-
-    this.right_mouse_button_pressed  = false;
-    this.right_mouse_button_down     = false;
-    this.right_mouse_button_released = false;
-
-    this.middle_mouse_button_pressed  = false;
-    this.middle_mouse_button_down     = false;
-    this.middle_mouse_button_released = false;
-
-    this.pointer_pos = { x: 0, y: 0 };
-    this.previous_pointer_pos = { x: 0, y: 0 };
-
-    this.scroll_delta = 0;
-  }
-
-  get pointer_count()
-  {
-    if (this.left_mouse_button_down  ||
-       this.right_mouse_button_down ||
-       this.middle_mouse_button_down)
-    {
-      return 1;
-    }
-    else
-    {
-      return 0;
-    }
-  }
-
-  get is_touchscreen()
-  {
-    return false;
-  }
-
-  pointer_down(event)
-  {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
-
-    this.previous_pointer_pos.x = event.clientX;
-    this.previous_pointer_pos.y = event.clientY;
-
-    switch (event.button)
-    {
-    case 0:
-      this.left_mouse_button_pressed = true;
-      this.left_mouse_button_down    = true;
-      break;
-    case 1:
-      this.middle_mouse_button_pressed = true;
-      this.middle_mouse_button_down    = true;
-      break;
-    case 2:
-      this.right_mouse_button_pressed = true;
-      this.right_mouse_button_down    = true;
-      break;
-    }
-  }
-
-  pointer_up(event)
-  {
-    switch (event.button)
-    {
-    case 0:
-      this.left_mouse_button_released = true;
-      this.left_mouse_button_down     = false;
-      break;
-    case 1:
-      this.middle_mouse_button_released = true;
-      this.middle_mouse_button_down     = false;
-      break;
-    case 2:
-      this.right_mouse_button_released = true;
-      this.right_mouse_button_down     = false;
-      break;
-    }
-  }
-
-  pointer_move(event)
-  {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
-  }
-
-  pointer_cancel(event)
-  {
-    this.pointer_out(event);
-  }
-
-  pointer_out(event)
-  {
-    if (this.left_mouse_button_down)
-    {
-      this.left_mouse_button_down     = false;
-      this.left_mouse_button_released = true;
-    }
-    if (this.middle_mouse_button_down)
-    {
-      this.middle_mouse_button_down     = false;
-      this.middle_mouse_button_released = true;
-    }
-    if (this.right_mouse_button_down)
-    {
-      this.right_mouse_button_down     = false;
-      this.right_mouse_button_released = true;
-    }
-  }
-
-  scroll(event)
-  {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
-
-    if (OS$1.is_mac)
-    {
-      // User is pinching
-      if (event.ctrlKey)
-      ;
-      else
-      {
-        // User is using the touchpad
-        if (MathUtilities.is_int(event.deltaY))
-        {
-          // Negative values means scroll up
-          // Positive values means scroll down
-          // console.log("Scrolling with a touchpad", (event.deltaY))
-          // 350 is aprox the maximum value of deltaY on touchpad scroll
-          this.scroll_delta = MathUtilities.clamp(event.deltaY / 350, -1, 1) * -1;
-        }
-        else
-        {
-          // Negative values means scroll up
-          // Positive values means scroll down
-          // console.log("Scrolling with a mouse", event.deltaY)
-          this.scroll_delta = event.deltaY / Math.abs(event.deltaY);
-        }
-      }
-    }
-    else
-    {
-      // probably windows
-      if (Math.abs(event.deltaY) < 0.0001)
-      {
-        this.scroll_delta = 0;
-      }
-      else
-      {
-        this.scroll_delta = event.deltaY / Math.abs(event.deltaY);
-      }
-    }
-  }
-
-  get zoom_delta()
-  {
-    return this.scroll_delta;
-  }
-
-  clear()
-  {
-    this.left_mouse_button_pressed  = false;
-    this.left_mouse_button_released = false;
-
-    this.right_mouse_button_pressed  = false;
-    this.right_mouse_button_released = false;
-
-    this.middle_mouse_button_pressed  = false;
-    this.middle_mouse_button_released = false;
-
-    this.scroll_delta = 0;
-
-    this.update_previous_pointer_pos();
-  }
-
-  get pointer_pos_delta()
-  {
-    return {
-      x: this.pointer_pos.x - this.previous_pointer_pos.x,
-      y: this.pointer_pos.y - this.previous_pointer_pos.y
-    };
-  }
-
-  get pointer_center()
-  {
-    return this.pointer_pos;
-  }
-
-  get pointer_center_delta()
-  {
-    return this.pointer_pos_delta;
-  }
-
-  update_previous_pointer_pos()
-  {
-    this.previous_pointer_pos.x = this.pointer_pos.x;
-    this.previous_pointer_pos.y = this.pointer_pos.y;
-  }
-}
-
 class Vector2
 {
   constructor(x = 0, y = 0)
@@ -476,8 +200,9 @@ class LimitedVector2Stack extends LimitedStack
 
 class Pointer
 {
-  constructor(id, x, y)
+  constructor(id, x, y, region)
   {
+    this.region = region;
     this.id = id;
 
     this.position_array          = new LimitedVector2Stack(5);
@@ -485,16 +210,36 @@ class Pointer
 
     this.position_array.push(new Vector2(x, y));
     this.previous_position_array.push(new Vector2(x, y));
+
+    this.pressed = true;
+    this.down = true;
+    this.released = false;
   }
 
   get position()
   {
-    return this.position_array.get_first();
+    return this.region.invert_y(this.position_array.get_first());
   }
 
   get previous_position()
   {
-    return this.previous_position_array.get_first();
+    return this.region.invert_y(this.previous_position_array.get_first());
+  }
+
+  get html_NDC()
+  {
+    return this.region.transform_pos_to_NDC(this.region.invert_y(this.position_array.get_first()));
+  }
+
+  get NDC()
+  {
+    const ndc = this.region.transform_pos_to_NDC(this.position);
+    return ndc;
+  }
+
+  get NDC_delta()
+  {
+    return this.region.transform_dir_to_NDC(this.get_position_delta());
   }
 
   distance_to(pointer)
@@ -525,10 +270,380 @@ class Pointer
   }
 }
 
+class MathUtilities
+{
+  static clamp(value, min, max)
+  {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  static is_int(n)
+  {
+    return Number(n) === n && n % 1 === 0;
+  }
+}
+
+class OS
+{
+  init()
+  {
+    this.operating_systems = {
+      ANDROID: 'android',
+      IOS: 'ios',
+      LINUX: 'linux',
+      MAC: 'mac',
+      WINDOWS: 'windows'
+    };
+
+    this.is_mobile = !!(navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/));
+    this.is_ipad = !!(navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+    this.is_ios = !!navigator.userAgent.match(/(iPhone|iPod|iPad)/) || this.is_ipad;
+
+    this.is_android = this.get_os() === this.operating_systems.ANDROID;
+    this.is_linux = this.get_os() === this.operating_systems.LINUX;
+    this.is_mac = this.get_os() === this.operating_systems.MAC;
+    this.is_windows = this.get_os() === this.operating_systems.WINDOWS;
+  }
+
+  get_os()
+  {
+    const userAgent = window.navigator.userAgent;
+    const platform = window.navigator.platform;
+    const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+    const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+    const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+    let os = null;
+
+    if (macosPlatforms.indexOf(platform) !== -1)
+    {
+      os = this.operating_systems.MAC;
+    }
+    else if (iosPlatforms.indexOf(platform) !== -1)
+    {
+      os = this.operating_systems.IOS;
+    }
+    else if (windowsPlatforms.indexOf(platform) !== -1)
+    {
+      os = this.operating_systems.WINDOWS;
+    }
+    else if (/Android/.test(userAgent))
+    {
+      os = this.operating_systems.ANDROID;
+    }
+    else if (!os && /Linux/.test(platform))
+    {
+      os = this.operating_systems.LINUX;
+    }
+
+    return os;
+  }
+}
+
+var OS$1 = new OS();
+
+class MouseInputModule
+{
+  constructor(region)
+  {
+    this.left_mouse_button_pressed  = false;
+    this.left_mouse_button_down     = false;
+    this.left_mouse_button_released = false;
+
+    this.right_mouse_button_pressed  = false;
+    this.right_mouse_button_down     = false;
+    this.right_mouse_button_released = false;
+
+    this.middle_mouse_button_pressed  = false;
+    this.middle_mouse_button_down     = false;
+    this.middle_mouse_button_released = false;
+
+    this.pointer_pos = { x: 0, y: 0 };
+    this.previous_pointer_pos = { x: 0, y: 0 };
+
+    this.pointer = new Pointer(9999, 0, 0, region);
+    this.pointer.pressed = false;
+    this.pointer.down = false;
+    this.pointer.released = false;
+
+    this.scroll_delta = 0;
+  }
+
+  get_primary_pointer()
+  {
+    return this.pointer;
+  }
+
+  get pointer_count()
+  {
+    if (this.left_mouse_button_down  ||
+       this.right_mouse_button_down ||
+       this.middle_mouse_button_down)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+  }
+
+  get is_touchscreen()
+  {
+    return false;
+  }
+
+  pointer_down(event)
+  {
+    // this.pointer_pos.x = event.clientX;
+    // this.pointer_pos.y = event.clientY;
+    this.pointer.set_position(event.clientX, event.clientY);
+
+    // this.previous_pointer_pos.x = event.clientX;
+    // this.previous_pointer_pos.y = event.clientY;
+
+    switch (event.button)
+    {
+    case 0:
+      this.left_mouse_button_pressed = true;
+      this.left_mouse_button_down    = true;
+      this.pointer.pressed = true;
+      this.pointer.down = true;
+      break;
+    case 1:
+      this.middle_mouse_button_pressed = true;
+      this.middle_mouse_button_down    = true;
+      break;
+    case 2:
+      this.right_mouse_button_pressed = true;
+      this.right_mouse_button_down    = true;
+      break;
+    }
+  }
+
+  pointer_up(event)
+  {
+    switch (event.button)
+    {
+    case 0:
+      this.left_mouse_button_released = true;
+      this.left_mouse_button_down     = false;
+      this.pointer.released = true;
+      this.pointer.down = false;
+      break;
+    case 1:
+      this.middle_mouse_button_released = true;
+      this.middle_mouse_button_down     = false;
+      break;
+    case 2:
+      this.right_mouse_button_released = true;
+      this.right_mouse_button_down     = false;
+      break;
+    }
+  }
+
+  pointer_move(event)
+  {
+    this.pointer.set_position(event.clientX, event.clientY);
+  }
+
+  pointer_cancel(event)
+  {
+    this.pointer_out(event);
+  }
+
+  pointer_out(event)
+  {
+    if (this.left_mouse_button_down)
+    {
+      this.left_mouse_button_down     = false;
+      this.left_mouse_button_released = true;
+      this.pointer.down = false;
+      this.pointer.released = true;
+    }
+    if (this.middle_mouse_button_down)
+    {
+      this.middle_mouse_button_down     = false;
+      this.middle_mouse_button_released = true;
+    }
+    if (this.right_mouse_button_down)
+    {
+      this.right_mouse_button_down     = false;
+      this.right_mouse_button_released = true;
+    }
+  }
+
+  scroll(event)
+  {
+    this.pointer.set_position(event.clientX, event.clientY);
+    if (OS$1.is_mac)
+    {
+      // User is pinching
+      if (event.ctrlKey)
+      ;
+      else
+      {
+        // User is using the touchpad
+        if (MathUtilities.is_int(event.deltaY))
+        {
+          // Negative values means scroll up
+          // Positive values means scroll down
+          // console.log("Scrolling with a touchpad", (event.deltaY))
+          // 350 is aprox the maximum value of deltaY on touchpad scroll
+          this.scroll_delta = MathUtilities.clamp(event.deltaY / 350, -1, 1) * -1;
+        }
+        else
+        {
+          // Negative values means scroll up
+          // Positive values means scroll down
+          // console.log("Scrolling with a mouse", event.deltaY)
+          this.scroll_delta = event.deltaY / Math.abs(event.deltaY);
+        }
+      }
+    }
+    else
+    {
+      // probably windows
+      if (Math.abs(event.deltaY) < 0.0001)
+      {
+        this.scroll_delta = 0;
+      }
+      else
+      {
+        this.scroll_delta = event.deltaY / Math.abs(event.deltaY);
+      }
+    }
+  }
+
+  get zoom_delta()
+  {
+    return this.scroll_delta;
+  }
+
+  clear()
+  {
+    this.left_mouse_button_pressed  = false;
+    this.left_mouse_button_released = false;
+
+    this.pointer.pressed = false;
+    this.pointer.released = false;
+
+    this.right_mouse_button_pressed  = false;
+    this.right_mouse_button_released = false;
+
+    this.middle_mouse_button_pressed  = false;
+    this.middle_mouse_button_released = false;
+
+    this.scroll_delta = 0;
+
+    this.update_previous_pointer_pos();
+  }
+
+  get pointer_pos_delta()
+  {
+    return this.pointer.get_position_delta();
+  }
+
+  get pointer_center()
+  {
+    return this.pointer.position;
+  }
+
+  get pointer_center_delta()
+  {
+    return this.pointer.get_position_delta();
+  }
+
+  update_previous_pointer_pos()
+  {
+    this.pointer.reset_previous_position();
+  }
+
+  get_primary_pointer_position()
+  {
+    return this.pointer.position;
+  }
+}
+
+class Region
+{
+  constructor(region_element)
+  {
+    this.region_element = region_element;
+    this.region_bounds = {
+      x: 0,
+      y: 0,
+      width: 1,
+      height: 1
+    };
+
+    this.resize_observer = new ResizeObserver(this.update_region_bounds.bind(this));
+    this.resize_observer.observe(this.region_element);
+  }
+
+  update_region_bounds()
+  {
+    const region_bounds = this.region_element.getBoundingClientRect();
+
+    this.region_bounds.x = region_bounds.left;
+    this.region_bounds.y = region_bounds.top;
+    this.region_bounds.width = region_bounds.width;
+    this.region_bounds.height = region_bounds.height;
+  }
+
+  check_for_legal_bounds()
+  {
+    if (this.region_bounds.width === 0 || this.region_bounds.height === 0)
+    {
+      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.region_bounds);
+    }
+  }
+
+  invert_y(pos)
+  {
+    const vec = new Vector2();
+    vec.copy(pos);
+    vec.y = this.region_bounds.height - vec.y;
+    return vec;
+  }
+
+  transform_pos_to_subregion(pos)
+  {
+    const vec = new Vector2();
+    vec.copy(pos);
+
+    vec.x -= this.region_bounds.x;
+    vec.y -= this.region_bounds.y;
+
+    return vec;
+  }
+
+  transform_pos_to_NDC(pos)
+  {
+    this.check_for_legal_bounds();
+
+    const vec = this.transform_pos_to_subregion(pos);
+
+    vec.x = (vec.x / this.region_bounds.width) * 2 - 1;
+    vec.y = (vec.y / this.region_bounds.height) * 2 - 1;
+    return vec;
+  }
+
+  transform_dir_to_NDC(dir)
+  {
+    const vec = new Vector2();
+    vec.copy(dir);
+    dir.x /= this.region_bounds.width;
+    dir.y /= this.region_bounds.height;
+
+    return dir;
+  }
+}
+
 class TouchInputModule
 {
-  constructor()
+  constructor(region)
   {
+    this.region = region;
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_down     = false;
     this.left_mouse_button_released = false;
@@ -538,7 +653,7 @@ class TouchInputModule
     this.previous_separation_distance = undefined;
     this.zoom_delta = 0;
 
-    this.previous_primary_pointer_pos = { x: 0, y: 0 };
+    this.previous_primary_pointer_pos = new Vector2();
 
     // this.update_pointer(7, 5, 5)
     // this.update_pointer(6, 5, 5)
@@ -568,7 +683,19 @@ class TouchInputModule
     return 0;
   }
 
-  get pointer_pos()
+  get_primary_pointer()
+  {
+    if (this.pointers.length > 0)
+    {
+      return this.pointers[0];
+    }
+    else
+    {
+      return undefined;
+    }
+  }
+
+  get_primary_pointer_position()
   {
     const position = new Vector2();
     position.x = this.previous_primary_pointer_pos.x;
@@ -681,8 +808,7 @@ class TouchInputModule
     let p = this.pointers.find(pointer => pointer.id === pointer_id);
     if (p === undefined)
     {
-      // const is_primary = this.pointers.length === 0;
-      p = new Pointer(pointer_id, x, y);
+      p = new Pointer(pointer_id, x, y, this.region);
       this.pointers.push(p);
     }
     else
@@ -777,6 +903,8 @@ class TouchInputModule
     {
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+      p.released = true;
+      p.down = false;
 
       if (this.left_mouse_button_down && this.is_primary_pointer(p))
       {
@@ -797,6 +925,7 @@ class TouchInputModule
     for (let i = 0; i < this.pointers.length; i++)
     {
       this.pointers[i].reset_previous_position();
+      this.pointers[i].pressed = false;
     }
   }
 }
@@ -809,26 +938,17 @@ class InputController
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
-    this.mouse_input_module = new MouseInputModule();
-    this.touch_input_module = new TouchInputModule();
+    this.region = new Region(this.sub_region_element);
+    this.mouse_input_module = new MouseInputModule(this.region);
+    this.touch_input_module = new TouchInputModule(this.region);
 
     this.active_input_module = this.mouse_input_module;
-
-    this.region_bounds = {
-      x: 0,
-      y: 0,
-      width: 1,
-      height: 1
-    };
 
     this.touch_cooldown = new Date() - 1000;
 
     OS$1.init();
 
     this.bind_events();
-
-    this.resize_observer = new ResizeObserver(this.update_region_bounds.bind(this));
-    this.resize_observer.observe(this.sub_region_element);
   }
 
   bind_events()
@@ -939,16 +1059,6 @@ class InputController
     this.mouse_input_module.clear();
   }
 
-  update_region_bounds()
-  {
-    const region_bounds = this.sub_region_element.getBoundingClientRect();
-
-    this.region_bounds.x = region_bounds.left;
-    this.region_bounds.y = region_bounds.top;
-    this.region_bounds.width = region_bounds.width;
-    this.region_bounds.height = region_bounds.height;
-  }
-
   mouse_input_allowed()
   {
     return (new Date() - this.touch_cooldown) / 1000 > 0.75;
@@ -1015,40 +1125,6 @@ class InputController
     return this.active_input_module.is_touchscreen;
   }
 
-  check_for_legal_bounds()
-  {
-    if (this.region_bounds.width === 0 || this.region_bounds.height === 0)
-    {
-      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.region_bounds);
-    }
-  }
-
-  invert_y(pos)
-  {
-    return {
-      x: pos.x,
-      y: this.region_bounds.height - pos.y
-    };
-  }
-
-  transform_pos_to_subregion(pos)
-  {
-    return {
-      x: pos.x - this.region_bounds.x,
-      y: pos.y - this.region_bounds.y
-    };
-  }
-
-  transform_pos_to_NDC(pos)
-  {
-    this.check_for_legal_bounds();
-
-    return {
-      x: (pos.x / this.region_bounds.width) * 2 - 1,
-      y: (pos.y / this.region_bounds.height) * 2 - 1
-    };
-  }
-
   get scroll_delta()
   {
     return this.active_input_module.scroll_delta;
@@ -1085,41 +1161,27 @@ class InputController
 
   get pointer_pos()
   {
-    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_pos));
-  }
-
-  get html_pointer_pos()
-  {
-    return this.transform_pos_to_subregion(this.active_input_module.pointer_pos);
+    return this.active_input_module.get_primary_pointer_position();
   }
 
   get pointer_pos_delta()
   {
-    const pos_delta = this.active_input_module.pointer_pos_delta;
-
-    return {
-      x: pos_delta.x,
-      y: pos_delta.y * -1
-    };
+    return this.get_pointer_pos_delta(0);
   }
 
   get NDC()
   {
-    return this.transform_pos_to_NDC(this.pointer_pos);
+    return this.active_input_module.get_primary_pointer().NDC;
   }
 
   get html_NDC()
   {
-    return this.transform_pos_to_NDC(this.html_pointer_pos);
+    return this.active_input_module.get_primary_pointer().html_NDC;
   }
 
   get NDC_delta()
   {
-    this.check_for_legal_bounds();
-    return {
-      x: this.pointer_pos_delta.x / this.region_bounds.width,
-      y: this.pointer_pos_delta.y / this.region_bounds.height
-    };
+    return this.active_input_module.get_primary_pointer().NDC_delta;
   }
 
   get pointer_center()
@@ -1152,6 +1214,32 @@ class InputController
       x: center_delta.x / this.region_bounds.width,
       y: center_delta.y / this.region_bounds.height
     };
+  }
+
+  get_pointer_pos()
+  {
+    return this.invert_y(this.active_input_module.get_primary_pointer_position(index));
+  }
+
+  get_pointer_pos_delta(index)
+  {
+    const pos_delta = this.active_input_module.get_pointer_pos_delta(index);
+    pos_delta.y *= -1;
+    return pos_delta;
+  }
+
+  get_pointer_NDC(index)
+  {
+    return this.transform_pos_to_NDC(this.get_pointer_pos());
+  }
+
+  get_pointer_NDC_delta(index)
+  {
+    this.check_for_legal_bounds();
+    const delta = this.get_pointer_pos_delta(index);
+    delta.x /= this.region_bounds.width;
+    delta.y /= this.region_bounds.height;
+    return delta;
   }
 
   dispose()

@@ -1,8 +1,9 @@
+import Pointer from './Pointer';
 import MathUtilities from './utilities/MathUtilities';
 import OS from './utilities/OS';
 export default class MouseInputModule
 {
-  constructor()
+  constructor(region)
   {
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_down     = false;
@@ -19,7 +20,17 @@ export default class MouseInputModule
     this.pointer_pos = { x: 0, y: 0 };
     this.previous_pointer_pos = { x: 0, y: 0 };
 
+    this.pointer = new Pointer(9999, 0, 0, region);
+    this.pointer.pressed = false;
+    this.pointer.down = false;
+    this.pointer.released = false;
+
     this.scroll_delta = 0;
+  }
+
+  get_primary_pointer()
+  {
+    return this.pointer;
   }
 
   get pointer_count()
@@ -43,17 +54,20 @@ export default class MouseInputModule
 
   pointer_down(event)
   {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
+    // this.pointer_pos.x = event.clientX;
+    // this.pointer_pos.y = event.clientY;
+    this.pointer.set_position(event.clientX, event.clientY);
 
-    this.previous_pointer_pos.x = event.clientX;
-    this.previous_pointer_pos.y = event.clientY;
+    // this.previous_pointer_pos.x = event.clientX;
+    // this.previous_pointer_pos.y = event.clientY;
 
     switch (event.button)
     {
     case 0:
       this.left_mouse_button_pressed = true;
       this.left_mouse_button_down    = true;
+      this.pointer.pressed = true;
+      this.pointer.down = true;
       break;
     case 1:
       this.middle_mouse_button_pressed = true;
@@ -73,6 +87,8 @@ export default class MouseInputModule
     case 0:
       this.left_mouse_button_released = true;
       this.left_mouse_button_down     = false;
+      this.pointer.released = true;
+      this.pointer.down = false;
       break;
     case 1:
       this.middle_mouse_button_released = true;
@@ -87,8 +103,7 @@ export default class MouseInputModule
 
   pointer_move(event)
   {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
+    this.pointer.set_position(event.clientX, event.clientY);
   }
 
   pointer_cancel(event)
@@ -102,6 +117,8 @@ export default class MouseInputModule
     {
       this.left_mouse_button_down     = false;
       this.left_mouse_button_released = true;
+      this.pointer.down = false;
+      this.pointer.released = true;
     }
     if (this.middle_mouse_button_down)
     {
@@ -117,9 +134,7 @@ export default class MouseInputModule
 
   scroll(event)
   {
-    this.pointer_pos.x = event.clientX;
-    this.pointer_pos.y = event.clientY;
-
+    this.pointer.set_position(event.clientX, event.clientY);
     if (OS.is_mac)
     {
       // User is pinching
@@ -174,6 +189,9 @@ export default class MouseInputModule
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_released = false;
 
+    this.pointer.pressed = false;
+    this.pointer.released = false;
+
     this.right_mouse_button_pressed  = false;
     this.right_mouse_button_released = false;
 
@@ -187,34 +205,26 @@ export default class MouseInputModule
 
   get pointer_pos_delta()
   {
-    return {
-      x: this.pointer_pos.x - this.previous_pointer_pos.x,
-      y: this.pointer_pos.y - this.previous_pointer_pos.y
-    };
+    return this.pointer.get_position_delta();
   }
 
   get pointer_center()
   {
-    return this.pointer_pos;
+    return this.pointer.position;
   }
 
   get pointer_center_delta()
   {
-    return this.pointer_pos_delta;
+    return this.pointer.get_position_delta();
   }
 
   update_previous_pointer_pos()
   {
-    this.previous_pointer_pos.x = this.pointer_pos.x;
-    this.previous_pointer_pos.y = this.pointer_pos.y;
+    this.pointer.reset_previous_position();
   }
 
-  get_pointer_pos(index)
+  get_primary_pointer_position()
   {
-    return this.pointer_center;
-  }
-  get_pointer_pos_delta(index)
-  {
-    return this.pointer_center_delta;
+    return this.pointer.position;
   }
 }

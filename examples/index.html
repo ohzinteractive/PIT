@@ -48,40 +48,40 @@
 				// console.log(input.pointer_center);
 				// console.log("mouse_pos", input.mouse_pos.y, "NDC", input.NDC.y);
 				// console.log("mouse_delta", input.NDC.x, "NDC delta", input.NDC_delta.x);
-
+        console.log(input.NDC_delta)
 
 				// if(input.left_mouse_button_pressed)
 					// console.log('pressed')
-        let x = (input.NDC.x * 0.5 + 0.5)* window.innerWidth;
-        let y = (1-(input.NDC.y * 0.5 + 0.5))* window.innerHeight;
+        // let x = (input.NDC.x * 0.5 + 0.5)* window.innerWidth;
+        // let y = (1-(input.NDC.y * 0.5 + 0.5))* window.innerHeight;
 
         // scale += input.zoom_delta*0.1;
 
-        ndc_pos.x += input.NDC_delta.x*500;
-        ndc_pos.y += input.NDC_delta.y*-500;
-        elem.style.transform = "translate("+ndc_pos.x+"px, "+ndc_pos.y+"px) scale("+scale+")";
+        // ndc_pos.x += input.NDC_delta.x*500;
+        // ndc_pos.y += input.NDC_delta.y*-500;
+        // elem.style.transform = "translate("+ndc_pos.x+"px, "+ndc_pos.y+"px) scale("+scale+")";
         // elem.style.transform = "translate("+x+"px, "+y+"px); scale("+scale+");";
 
-				if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)
-				{
-					cube.rotation.y += input.NDC_delta.x *2
-					// console.log('down')
-				}
+				// if(input.left_mouse_button_down && Math.abs(input.scroll_delta) < 0.00001)
+				// {
+				// 	cube.rotation.y += input.NDC_delta.x *2
+				// 	// console.log('down')
+				// }
         // console.log(input.html_NDC);
 
-				if(input.pointer_count > 0)
-					cube.position.x += input.pointer_center_NDC_delta.x *3;
+				// if(input.pointer_count > 0)
+				// 	cube.position.x += input.pointer_center_NDC_delta.x *3;
 
 				// if(input.left_mouse_button_released)
 				// console.log('released')
 
 
-				if(input.pointer_count === 2)
-				{
-					let scale = cube.scale.x;
-					scale -= input.scroll_delta/10;
-					cube.scale.set(scale, scale, scale);
-				}
+				// if(input.pointer_count === 2)
+				// {
+				// 	let scale = cube.scale.x;
+				// 	scale -= input.scroll_delta/10;
+				// 	cube.scale.set(scale, scale, scale);
+				// }
 
 
 				renderer.render(scene, camera);

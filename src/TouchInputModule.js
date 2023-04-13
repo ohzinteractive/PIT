@@ -4,8 +4,9 @@ import Pointer from './Pointer';
 
 export default class TouchInputModule
 {
-  constructor()
+  constructor(region)
   {
+    this.region = region;
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_down     = false;
     this.left_mouse_button_released = false;
@@ -45,28 +46,19 @@ export default class TouchInputModule
     return 0;
   }
 
-  get_pointer_pos(index)
+  get_primary_pointer()
   {
-    const position = new Vector2();
-
-    if(index < this.pointers.length)
+    if (this.pointers.length > 0)
     {
-      position.copy(this.pointers[index].position);
+      return this.pointers[0];
     }
-    return position;
-  }
-  get_pointer_pos_delta(index)
-  {
-    const position = new Vector2();
-
-    if(index < this.pointers.length)
+    else
     {
-      position.copy(this.pointers[index].get_position_delta());
+      return undefined;
     }
-    return position;
   }
 
-  get pointer_pos()
+  get_primary_pointer_position()
   {
     const position = new Vector2();
     position.x = this.previous_primary_pointer_pos.x;
@@ -179,8 +171,7 @@ export default class TouchInputModule
     let p = this.pointers.find(pointer => pointer.id === pointer_id);
     if (p === undefined)
     {
-      // const is_primary = this.pointers.length === 0;
-      p = new Pointer(pointer_id, x, y);
+      p = new Pointer(pointer_id, x, y, this.region);
       this.pointers.push(p);
     }
     else
@@ -275,6 +266,8 @@ export default class TouchInputModule
     {
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+      p.released = true;
+      p.down = false;
 
       if (this.left_mouse_button_down && this.is_primary_pointer(p))
       {
@@ -295,6 +288,7 @@ export default class TouchInputModule
     for (let i = 0; i < this.pointers.length; i++)
     {
       this.pointers[i].reset_previous_position();
+      this.pointers[i].pressed = false;
     }
   }
 }
