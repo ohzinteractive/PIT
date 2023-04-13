@@ -25,6 +25,11 @@ export default class Pointer
     return this.region.invert_y(this.position_array.get_first());
   }
 
+  get html_position()
+  {
+    return this.position_array.get_first();
+  }
+
   get previous_position()
   {
     return this.region.invert_y(this.previous_position_array.get_first());

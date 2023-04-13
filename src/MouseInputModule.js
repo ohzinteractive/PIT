@@ -25,6 +25,8 @@ export default class MouseInputModule
     this.pointer.down = false;
     this.pointer.released = false;
 
+    this.pointers = [this.pointer];
+
     this.scroll_delta = 0;
   }
 
@@ -35,16 +37,7 @@ export default class MouseInputModule
 
   get pointer_count()
   {
-    if (this.left_mouse_button_down  ||
-       this.right_mouse_button_down ||
-       this.middle_mouse_button_down)
-    {
-      return 1;
-    }
-    else
-    {
-      return 0;
-    }
+    return 1;
   }
 
   get is_touchscreen()
@@ -226,5 +219,10 @@ export default class MouseInputModule
   get_primary_pointer_position()
   {
     return this.pointer.position;
+  }
+
+  get_primary_html_pointer_position()
+  {
+    return this.pointer.html_position;
   }
 }

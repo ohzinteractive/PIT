@@ -77,6 +77,12 @@ export default class TouchInputModule
     return position;
   }
 
+  get_primary_html_pointer_position()
+  {
+    const pos = this.get_primary_pointer_position();
+    return this.region.invert_y(pos);
+  }
+
   get pointer_pos_delta()
   {
     const position = new Vector2();

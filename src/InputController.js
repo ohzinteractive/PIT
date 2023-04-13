@@ -232,9 +232,19 @@ export default class InputController
             pos.y < rect.top + rect.height;
   }
 
+  get pointers()
+  {
+    return this.active_input_module.pointers;
+  }
+
   get pointer_pos()
   {
     return this.active_input_module.get_primary_pointer_position();
+  }
+
+  get html_pointer_pos()
+  {
+    return this.active_input_module.get_primary_html_pointer_position();
   }
 
   get pointer_pos_delta()
@@ -259,7 +269,7 @@ export default class InputController
 
   get pointer_center()
   {
-    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_center));
+    return this.active_input_module.pointer_center;
   }
 
   get pointer_center_delta()
