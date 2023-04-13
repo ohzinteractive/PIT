@@ -12,14 +12,6 @@
     "types",
     "package.json"
   ],
-  "devDependencies": {
-    "cross-var": "^1.1.0",
-    "rollup": "^2.44.0",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-terser": "^7.0.2",
-    "standardx": "^7.0.0",
-    "typescript": "^4.4.3"
-  },
   "scripts": {
     "start": "rollup -w -c",
     "build": "rollup -c",
@@ -48,5 +40,16 @@
     "ignore": [
       "/examples/**/*"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "cross-var": "^1.1.0",
+    "rollup": "^2.44.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "standardx": "^7.0.0",
+    "typescript": "^4.4.3"
   }
 }
