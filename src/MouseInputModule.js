@@ -5,6 +5,7 @@ export default class MouseInputModule
 {
   constructor(region)
   {
+    this.region = region;
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_down     = false;
     this.left_mouse_button_released = false;
@@ -224,5 +225,15 @@ export default class MouseInputModule
   get_primary_html_pointer_position()
   {
     return this.pointer.html_position;
+  }
+
+  get_primary_pointer_NDC()
+  {
+    return this.pointer.NDC;
+  }
+
+  get_primary_pointer_html_NDC()
+  {
+    return this.pointer.html_NDC;
   }
 }

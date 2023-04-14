@@ -77,6 +77,18 @@ export default class TouchInputModule
     return position;
   }
 
+  get_primary_pointer_NDC()
+  {
+    const pos = this.get_primary_pointer_position();
+    return this.region.transform_pos_to_NDC(pos);
+  }
+
+  get_primary_pointer_html_NDC()
+  {
+    const pos = this.get_primary_html_pointer_position();
+    return this.region.transform_pos_to_NDC(pos);
+  }
+
   get_primary_html_pointer_position()
   {
     const pos = this.get_primary_pointer_position();

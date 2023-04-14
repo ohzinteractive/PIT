@@ -254,12 +254,12 @@ export default class InputController
 
   get NDC()
   {
-    return this.active_input_module.get_primary_pointer().NDC;
+    return this.active_input_module.get_primary_pointer_NDC();
   }
 
   get html_NDC()
   {
-    return this.active_input_module.get_primary_pointer().html_NDC;
+    return this.active_input_module.get_primary_pointer_html_NDC();
   }
 
   get NDC_delta()

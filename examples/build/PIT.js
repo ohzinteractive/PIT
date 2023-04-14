@@ -221,6 +221,11 @@ class Pointer
     return this.region.invert_y(this.position_array.get_first());
   }
 
+  get html_position()
+  {
+    return this.position_array.get_first();
+  }
+
   get previous_position()
   {
     return this.region.invert_y(this.previous_position_array.get_first());
@@ -345,6 +350,7 @@ class MouseInputModule
 {
   constructor(region)
   {
+    this.region = region;
     this.left_mouse_button_pressed  = false;
     this.left_mouse_button_down     = false;
     this.left_mouse_button_released = false;
@@ -365,6 +371,8 @@ class MouseInputModule
     this.pointer.down = false;
     this.pointer.released = false;
 
+    this.pointers = [this.pointer];
+
     this.scroll_delta = 0;
   }
 
@@ -375,16 +383,7 @@ class MouseInputModule
 
   get pointer_count()
   {
-    if (this.left_mouse_button_down  ||
-       this.right_mouse_button_down ||
-       this.middle_mouse_button_down)
-    {
-      return 1;
-    }
-    else
-    {
-      return 0;
-    }
+    return 1;
   }
 
   get is_touchscreen()
@@ -562,6 +561,21 @@ class MouseInputModule
   {
     return this.pointer.position;
   }
+
+  get_primary_html_pointer_position()
+  {
+    return this.pointer.html_position;
+  }
+
+  get_primary_pointer_NDC()
+  {
+    return this.pointer.NDC;
+  }
+
+  get_primary_pointer_html_NDC()
+  {
+    return this.pointer.html_NDC;
+  }
 }
 
 class Region
@@ -712,6 +726,24 @@ class TouchInputModule
     }
 
     return position;
+  }
+
+  get_primary_pointer_NDC()
+  {
+    const pos = this.get_primary_pointer_position();
+    return this.region.transform_pos_to_NDC(pos);
+  }
+
+  get_primary_pointer_html_NDC()
+  {
+    const pos = this.get_primary_html_pointer_position();
+    return this.region.transform_pos_to_NDC(pos);
+  }
+
+  get_primary_html_pointer_position()
+  {
+    const pos = this.get_primary_pointer_position();
+    return this.region.invert_y(pos);
   }
 
   get pointer_pos_delta()
@@ -1159,9 +1191,19 @@ class InputController
             pos.y < rect.top + rect.height;
   }
 
+  get pointers()
+  {
+    return this.active_input_module.pointers;
+  }
+
   get pointer_pos()
   {
     return this.active_input_module.get_primary_pointer_position();
+  }
+
+  get html_pointer_pos()
+  {
+    return this.active_input_module.get_primary_html_pointer_position();
   }
 
   get pointer_pos_delta()
@@ -1171,12 +1213,12 @@ class InputController
 
   get NDC()
   {
-    return this.active_input_module.get_primary_pointer().NDC;
+    return this.active_input_module.get_primary_pointer_NDC();
   }
 
   get html_NDC()
   {
-    return this.active_input_module.get_primary_pointer().html_NDC;
+    return this.active_input_module.get_primary_pointer_html_NDC();
   }
 
   get NDC_delta()
@@ -1186,7 +1228,7 @@ class InputController
 
   get pointer_center()
   {
-    return this.invert_y(this.transform_pos_to_subregion(this.active_input_module.pointer_center));
+    return this.active_input_module.pointer_center;
   }
 
   get pointer_center_delta()
