@@ -27,7 +27,7 @@ export default class Pointer
 
   get html_position()
   {
-    return this.position_array.get_first();
+    return this.position_array.get_first().clone();
   }
 
   get previous_position()
@@ -37,13 +37,12 @@ export default class Pointer
 
   get html_NDC()
   {
-    return this.region.transform_pos_to_NDC(this.region.invert_y(this.position_array.get_first()));
+    return this.region.transform_pos_to_NDC(this.html_position);
   }
 
   get NDC()
   {
-    const ndc = this.region.transform_pos_to_NDC(this.position);
-    return ndc;
+    return this.region.transform_pos_to_NDC(this.position);
   }
 
   get NDC_delta()
@@ -63,7 +62,7 @@ export default class Pointer
 
   set_position(x, y)
   {
-    this.previous_position_array.push(this.position_array.get_first());
+    this.previous_position_array.push(this.position_array.get_first().clone());
     this.position_array.push(new Vector2(x, y));
   }
 

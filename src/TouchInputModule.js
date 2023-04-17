@@ -250,6 +250,7 @@ export default class TouchInputModule
     {
       const touch = touches[i];
       const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+      p.released = true;
 
       if (this.is_primary_pointer(p))
       {

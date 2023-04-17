@@ -1,7 +1,7 @@
 import MouseInputModule from './MouseInputModule';
 import { Region } from './Region';
 import TouchInputModule from './TouchInputModule';
-import { Vector2 } from './Vector2';
+// import { Vector2 } from './Vector2';
 import OS from './utilities/OS';
 // import Logger from './utilities/Logger';
 
