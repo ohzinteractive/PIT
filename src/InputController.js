@@ -301,7 +301,7 @@ export default class InputController
 
   get_pointer_pos()
   {
-    return this.invert_y(this.active_input_module.get_primary_pointer_position(index));
+    return this.invert_y(this.active_input_module.get_primary_pointer_position());
   }
 
   get_pointer_pos_delta(index)
