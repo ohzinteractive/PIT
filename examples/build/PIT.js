@@ -198,6 +198,8 @@ class LimitedVector2Stack extends LimitedStack
   }
 }
 
+// import Logger from './utilities/Logger';
+
 class Pointer
 {
   constructor(id, x, y, region)
@@ -343,7 +345,7 @@ class OS
   }
 }
 
-var OS$1 = new OS();
+const os = new OS();
 
 class MouseInputModule
 {
@@ -473,7 +475,7 @@ class MouseInputModule
   scroll(event)
   {
     this.pointer.set_position(event.clientX, event.clientY);
-    if (OS$1.is_mac)
+    if (os.is_mac)
     {
       // User is pinching
       if (event.ctrlKey)
@@ -651,6 +653,8 @@ class Region
     return dir;
   }
 }
+
+// import Logger from './utilities/Logger';
 
 class TouchInputModule
 {
@@ -962,8 +966,6 @@ class TouchInputModule
   }
 }
 
-// import Logger from './utilities/Logger';
-
 class InputController
 {
   init(dom_element, sub_region_element)
@@ -978,7 +980,7 @@ class InputController
 
     this.touch_cooldown = new Date() - 1000;
 
-    OS$1.init();
+    os.init();
 
     this.bind_events();
   }
@@ -1260,12 +1262,12 @@ class InputController
 
   get_pointer_pos()
   {
-    return this.invert_y(this.active_input_module.get_primary_pointer_position(index));
+    return this.invert_y(this.active_input_module.get_primary_pointer_position());
   }
 
-  get_pointer_pos_delta(index)
+  get_pointer_pos_delta()
   {
-    const pos_delta = this.active_input_module.get_pointer_pos_delta(index);
+    const pos_delta = this.active_input_module.pointer_pos_delta;
     pos_delta.y *= -1;
     return pos_delta;
   }
@@ -1275,10 +1277,10 @@ class InputController
     return this.transform_pos_to_NDC(this.get_pointer_pos());
   }
 
-  get_pointer_NDC_delta(index)
+  get_pointer_NDC_delta()
   {
     this.check_for_legal_bounds();
-    const delta = this.get_pointer_pos_delta(index);
+    const delta = this.get_pointer_pos_delta();
     delta.x /= this.region_bounds.width;
     delta.y /= this.region_bounds.height;
     return delta;

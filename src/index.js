@@ -1,4 +1,4 @@
-import InputController from './InputController';
+import { InputController } from './InputController';
 
 export {
   InputController

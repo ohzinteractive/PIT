@@ -1,11 +1,9 @@
-import MouseInputModule from './MouseInputModule';
+import { MouseInputModule } from './MouseInputModule';
 import { Region } from './Region';
-import TouchInputModule from './TouchInputModule';
-// import { Vector2 } from './Vector2';
-import OS from './utilities/OS';
-// import Logger from './utilities/Logger';
+import { TouchInputModule } from './TouchInputModule';
+import { OS } from './utilities/OS';
 
-export default class InputController
+class InputController
 {
   init(dom_element, sub_region_element)
   {
@@ -304,9 +302,9 @@ export default class InputController
     return this.invert_y(this.active_input_module.get_primary_pointer_position());
   }
 
-  get_pointer_pos_delta(index)
+  get_pointer_pos_delta()
   {
-    const pos_delta = this.active_input_module.get_pointer_pos_delta(index);
+    const pos_delta = this.active_input_module.pointer_pos_delta;
     pos_delta.y *= -1;
     return pos_delta;
   }
@@ -316,10 +314,10 @@ export default class InputController
     return this.transform_pos_to_NDC(this.get_pointer_pos());
   }
 
-  get_pointer_NDC_delta(index)
+  get_pointer_NDC_delta()
   {
     this.check_for_legal_bounds();
-    const delta = this.get_pointer_pos_delta(index);
+    const delta = this.get_pointer_pos_delta();
     delta.x /= this.region_bounds.width;
     delta.y /= this.region_bounds.height;
     return delta;
@@ -330,3 +328,5 @@ export default class InputController
     this.unbind_events();
   }
 }
+
+export { InputController };

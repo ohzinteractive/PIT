@@ -1,4 +1,4 @@
-export default class LimitedStack
+class LimitedStack
 {
   constructor(max_size = 1)
   {
@@ -34,3 +34,5 @@ export default class LimitedStack
     }
   }
 }
+
+export { LimitedStack };

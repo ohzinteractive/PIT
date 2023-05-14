@@ -1,8 +1,8 @@
+import { Pointer } from './Pointer';
 import { Vector2 } from './Vector2';
 // import Logger from './utilities/Logger';
-import Pointer from './Pointer';
 
-export default class TouchInputModule
+class TouchInputModule
 {
   constructor(region)
   {
@@ -311,3 +311,5 @@ export default class TouchInputModule
     }
   }
 }
+
+export { TouchInputModule };

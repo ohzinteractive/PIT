@@ -1,8 +1,8 @@
 import { Vector2 } from './Vector2';
+import { LimitedVector2Stack } from './utilities/LimitedVector2Stack';
 // import Logger from './utilities/Logger';
-import LimitedVector2Stack from './utilities/LimitedVector2Stack';
 
-export default class Pointer
+class Pointer
 {
   constructor(id, x, y, region)
   {
@@ -77,3 +77,5 @@ export default class Pointer
     return this.position.clone().sub(this.previous_position);
   }
 }
+
+export { Pointer };

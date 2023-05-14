@@ -1,7 +1,7 @@
-import LimitedStack from './LimitedStack';
 import { Vector2 } from '../Vector2';
+import { LimitedStack } from './LimitedStack';
 
-export default class LimitedVector2Stack extends LimitedStack
+class LimitedVector2Stack extends LimitedStack
 {
   constructor(max_size = 1)
   {
@@ -37,3 +37,5 @@ export default class LimitedVector2Stack extends LimitedStack
     this.average.divideScalar(Math.max(1, this.array.length));
   }
 }
+
+export { LimitedVector2Stack };

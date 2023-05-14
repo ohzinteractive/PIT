@@ -1,7 +1,8 @@
-import Pointer from './Pointer';
-import MathUtilities from './utilities/MathUtilities';
-import OS from './utilities/OS';
-export default class MouseInputModule
+import { Pointer } from './Pointer';
+import { MathUtilities } from './utilities/MathUtilities';
+import { OS } from './utilities/OS';
+
+class MouseInputModule
 {
   constructor(region)
   {
@@ -237,3 +238,5 @@ export default class MouseInputModule
     return this.pointer.html_NDC;
   }
 }
+
+export { MouseInputModule };

@@ -1,4 +1,4 @@
-export default class MathUtilities
+class MathUtilities
 {
   static clamp(value, min, max)
   {
@@ -10,3 +10,5 @@ export default class MathUtilities
     return Number(n) === n && n % 1 === 0;
   }
 }
+
+export { MathUtilities };
