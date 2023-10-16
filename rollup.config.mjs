@@ -1,5 +1,4 @@
-import sourcemaps from 'rollup-plugin-sourcemaps';
-// import { terser } from 'rollup-plugin-terser';
+// import terser from '@rollup/plugin-terser';
 
 export default [
   {
@@ -12,7 +11,6 @@ export default [
       }
     ],
     plugins: [
-      sourcemaps()
     ]
   },
   {
@@ -25,7 +23,6 @@ export default [
       }
     ],
     plugins: [
-      sourcemaps()
     ]
   }
 ];
