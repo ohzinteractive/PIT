@@ -17,9 +17,8 @@
     "build": "rollup -c",
     "preinstall": "yarn config-hooks",
     "config-hooks": "git config core.hooksPath git_hooks",
-    "create-tag": "git tag -a \"v$npm_package_version\" -m \"Release Version $npm_package_version\" && git push origin \"v$npm_package_version\"",
-    "update-version": "echo \"v$npm_package_version\" > .version",
-    "fix-syntax": "standardx --fix || echo 'Done'",
+    "create-tag": "node tasks/app/create_tag.mjs",
+    "fix-syntax": "standardx --fix",
     "generate-types": "npx -p typescript tsc src/components/sdf_text/SDFTextBatch.js --declaration --allowJs --emitDeclarationOnly --outDir types",
     "upload": "yarn build && npm publish && yarn create-tag"
   },
