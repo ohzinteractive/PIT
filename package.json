@@ -1,6 +1,6 @@
 {
   "name": "pit-js",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Pollable Input",
   "module": "examples/build/PIT.module.js",
   "main": "examples/build/PIT.js",
@@ -58,6 +58,5 @@
     "rollup-plugin-glslify": "^1.3.1",
     "standardx": "^7.0.0",
     "typescript": "4.4.4"
-  },
-  "packageManager": "yarn@4.0.2"
+  }
 }
