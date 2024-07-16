@@ -1288,5 +1288,5 @@ class InputController
   }
 }
 
-export { InputController };
+export { InputController, Vector2 };
 //# sourceMappingURL=PIT.module.js.map

@@ -1291,4 +1291,5 @@ class InputController
 }
 
 exports.InputController = InputController;
+exports.Vector2 = Vector2;
 //# sourceMappingURL=PIT.js.map

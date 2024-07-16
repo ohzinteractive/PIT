@@ -1,6 +1,6 @@
 {
   "name": "pit-js",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "description": "Pollable Input",
   "module": "examples/build/PIT.module.js",
   "main": "examples/build/PIT.js",
