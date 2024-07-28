@@ -22,22 +22,17 @@ class Pointer
 
   get position()
   {
-    return this.region.invert_y(this.position_array.get_first());
+    return this.position_array.get_first().clone();
   }
 
-  get html_position()
+  get position_delta()
   {
-    return this.position_array.get_first().clone();
+    return this.position.sub(this.previous_position);
   }
 
   get previous_position()
   {
-    return this.region.invert_y(this.previous_position_array.get_first());
-  }
-
-  get html_NDC()
-  {
-    return this.region.transform_pos_to_NDC(this.html_position);
+    return this.previous_position_array.get_first();
   }
 
   get NDC()
@@ -47,7 +42,9 @@ class Pointer
 
   get NDC_delta()
   {
-    return this.region.transform_dir_to_NDC(this.get_position_delta());
+    const delta = this.region.transform_dir_to_NDC(this.position_delta);
+    delta.y *= -1;
+    return delta;
   }
 
   distance_to(pointer)
@@ -70,11 +67,6 @@ class Pointer
   {
     this.previous_position_array.push(this.position_array.get_first().clone());
     this.position_array.push(this.position_array.get_first().clone());
-  }
-
-  get_position_delta()
-  {
-    return this.position.clone().sub(this.previous_position);
   }
 }
 

@@ -32,6 +32,11 @@ class TouchInputModule
     // this.pointers[0].distance_to(this.pointers[1])
   }
 
+  get_pointer(i)
+  {
+    return this.pointers[i];
+  }
+
   get is_touchscreen()
   {
     return true;
@@ -41,7 +46,7 @@ class TouchInputModule
   {
     if (this.pointers.length === 1)
     {
-      return this.pointers[0].get_position_delta().y * 0.03;
+      return this.pointers[0].position_delta.y * 0.03;
     }
     return 0;
   }
@@ -58,50 +63,13 @@ class TouchInputModule
     }
   }
 
-  get_primary_pointer_position()
-  {
-    const position = new Vector2();
-    position.x = this.previous_primary_pointer_pos.x;
-    position.y = this.previous_primary_pointer_pos.y;
-
-    if (this.pointers.length > 0)
-    {
-      position.set(0, 0);
-      for (let i = 0; i < this.pointers.length; i++)
-      {
-        position.add(this.pointers[i].position);
-      }
-      position.divideScalar(Math.max(1, this.pointers.length));
-    }
-
-    return position;
-  }
-
-  get_primary_pointer_NDC()
-  {
-    const pos = this.get_primary_pointer_position();
-    return this.region.transform_pos_to_NDC(pos);
-  }
-
-  get_primary_pointer_html_NDC()
-  {
-    const pos = this.get_primary_html_pointer_position();
-    return this.region.transform_pos_to_NDC(pos);
-  }
-
-  get_primary_html_pointer_position()
-  {
-    const pos = this.get_primary_pointer_position();
-    return this.region.invert_y(pos);
-  }
-
   get pointer_pos_delta()
   {
     const position = new Vector2();
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      position.add(this.pointers[i].get_position_delta());
+      position.add(this.pointers[i].position_delta());
     }
 
     position.divideScalar(Math.max(1, this.pointers.length));
@@ -141,12 +109,32 @@ class TouchInputModule
     return center;
   }
 
+  get pointer_center_NDC()
+  {
+    const center = this.pointer_center;
+    return this.region.transform_pos_to_NDC(center);
+  }
+
+  get previous_pointer_center_NDC()
+  {
+    const center = this.previous_pointer_center;
+    return this.region.transform_pos_to_NDC(center);
+  }
+
   get pointer_center_delta()
   {
     const current_center = this.pointer_center;
     const prev_center = this.previous_pointer_center;
 
     return current_center.clone().sub(prev_center);
+  }
+
+  get pointer_center_NDC_delta()
+  {
+    const center = this.pointer_center_NDC;
+    const prev_center = this.previous_pointer_center_NDC;
+
+    return center.sub(prev_center);
   }
 
   update_pointer_separation()

@@ -37,6 +37,38 @@ class MouseInputModule
     return this.pointer;
   }
 
+  get_pointer(index)
+  {
+    const pointer = new Pointer(index,
+      this.pointer.position.x,
+      this.pointer.position.y,
+      this.pointer.region
+    );
+
+    pointer.position_array.set_from_stack(this.pointer.position_array);
+    pointer.previous_position_array.set_from_stack(this.pointer.previous_position_array);
+
+    if (index === 0)
+    {
+      pointer.pressed = this.left_mouse_button_pressed;
+      pointer.down = this.left_mouse_button_down;
+      pointer.released = this.left_mouse_button_released;
+    }
+    if (index === 1)
+    {
+      pointer.pressed  = this.right_mouse_button_pressed;
+      pointer.down     = this.right_mouse_button_down;
+      pointer.released = this.right_mouse_button_released;
+    }
+    if (index === 2)
+    {
+      pointer.pressed  = this.middle_mouse_button_pressed;
+      pointer.down     = this.middle_mouse_button_down;
+      pointer.released = this.middle_mouse_button_released;
+    }
+    return pointer;
+  }
+
   get pointer_count()
   {
     return 1;
@@ -45,6 +77,26 @@ class MouseInputModule
   get is_touchscreen()
   {
     return false;
+  }
+
+  get pointer_center()
+  {
+    return this.pointer.position;
+  }
+
+  get pointer_center_NDC()
+  {
+    return this.pointer.NDC;
+  }
+
+  get pointer_center_NDC_delta()
+  {
+    return this.pointer.NDC_delta;
+  }
+
+  get pointer_center_delta()
+  {
+    return this.pointer.position_delta;
   }
 
   pointer_down(event)
@@ -200,42 +252,12 @@ class MouseInputModule
 
   get pointer_pos_delta()
   {
-    return this.pointer.get_position_delta();
-  }
-
-  get pointer_center()
-  {
-    return this.pointer.position;
-  }
-
-  get pointer_center_delta()
-  {
-    return this.pointer.get_position_delta();
+    return this.pointer.position_delta;
   }
 
   update_previous_pointer_pos()
   {
     this.pointer.reset_previous_position();
-  }
-
-  get_primary_pointer_position()
-  {
-    return this.pointer.position;
-  }
-
-  get_primary_html_pointer_position()
-  {
-    return this.pointer.html_position;
-  }
-
-  get_primary_pointer_NDC()
-  {
-    return this.pointer.NDC;
-  }
-
-  get_primary_pointer_html_NDC()
-  {
-    return this.pointer.html_NDC;
   }
 }
 

@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 class Vector2
 {
   constructor(x = 0, y = 0)
@@ -218,22 +220,17 @@ class Pointer
 
   get position()
   {
-    return this.region.invert_y(this.position_array.get_first());
+    return this.position_array.get_first().clone();
   }
 
-  get html_position()
+  get position_delta()
   {
-    return this.position_array.get_first().clone();
+    return this.position.sub(this.previous_position);
   }
 
   get previous_position()
   {
-    return this.region.invert_y(this.previous_position_array.get_first());
-  }
-
-  get html_NDC()
-  {
-    return this.region.transform_pos_to_NDC(this.html_position);
+    return this.previous_position_array.get_first();
   }
 
   get NDC()
@@ -243,7 +240,9 @@ class Pointer
 
   get NDC_delta()
   {
-    return this.region.transform_dir_to_NDC(this.get_position_delta());
+    const delta = this.region.transform_dir_to_NDC(this.position_delta);
+    delta.y *= -1;
+    return delta;
   }
 
   distance_to(pointer)
@@ -266,11 +265,6 @@ class Pointer
   {
     this.previous_position_array.push(this.position_array.get_first().clone());
     this.position_array.push(this.position_array.get_first().clone());
-  }
-
-  get_position_delta()
-  {
-    return this.position.clone().sub(this.previous_position);
   }
 }
 
@@ -380,6 +374,38 @@ class MouseInputModule
     return this.pointer;
   }
 
+  get_pointer(index)
+  {
+    const pointer = new Pointer(index,
+      this.pointer.position.x,
+      this.pointer.position.y,
+      this.pointer.region
+    );
+
+    pointer.position_array.set_from_stack(this.pointer.position_array);
+    pointer.previous_position_array.set_from_stack(this.pointer.previous_position_array);
+
+    if (index === 0)
+    {
+      pointer.pressed = this.left_mouse_button_pressed;
+      pointer.down = this.left_mouse_button_down;
+      pointer.released = this.left_mouse_button_released;
+    }
+    if (index === 1)
+    {
+      pointer.pressed  = this.right_mouse_button_pressed;
+      pointer.down     = this.right_mouse_button_down;
+      pointer.released = this.right_mouse_button_released;
+    }
+    if (index === 2)
+    {
+      pointer.pressed  = this.middle_mouse_button_pressed;
+      pointer.down     = this.middle_mouse_button_down;
+      pointer.released = this.middle_mouse_button_released;
+    }
+    return pointer;
+  }
+
   get pointer_count()
   {
     return 1;
@@ -388,6 +414,26 @@ class MouseInputModule
   get is_touchscreen()
   {
     return false;
+  }
+
+  get pointer_center()
+  {
+    return this.pointer.position;
+  }
+
+  get pointer_center_NDC()
+  {
+    return this.pointer.NDC;
+  }
+
+  get pointer_center_NDC_delta()
+  {
+    return this.pointer.NDC_delta;
+  }
+
+  get pointer_center_delta()
+  {
+    return this.pointer.position_delta;
   }
 
   pointer_down(event)
@@ -538,42 +584,12 @@ class MouseInputModule
 
   get pointer_pos_delta()
   {
-    return this.pointer.get_position_delta();
-  }
-
-  get pointer_center()
-  {
-    return this.pointer.position;
-  }
-
-  get pointer_center_delta()
-  {
-    return this.pointer.get_position_delta();
+    return this.pointer.position_delta;
   }
 
   update_previous_pointer_pos()
   {
     this.pointer.reset_previous_position();
-  }
-
-  get_primary_pointer_position()
-  {
-    return this.pointer.position;
-  }
-
-  get_primary_html_pointer_position()
-  {
-    return this.pointer.html_position;
-  }
-
-  get_primary_pointer_NDC()
-  {
-    return this.pointer.NDC;
-  }
-
-  get_primary_pointer_html_NDC()
-  {
-    return this.pointer.html_NDC;
   }
 }
 
@@ -582,41 +598,38 @@ class Region
   constructor(region_element)
   {
     this.region_element = region_element;
-    this.region_bounds = {
+    this.bounds = {
       x: 0,
       y: 0,
       width: 1,
       height: 1
     };
 
-    this.resize_observer = new ResizeObserver(this.update_region_bounds.bind(this));
-    this.resize_observer.observe(this.region_element);
+    this.observer = new IntersectionObserver((entries) =>
+    {
+      for (const entry of entries)
+      {
+        const bounds = entry.boundingClientRect;
+        this.bounds.x =      bounds.left;
+        this.bounds.y =      bounds.top;
+        this.bounds.width =  bounds.width;
+        this.bounds.height = bounds.height;
+      }
+      this.observer.disconnect();
+    });
   }
 
-  update_region_bounds()
+  update()
   {
-    const region_bounds = this.region_element.getBoundingClientRect();
-
-    this.region_bounds.x = region_bounds.left;
-    this.region_bounds.y = region_bounds.top;
-    this.region_bounds.width = region_bounds.width;
-    this.region_bounds.height = region_bounds.height;
+    this.observer.observe(this.region_element);
   }
 
   check_for_legal_bounds()
   {
-    if (this.region_bounds.width === 0 || this.region_bounds.height === 0)
+    if (this.bounds.width === 0 || this.bounds.height === 0)
     {
-      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.region_bounds);
+      console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.bounds);
     }
-  }
-
-  invert_y(pos)
-  {
-    const vec = new Vector2();
-    vec.copy(pos);
-    vec.y = this.region_bounds.height - vec.y;
-    return vec;
   }
 
   transform_pos_to_subregion(pos)
@@ -624,8 +637,8 @@ class Region
     const vec = new Vector2();
     vec.copy(pos);
 
-    vec.x -= this.region_bounds.x;
-    vec.y -= this.region_bounds.y;
+    vec.x -= this.bounds.x;
+    vec.y -= this.bounds.y;
 
     return vec;
   }
@@ -633,11 +646,11 @@ class Region
   transform_pos_to_NDC(pos)
   {
     this.check_for_legal_bounds();
-
     const vec = this.transform_pos_to_subregion(pos);
 
-    vec.x = (vec.x / this.region_bounds.width) * 2 - 1;
-    vec.y = (vec.y / this.region_bounds.height) * 2 - 1;
+    vec.x = (vec.x / this.bounds.width) * 2 - 1;
+    vec.y = (1 - (vec.y / this.bounds.height)) * 2 - 1;
+    console.log(vec.y);
     return vec;
   }
 
@@ -645,8 +658,8 @@ class Region
   {
     const vec = new Vector2();
     vec.copy(dir);
-    dir.x /= this.region_bounds.width;
-    dir.y /= this.region_bounds.height;
+    dir.x /= this.bounds.width;
+    dir.y /= this.bounds.height;
 
     return dir;
   }
@@ -684,6 +697,11 @@ class TouchInputModule
     // this.pointers[0].distance_to(this.pointers[1])
   }
 
+  get_pointer(i)
+  {
+    return this.pointers[i];
+  }
+
   get is_touchscreen()
   {
     return true;
@@ -693,7 +711,7 @@ class TouchInputModule
   {
     if (this.pointers.length === 1)
     {
-      return this.pointers[0].get_position_delta().y * 0.03;
+      return this.pointers[0].position_delta.y * 0.03;
     }
     return 0;
   }
@@ -710,50 +728,13 @@ class TouchInputModule
     }
   }
 
-  get_primary_pointer_position()
-  {
-    const position = new Vector2();
-    position.x = this.previous_primary_pointer_pos.x;
-    position.y = this.previous_primary_pointer_pos.y;
-
-    if (this.pointers.length > 0)
-    {
-      position.set(0, 0);
-      for (let i = 0; i < this.pointers.length; i++)
-      {
-        position.add(this.pointers[i].position);
-      }
-      position.divideScalar(Math.max(1, this.pointers.length));
-    }
-
-    return position;
-  }
-
-  get_primary_pointer_NDC()
-  {
-    const pos = this.get_primary_pointer_position();
-    return this.region.transform_pos_to_NDC(pos);
-  }
-
-  get_primary_pointer_html_NDC()
-  {
-    const pos = this.get_primary_html_pointer_position();
-    return this.region.transform_pos_to_NDC(pos);
-  }
-
-  get_primary_html_pointer_position()
-  {
-    const pos = this.get_primary_pointer_position();
-    return this.region.invert_y(pos);
-  }
-
   get pointer_pos_delta()
   {
     const position = new Vector2();
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      position.add(this.pointers[i].get_position_delta());
+      position.add(this.pointers[i].position_delta());
     }
 
     position.divideScalar(Math.max(1, this.pointers.length));
@@ -793,12 +774,32 @@ class TouchInputModule
     return center;
   }
 
+  get pointer_center_NDC()
+  {
+    const center = this.pointer_center;
+    return this.region.transform_pos_to_NDC(center);
+  }
+
+  get previous_pointer_center_NDC()
+  {
+    const center = this.previous_pointer_center;
+    return this.region.transform_pos_to_NDC(center);
+  }
+
   get pointer_center_delta()
   {
     const current_center = this.pointer_center;
     const prev_center = this.previous_pointer_center;
 
     return current_center.clone().sub(prev_center);
+  }
+
+  get pointer_center_NDC_delta()
+  {
+    const center = this.pointer_center_NDC;
+    const prev_center = this.previous_pointer_center_NDC;
+
+    return center.sub(prev_center);
   }
 
   update_pointer_separation()
@@ -1087,6 +1088,7 @@ class InputController
 
   clear()
   {
+    this.region.update();
     this.touch_input_module.clear();
     this.mouse_input_module.clear();
   }
@@ -1183,7 +1185,7 @@ class InputController
   pointer_is_over_element(elem)
   {
     const rect = elem.getBoundingClientRect();
-    const pos = this.html_pointer_pos;
+    const pos = this.pointer_pos;
 
     return  pos.x > rect.left &&
             pos.x < rect.left + rect.width &&
@@ -1198,12 +1200,7 @@ class InputController
 
   get pointer_pos()
   {
-    return this.active_input_module.get_primary_pointer_position();
-  }
-
-  get html_pointer_pos()
-  {
-    return this.active_input_module.get_primary_html_pointer_position();
+    return this.get_pointer_pos(0);
   }
 
   get pointer_pos_delta()
@@ -1213,17 +1210,12 @@ class InputController
 
   get NDC()
   {
-    return this.active_input_module.get_primary_pointer_NDC();
-  }
-
-  get html_NDC()
-  {
-    return this.active_input_module.get_primary_pointer_html_NDC();
+    return this.get_pointer_NDC(0);
   }
 
   get NDC_delta()
   {
-    return this.active_input_module.get_primary_pointer().NDC_delta;
+    return this.get_pointer_NDC_delta(0);
   }
 
   get pointer_center()
@@ -1233,55 +1225,37 @@ class InputController
 
   get pointer_center_delta()
   {
-    const center_delta = this.active_input_module.pointer_center_delta;
-
-    return {
-      x: center_delta.x,
-      y: center_delta.y * -1
-    };
+    return this.active_input_module.pointer_center_delta;
   }
 
   get pointer_center_NDC()
   {
-    return this.transform_pos_to_NDC(this.pointer_center);
+    return this.active_input_module.pointer_center_NDC;
   }
 
   get pointer_center_NDC_delta()
   {
-    this.check_for_legal_bounds();
-
-    const center_delta = this.pointer_center_delta;
-
-    return {
-      x: center_delta.x / this.region_bounds.width,
-      y: center_delta.y / this.region_bounds.height
-    };
+    return this.active_input_module.pointer_center_NDC_delta;
   }
 
-  get_pointer_pos()
+  get_pointer_pos(index = 0)
   {
-    return this.invert_y(this.active_input_module.get_primary_pointer_position());
+    return this.active_input_module.get_pointer(index).position;
   }
 
-  get_pointer_pos_delta()
+  get_pointer_pos_delta(index = 0)
   {
-    const pos_delta = this.active_input_module.pointer_pos_delta;
-    pos_delta.y *= -1;
-    return pos_delta;
+    return this.active_input_module.get_pointer(index).position_delta;
   }
 
-  get_pointer_NDC(index)
+  get_pointer_NDC(index = 0)
   {
-    return this.transform_pos_to_NDC(this.get_pointer_pos());
+    return this.active_input_module.get_pointer(index).NDC;
   }
 
-  get_pointer_NDC_delta()
+  get_pointer_NDC_delta(index = 0)
   {
-    this.check_for_legal_bounds();
-    const delta = this.get_pointer_pos_delta();
-    delta.x /= this.region_bounds.width;
-    delta.y /= this.region_bounds.height;
-    return delta;
+    return this.active_input_module.get_pointer(index).NDC_delta;
   }
 
   dispose()
