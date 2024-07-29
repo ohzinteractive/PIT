@@ -650,7 +650,6 @@ class Region
 
     vec.x = (vec.x / this.bounds.width) * 2 - 1;
     vec.y = (1 - (vec.y / this.bounds.height)) * 2 - 1;
-    console.log(vec.y);
     return vec;
   }
 
