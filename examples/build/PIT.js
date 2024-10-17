@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 class Vector2
 {
   constructor(x = 0, y = 0)
@@ -682,6 +680,7 @@ class TouchInputModule
 
     this.previous_primary_pointer_pos = new Vector2();
 
+    this.default_pointer = new Pointer(-5, 0, 0, region);
     // this.update_pointer(7, 5, 5)
     // this.update_pointer(6, 5, 5)
     // this.update_pointer(5, 5, 5)
@@ -698,7 +697,14 @@ class TouchInputModule
 
   get_pointer(i)
   {
-    return this.pointers[i];
+    if (this.pointers[i] !== undefined)
+    {
+      return this.pointers[i];
+    }
+    else
+    {
+      return this.default_pointer;
+    }
   }
 
   get is_touchscreen()
@@ -708,23 +714,16 @@ class TouchInputModule
 
   get scroll_delta()
   {
-    if (this.pointers.length === 1)
+    if (this.pointers.length > 0)
     {
-      return this.pointers[0].position_delta.y * 0.03;
+      return this.get_primary_pointer().position_delta.y * 0.03;
     }
     return 0;
   }
 
   get_primary_pointer()
   {
-    if (this.pointers.length > 0)
-    {
-      return this.pointers[0];
-    }
-    else
-    {
-      return undefined;
-    }
+    return this.get_pointer(0);
   }
 
   get pointer_pos_delta()
@@ -854,6 +853,7 @@ class TouchInputModule
       this.previous_primary_pointer_pos.x = p.position.x;
       this.previous_primary_pointer_pos.y = p.position.y;
     }
+    this.default_pointer.set_position(p.position.x, p.position.y);
 
     this.update_pointer_separation();
 
