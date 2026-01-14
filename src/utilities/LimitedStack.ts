@@ -1,5 +1,8 @@
 class LimitedStack
 {
+  array: any;
+  max_size: any;
+  
   constructor(max_size = 1)
   {
     this.max_size = max_size;
@@ -17,7 +20,7 @@ class LimitedStack
     return this.array.length();
   }
 
-  set_from_stack(stack)
+  set_from_stack(stack: any)
   {
     for (let i = 0; i < this.array.length; i++)
     {
@@ -25,7 +28,7 @@ class LimitedStack
     }
   }
 
-  push(elem)
+  push(elem: any)
   {
     this.array.unshift(elem);
     if (this.array.length > this.max_size)

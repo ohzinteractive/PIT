@@ -5,7 +5,24 @@ import { OS } from './utilities/OS';
 
 class InputController
 {
-  init(dom_element, sub_region_element)
+  __binded_on_mousedown: any;
+  __binded_on_mouseleave: any;
+  __binded_on_mousemove: any;
+  __binded_on_mouseup: any;
+  __binded_on_touchcancel: any;
+  __binded_on_touchend: any;
+  __binded_on_touchmove: any;
+  __binded_on_touchstart: any;
+  __binded_on_wheel: any;
+  active_input_module: any;
+  dom_element: any;
+  mouse_input_module: any;
+  region: any;
+  sub_region_element: any;
+  touch_cooldown: any;
+  touch_input_module: any;
+
+  init(dom_element: any, sub_region_element: any)
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
@@ -15,6 +32,7 @@ class InputController
 
     this.active_input_module = this.mouse_input_module;
 
+    // @ts-expect-error TS(2362): The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
     this.touch_cooldown = new Date() - 1000;
 
     OS.init();
@@ -61,37 +79,37 @@ class InputController
     this.dom_element.removeEventListener('mouseleave', this.__binded_on_mouseleave, false);
   }
 
-  on_wheel(event)
+  on_wheel(event: any)
   {
     this.mouse_input_module.scroll(event);
     this.set_mouse_input_active();
   }
 
-  on_touchstart(event)
+  on_touchstart(event: any)
   {
     this.touch_input_module.pointer_down(event);
     this.set_touch_input_active();
   }
 
-  on_touchmove(event)
+  on_touchmove(event: any)
   {
     this.touch_input_module.pointer_move(event);
     this.set_touch_input_active();
   }
 
-  on_touchcancel(event)
+  on_touchcancel(event: any)
   {
     this.touch_input_module.pointer_cancel(event);
     this.set_touch_input_active();
   }
 
-  on_touchend(event)
+  on_touchend(event: any)
   {
     this.touch_input_module.pointer_up(event);
     this.set_touch_input_active();
   }
 
-  on_mousedown(event)
+  on_mousedown(event: any)
   {
     if (this.mouse_input_allowed())
     {
@@ -100,7 +118,7 @@ class InputController
     }
   }
 
-  on_mousemove(event)
+  on_mousemove(event: any)
   {
     if (this.mouse_input_allowed())
     {
@@ -109,7 +127,7 @@ class InputController
     }
   }
 
-  on_mouseup(event)
+  on_mouseup(event: any)
   {
     if (this.mouse_input_allowed())
     {
@@ -118,7 +136,7 @@ class InputController
     }
   }
 
-  on_mouseleave(event)
+  on_mouseleave(event: any)
   {
     this.mouse_input_module.pointer_out(event);
     this.set_mouse_input_active();
@@ -133,6 +151,7 @@ class InputController
 
   mouse_input_allowed()
   {
+    // @ts-expect-error TS(2362): The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
     return (new Date() - this.touch_cooldown) / 1000 > 0.75;
   }
 
@@ -220,7 +239,7 @@ class InputController
             ndc.y >= -1 && ndc.y <= 1;
   }
 
-  pointer_is_over_element(elem)
+  pointer_is_over_element(elem: any)
   {
     const rect = elem.getBoundingClientRect();
     const pos = this.pointer_pos;

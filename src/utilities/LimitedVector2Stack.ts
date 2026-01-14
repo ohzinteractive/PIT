@@ -3,6 +3,8 @@ import { LimitedStack } from './LimitedStack';
 
 class LimitedVector2Stack extends LimitedStack
 {
+  average: any;
+  
   constructor(max_size = 1)
   {
     super(max_size);
@@ -10,7 +12,7 @@ class LimitedVector2Stack extends LimitedStack
     this.average = new Vector2();
   }
 
-  set_from_stack(vector2_stack)
+  set_from_stack(vector2_stack: any)
   {
     for (let i = 0; i < this.array.length; i++)
     {
@@ -19,7 +21,7 @@ class LimitedVector2Stack extends LimitedStack
     this.update_average();
   }
 
-  push(elem)
+  push(elem: any)
   {
     super.push(elem);
 

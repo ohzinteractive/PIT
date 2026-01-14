@@ -4,7 +4,23 @@ import { OS } from './utilities/OS';
 
 class MouseInputModule
 {
-  constructor(region)
+  left_mouse_button_down: any;
+  left_mouse_button_pressed: any;
+  left_mouse_button_released: any;
+  middle_mouse_button_down: any;
+  middle_mouse_button_pressed: any;
+  middle_mouse_button_released: any;
+  pointer: any;
+  pointer_pos: any;
+  pointers: any;
+  previous_pointer_pos: any;
+  region: any;
+  right_mouse_button_down: any;
+  right_mouse_button_pressed: any;
+  right_mouse_button_released: any;
+  scroll_delta: any;
+
+  constructor(region: any)
   {
     this.region = region;
     this.left_mouse_button_pressed  = false;
@@ -37,7 +53,7 @@ class MouseInputModule
     return this.pointer;
   }
 
-  get_pointer(index)
+  get_pointer(index: any)
   {
     const pointer = new Pointer(index,
       this.pointer.position.x,
@@ -99,7 +115,7 @@ class MouseInputModule
     return this.pointer.position_delta;
   }
 
-  pointer_down(event)
+  pointer_down(event: any)
   {
     // this.pointer_pos.x = event.clientX;
     // this.pointer_pos.y = event.clientY;
@@ -127,7 +143,7 @@ class MouseInputModule
     }
   }
 
-  pointer_up(event)
+  pointer_up(event: any)
   {
     switch (event.button)
     {
@@ -148,17 +164,17 @@ class MouseInputModule
     }
   }
 
-  pointer_move(event)
+  pointer_move(event: any)
   {
     this.pointer.set_position(event.clientX, event.clientY);
   }
 
-  pointer_cancel(event)
+  pointer_cancel(event: any)
   {
     this.pointer_out(event);
   }
 
-  pointer_out(event)
+  pointer_out(event: any)
   {
     if (this.left_mouse_button_down)
     {
@@ -179,7 +195,7 @@ class MouseInputModule
     }
   }
 
-  scroll(event)
+  scroll(event: any)
   {
     this.pointer.set_position(event.clientX, event.clientY);
     if (OS.is_mac)

@@ -4,7 +4,15 @@ import { LimitedVector2Stack } from './utilities/LimitedVector2Stack';
 
 class Pointer
 {
-  constructor(id, x, y, region)
+  down: any;
+  id: any;
+  position_array: any;
+  pressed: any;
+  previous_position_array: any;
+  region: any;
+  released: any;
+
+  constructor(id: any, x: any, y: any, region: any)
   {
     this.region = region;
     this.id = id;
@@ -47,17 +55,17 @@ class Pointer
     return delta;
   }
 
-  distance_to(pointer)
+  distance_to(pointer: any)
   {
     return this.position_array.average.distanceTo(pointer.position_array.average);
   }
 
-  previous_distance_to(pointer)
+  previous_distance_to(pointer: any)
   {
     return this.previous_position_array.average.distanceTo(pointer.previous_position_array.average);
   }
 
-  set_position(x, y)
+  set_position(x: any, y: any)
   {
     this.previous_position_array.push(this.position_array.get_first().clone());
     this.position_array.push(new Vector2(x, y));

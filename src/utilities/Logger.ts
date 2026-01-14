@@ -1,12 +1,14 @@
-import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
+// import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
 
 class Logger
 {
+  socket: any;
+  
   constructor()
   {
-    this.socket = io('ws://10.0.0.31:3000');
+    // this.socket = io('ws://10.0.0.31:3000');
 
-    let self = this;
+    const self = this;
     this.socket.on('connect', () =>
     {
       console.log('CONNECTED TO WEBSOCKET CONSOLE');
@@ -16,7 +18,7 @@ class Logger
     });
   }
 
-  log(msg)
+  log(msg: any)
   {
     if (this.socket)
     {

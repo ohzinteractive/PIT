@@ -4,7 +4,17 @@ import { Vector2 } from './Vector2';
 
 class TouchInputModule
 {
-  constructor(region)
+  default_pointer: any;
+  left_mouse_button_down: any;
+  left_mouse_button_pressed: any;
+  left_mouse_button_released: any;
+  pointers: any;
+  previous_primary_pointer_pos: any;
+  previous_separation_distance: any;
+  region: any;
+  zoom_delta: any;
+
+  constructor(region: any)
   {
     this.region = region;
     this.left_mouse_button_pressed  = false;
@@ -33,7 +43,7 @@ class TouchInputModule
     // this.pointers[0].distance_to(this.pointers[1])
   }
 
-  get_pointer(i)
+  get_pointer(i: any)
   {
     if (this.pointers[i] !== undefined)
     {
@@ -173,9 +183,9 @@ class TouchInputModule
     }
   }
 
-  update_pointer(pointer_id, x, y)
+  update_pointer(pointer_id: any, x: any, y: any)
   {
-    let p = this.pointers.find(pointer => pointer.id === pointer_id);
+    let p = this.pointers.find((pointer: any) => pointer.id === pointer_id);
     if (p === undefined)
     {
       p = new Pointer(pointer_id, x, y, this.region);
@@ -199,9 +209,9 @@ class TouchInputModule
     return p;
   }
 
-  remove_pointer(pointer_id)
+  remove_pointer(pointer_id: any)
   {
-    const index = this.pointers.findIndex(p => p.id === pointer_id);
+    const index = this.pointers.findIndex((p: any) => p.id === pointer_id);
 
     if (index !== undefined)
     {
@@ -210,12 +220,12 @@ class TouchInputModule
     this.update_pointer_separation();
   }
 
-  is_primary_pointer(pointer)
+  is_primary_pointer(pointer: any)
   {
     return this.pointers[0] === pointer;
   }
 
-  pointer_down(event)
+  pointer_down(event: any)
   {
     const touches = event.changedTouches;
 
@@ -232,7 +242,7 @@ class TouchInputModule
     }
   }
 
-  pointer_up(event)
+  pointer_up(event: any)
   {
     const touches = event.changedTouches;
 
@@ -251,7 +261,7 @@ class TouchInputModule
     }
   }
 
-  pointer_move(event)
+  pointer_move(event: any)
   {
     const touches = event.changedTouches;
 
@@ -262,12 +272,12 @@ class TouchInputModule
     }
   }
 
-  pointer_cancel(event)
+  pointer_cancel(event: any)
   {
     this.pointer_out(event);
   }
 
-  pointer_out(event)
+  pointer_out(event: any)
   {
     const touches = event.changedTouches;
 

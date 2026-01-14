@@ -1,12 +1,17 @@
 class Vector2
 {
+  x: any;
+  y: any;
+  
+  static isVector2: boolean = true;
+  
   constructor(x = 0, y = 0)
   {
     this.x = x;
     this.y = y;
   }
 
-  set(x, y)
+  set(x: any, y: any)
   {
     this.x = x;
     this.y = y;
@@ -16,10 +21,11 @@ class Vector2
 
   clone()
   {
+    // @ts-expect-error TS(2351): This expression is not constructable.
     return new this.constructor(this.x, this.y);
   }
 
-  copy(v)
+  copy(v: any)
   {
     this.x = v.x;
     this.y = v.y;
@@ -27,7 +33,7 @@ class Vector2
     return this;
   }
 
-  add(v)
+  add(v: any)
   {
     this.x += v.x;
     this.y += v.y;
@@ -35,7 +41,7 @@ class Vector2
     return this;
   }
 
-  sub(v)
+  sub(v: any)
   {
     this.x -= v.x;
     this.y -= v.y;
@@ -43,7 +49,7 @@ class Vector2
     return this;
   }
 
-  multiplyScalar(scalar)
+  multiplyScalar(scalar: any)
   {
     this.x *= scalar;
     this.y *= scalar;
@@ -51,7 +57,7 @@ class Vector2
     return this;
   }
 
-  divide(v)
+  divide(v: any)
   {
     this.x /= v.x;
     this.y /= v.y;
@@ -59,17 +65,17 @@ class Vector2
     return this;
   }
 
-  divideScalar(scalar)
+  divideScalar(scalar: any)
   {
     return this.multiplyScalar(1 / scalar);
   }
 
-  dot(v)
+  dot(v: any)
   {
     return this.x * v.x + this.y * v.y;
   }
 
-  cross(v)
+  cross(v: any)
   {
     return this.x * v.y - this.y * v.x;
   }
@@ -98,18 +104,18 @@ class Vector2
     return angle;
   }
 
-  distanceTo(v)
+  distanceTo(v: any)
   {
     return Math.sqrt(this.distanceToSquared(v));
   }
 
-  distanceToSquared(v)
+  distanceToSquared(v: any)
   {
     const dx = this.x - v.x; const dy = this.y - v.y;
     return dx * dx + dy * dy;
   }
 
-  lerp(v, alpha)
+  lerp(v: any, alpha: any)
   {
     this.x += (v.x - this.x) * alpha;
     this.y += (v.y - this.y) * alpha;
@@ -117,7 +123,5 @@ class Vector2
     return this;
   }
 }
-
-Vector2.prototype.isVector2 = true;
 
 export { Vector2 };
