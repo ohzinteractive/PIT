@@ -1,0 +1,38 @@
+import { Pointer } from './Pointer';
+declare class MouseInputModule {
+    left_mouse_button_down: any;
+    left_mouse_button_pressed: any;
+    left_mouse_button_released: any;
+    middle_mouse_button_down: any;
+    middle_mouse_button_pressed: any;
+    middle_mouse_button_released: any;
+    pointer: any;
+    pointer_pos: any;
+    pointers: any;
+    previous_pointer_pos: any;
+    region: any;
+    right_mouse_button_down: any;
+    right_mouse_button_pressed: any;
+    right_mouse_button_released: any;
+    scroll_delta: any;
+    constructor(region: any);
+    get_primary_pointer(): any;
+    get_pointer(index: any): Pointer;
+    get pointer_count(): number;
+    get is_touchscreen(): boolean;
+    get pointer_center(): any;
+    get pointer_center_NDC(): any;
+    get pointer_center_NDC_delta(): any;
+    get pointer_center_delta(): any;
+    pointer_down(event: any): void;
+    pointer_up(event: any): void;
+    pointer_move(event: any): void;
+    pointer_cancel(event: any): void;
+    pointer_out(event: any): void;
+    scroll(event: any): void;
+    get zoom_delta(): any;
+    clear(): void;
+    get pointer_pos_delta(): any;
+    update_previous_pointer_pos(): void;
+}
+export { MouseInputModule };

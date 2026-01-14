@@ -1,0 +1,37 @@
+import { Vector2 } from './Vector2';
+declare class TouchInputModule {
+    default_pointer: any;
+    left_mouse_button_down: any;
+    left_mouse_button_pressed: any;
+    left_mouse_button_released: any;
+    pointers: any;
+    previous_primary_pointer_pos: any;
+    previous_separation_distance: any;
+    region: any;
+    zoom_delta: any;
+    constructor(region: any);
+    get_pointer(i: any): any;
+    get is_touchscreen(): boolean;
+    get scroll_delta(): number;
+    get_primary_pointer(): any;
+    get pointer_pos_delta(): Vector2;
+    get pointer_count(): any;
+    get pointer_center(): Vector2;
+    get previous_pointer_center(): Vector2;
+    get pointer_center_NDC(): any;
+    get previous_pointer_center_NDC(): any;
+    get pointer_center_delta(): any;
+    get pointer_center_NDC_delta(): any;
+    update_pointer_separation(): void;
+    pointers_moving_away_from_each_other(): boolean;
+    update_pointer(pointer_id: any, x: any, y: any): any;
+    remove_pointer(pointer_id: any): void;
+    is_primary_pointer(pointer: any): boolean;
+    pointer_down(event: any): void;
+    pointer_up(event: any): void;
+    pointer_move(event: any): void;
+    pointer_cancel(event: any): void;
+    pointer_out(event: any): void;
+    clear(): void;
+}
+export { TouchInputModule };
