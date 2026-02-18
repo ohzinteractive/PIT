@@ -1,179 +1,135 @@
 'use strict';
 
-var Vector2 = /** @class */ (function () {
-    function Vector2(x, y) {
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
+Object.defineProperty(exports, '__esModule', { value: true });
+
+class Vector2 {
+    constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
     }
-    Vector2.prototype.set = function (x, y) {
+    set(x, y) {
         this.x = x;
         this.y = y;
         return this;
-    };
-    Vector2.prototype.clone = function () {
-        // @ts-expect-error TS(2351): This expression is not constructable.
-        return new this.constructor(this.x, this.y);
-    };
-    Vector2.prototype.copy = function (v) {
+    }
+    clone() {
+        return new Vector2(this.x, this.y);
+    }
+    copy(v) {
         this.x = v.x;
         this.y = v.y;
         return this;
-    };
-    Vector2.prototype.add = function (v) {
+    }
+    add(v) {
         this.x += v.x;
         this.y += v.y;
         return this;
-    };
-    Vector2.prototype.sub = function (v) {
+    }
+    sub(v) {
         this.x -= v.x;
         this.y -= v.y;
         return this;
-    };
-    Vector2.prototype.multiplyScalar = function (scalar) {
+    }
+    multiplyScalar(scalar) {
         this.x *= scalar;
         this.y *= scalar;
         return this;
-    };
-    Vector2.prototype.divide = function (v) {
+    }
+    divide(v) {
         this.x /= v.x;
         this.y /= v.y;
         return this;
-    };
-    Vector2.prototype.divideScalar = function (scalar) {
+    }
+    divideScalar(scalar) {
         return this.multiplyScalar(1 / scalar);
-    };
-    Vector2.prototype.dot = function (v) {
+    }
+    dot(v) {
         return this.x * v.x + this.y * v.y;
-    };
-    Vector2.prototype.cross = function (v) {
+    }
+    cross(v) {
         return this.x * v.y - this.y * v.x;
-    };
-    Vector2.prototype.lengthSq = function () {
+    }
+    lengthSq() {
         return this.x * this.x + this.y * this.y;
-    };
-    Vector2.prototype.length = function () {
+    }
+    length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
-    };
-    Vector2.prototype.normalize = function () {
+    }
+    normalize() {
         return this.divideScalar(this.length() || 1);
-    };
-    Vector2.prototype.angle = function () {
+    }
+    angle() {
         // computes the angle in radians with respect to the positive x-axis
-        var angle = Math.atan2(-this.y, -this.x) + Math.PI;
+        const angle = Math.atan2(-this.y, -this.x) + Math.PI;
         return angle;
-    };
-    Vector2.prototype.distanceTo = function (v) {
+    }
+    distanceTo(v) {
         return Math.sqrt(this.distanceToSquared(v));
-    };
-    Vector2.prototype.distanceToSquared = function (v) {
-        var dx = this.x - v.x;
-        var dy = this.y - v.y;
+    }
+    distanceToSquared(v) {
+        const dx = this.x - v.x;
+        const dy = this.y - v.y;
         return dx * dx + dy * dy;
-    };
-    Vector2.prototype.lerp = function (v, alpha) {
+    }
+    lerp(v, alpha) {
         this.x += (v.x - this.x) * alpha;
         this.y += (v.y - this.y) * alpha;
         return this;
-    };
-    Vector2.isVector2 = true;
-    return Vector2;
-}());
-
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 }
+Vector2.isVector2 = true;
 
-typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
-
-var LimitedStack = /** @class */ (function () {
-    function LimitedStack(max_size) {
-        if (max_size === void 0) { max_size = 1; }
+class LimitedStack {
+    constructor(max_size = 1) {
         this.max_size = max_size;
         this.array = [];
     }
-    LimitedStack.prototype.get_first = function () {
+    get_first() {
         return this.array[0];
-    };
-    LimitedStack.prototype.length = function () {
-        return this.array.length();
-    };
-    LimitedStack.prototype.set_from_stack = function (stack) {
-        for (var i = 0; i < this.array.length; i++) {
+    }
+    length() {
+        return this.array.length;
+    }
+    set_from_stack(stack) {
+        for (let i = 0; i < this.array.length; i++) {
             this.array[i] = stack.array[i];
         }
-    };
-    LimitedStack.prototype.push = function (elem) {
+    }
+    push(elem) {
         this.array.unshift(elem);
         if (this.array.length > this.max_size) {
             this.array.pop();
         }
-    };
-    return LimitedStack;
-}());
-
-var LimitedVector2Stack = /** @class */ (function (_super) {
-    __extends(LimitedVector2Stack, _super);
-    function LimitedVector2Stack(max_size) {
-        if (max_size === void 0) { max_size = 1; }
-        var _this = _super.call(this, max_size) || this;
-        _this.average = new Vector2();
-        return _this;
     }
-    LimitedVector2Stack.prototype.set_from_stack = function (vector2_stack) {
-        for (var i = 0; i < this.array.length; i++) {
+}
+
+class LimitedVector2Stack extends LimitedStack {
+    constructor(max_size = 1) {
+        super(max_size);
+        this.average = new Vector2();
+    }
+    set_from_stack(vector2_stack) {
+        for (let i = 0; i < this.array.length; i++) {
             this.array[i].copy(vector2_stack.array[i]);
         }
         this.update_average();
-    };
-    LimitedVector2Stack.prototype.push = function (elem) {
-        _super.prototype.push.call(this, elem);
+    }
+    push(elem) {
+        super.push(elem);
         this.update_average();
-    };
-    LimitedVector2Stack.prototype.update_average = function () {
+    }
+    update_average() {
         this.average.set(0, 0);
-        for (var i = 0; i < this.array.length; i++) {
+        for (let i = 0; i < this.array.length; i++) {
             this.average.add(this.array[i]);
         }
         this.average.divideScalar(Math.max(1, this.array.length));
-    };
-    return LimitedVector2Stack;
-}(LimitedStack));
+    }
+}
 
 // import Logger from './utilities/Logger';
-var Pointer = /** @class */ (function () {
-    function Pointer(id, x, y, region) {
+class Pointer {
+    constructor(id, x, y, region) {
         this.region = region;
         this.id = id;
         this.position_array = new LimitedVector2Stack(5);
@@ -184,76 +140,50 @@ var Pointer = /** @class */ (function () {
         this.down = true;
         this.released = false;
     }
-    Object.defineProperty(Pointer.prototype, "position", {
-        get: function () {
-            return this.position_array.get_first().clone();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Pointer.prototype, "position_delta", {
-        get: function () {
-            return this.position.sub(this.previous_position);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Pointer.prototype, "previous_position", {
-        get: function () {
-            return this.previous_position_array.get_first();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Pointer.prototype, "NDC", {
-        get: function () {
-            return this.region.transform_pos_to_NDC(this.position);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Pointer.prototype, "NDC_delta", {
-        get: function () {
-            var delta = this.region.transform_dir_to_NDC(this.position_delta);
-            delta.y *= -1;
-            return delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Pointer.prototype.distance_to = function (pointer) {
+    get position() {
+        return this.position_array.get_first().clone();
+    }
+    get position_delta() {
+        return this.position.sub(this.previous_position);
+    }
+    get previous_position() {
+        return this.previous_position_array.get_first();
+    }
+    get NDC() {
+        return this.region.transform_pos_to_NDC(this.position);
+    }
+    get NDC_delta() {
+        const delta = this.region.transform_dir_to_NDC(this.position_delta);
+        delta.y *= -1;
+        return delta;
+    }
+    distance_to(pointer) {
         return this.position_array.average.distanceTo(pointer.position_array.average);
-    };
-    Pointer.prototype.previous_distance_to = function (pointer) {
+    }
+    previous_distance_to(pointer) {
         return this.previous_position_array.average.distanceTo(pointer.previous_position_array.average);
-    };
-    Pointer.prototype.set_position = function (x, y) {
+    }
+    set_position(x, y) {
         this.previous_position_array.push(this.position_array.get_first().clone());
         this.position_array.push(new Vector2(x, y));
-    };
-    Pointer.prototype.reset_previous_position = function () {
+    }
+    reset_previous_position() {
         this.previous_position_array.push(this.position_array.get_first().clone());
         this.position_array.push(this.position_array.get_first().clone());
-    };
-    return Pointer;
-}());
-
-var MathUtilities = /** @class */ (function () {
-    function MathUtilities() {
     }
-    MathUtilities.clamp = function (value, min, max) {
+}
+
+class MathUtilities {
+    static clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
-    };
-    MathUtilities.is_int = function (n) {
-        return Number(n) === n && n % 1 === 0;
-    };
-    return MathUtilities;
-}());
-
-var OS = /** @class */ (function () {
-    function OS() {
     }
-    OS.prototype.init = function () {
+    static is_int(n) {
+        return Number(n) === n && n % 1 === 0;
+    }
+}
+
+class OS {
+    init() {
         this.operating_systems = {
             ANDROID: 'android',
             IOS: 'ios',
@@ -268,14 +198,14 @@ var OS = /** @class */ (function () {
         this.is_linux = this.get_os() === this.operating_systems.LINUX;
         this.is_mac = this.get_os() === this.operating_systems.MAC;
         this.is_windows = this.get_os() === this.operating_systems.WINDOWS;
-    };
-    OS.prototype.get_os = function () {
-        var userAgent = window.navigator.userAgent;
-        var platform = window.navigator.platform;
-        var macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
-        var windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-        var iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-        var os = null;
+    }
+    get_os() {
+        const userAgent = window.navigator.userAgent;
+        const platform = window.navigator.platform;
+        const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+        const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+        const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+        let os = null;
         if (macosPlatforms.indexOf(platform) !== -1) {
             os = this.operating_systems.MAC;
         }
@@ -292,13 +222,12 @@ var OS = /** @class */ (function () {
             os = this.operating_systems.LINUX;
         }
         return os;
-    };
-    return OS;
-}());
-var os = new OS();
+    }
+}
+const os = new OS();
 
-var MouseInputModule = /** @class */ (function () {
-    function MouseInputModule(region) {
+class MouseInputModule {
+    constructor(region) {
         this.region = region;
         this.left_mouse_button_pressed = false;
         this.left_mouse_button_down = false;
@@ -318,11 +247,11 @@ var MouseInputModule = /** @class */ (function () {
         this.pointers = [this.pointer];
         this.scroll_delta = 0;
     }
-    MouseInputModule.prototype.get_primary_pointer = function () {
+    get_primary_pointer() {
         return this.pointer;
-    };
-    MouseInputModule.prototype.get_pointer = function (index) {
-        var pointer = new Pointer(index, this.pointer.position.x, this.pointer.position.y, this.pointer.region);
+    }
+    get_pointer(index) {
+        const pointer = new Pointer(index, this.pointer.position.x, this.pointer.position.y, this.pointer.region);
         pointer.position_array.set_from_stack(this.pointer.position_array);
         pointer.previous_position_array.set_from_stack(this.pointer.previous_position_array);
         if (index === 0) {
@@ -341,50 +270,26 @@ var MouseInputModule = /** @class */ (function () {
             pointer.released = this.middle_mouse_button_released;
         }
         return pointer;
-    };
-    Object.defineProperty(MouseInputModule.prototype, "pointer_count", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MouseInputModule.prototype, "is_touchscreen", {
-        get: function () {
-            return false;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MouseInputModule.prototype, "pointer_center", {
-        get: function () {
-            return this.pointer.position;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MouseInputModule.prototype, "pointer_center_NDC", {
-        get: function () {
-            return this.pointer.NDC;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MouseInputModule.prototype, "pointer_center_NDC_delta", {
-        get: function () {
-            return this.pointer.NDC_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MouseInputModule.prototype, "pointer_center_delta", {
-        get: function () {
-            return this.pointer.position_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MouseInputModule.prototype.pointer_down = function (event) {
+    }
+    get pointer_count() {
+        return 1;
+    }
+    get is_touchscreen() {
+        return false;
+    }
+    get pointer_center() {
+        return this.pointer.position;
+    }
+    get pointer_center_NDC() {
+        return this.pointer.NDC;
+    }
+    get pointer_center_NDC_delta() {
+        return this.pointer.NDC_delta;
+    }
+    get pointer_center_delta() {
+        return this.pointer.position_delta;
+    }
+    pointer_down(event) {
         // this.pointer_pos.x = event.clientX;
         // this.pointer_pos.y = event.clientY;
         this.pointer.set_position(event.clientX, event.clientY);
@@ -406,8 +311,8 @@ var MouseInputModule = /** @class */ (function () {
                 this.right_mouse_button_down = true;
                 break;
         }
-    };
-    MouseInputModule.prototype.pointer_up = function (event) {
+    }
+    pointer_up(event) {
         switch (event.button) {
             case 0:
                 this.left_mouse_button_released = true;
@@ -424,14 +329,14 @@ var MouseInputModule = /** @class */ (function () {
                 this.right_mouse_button_down = false;
                 break;
         }
-    };
-    MouseInputModule.prototype.pointer_move = function (event) {
+    }
+    pointer_move(event) {
         this.pointer.set_position(event.clientX, event.clientY);
-    };
-    MouseInputModule.prototype.pointer_cancel = function (event) {
+    }
+    pointer_cancel(event) {
         this.pointer_out(event);
-    };
-    MouseInputModule.prototype.pointer_out = function (event) {
+    }
+    pointer_out(event) {
         if (this.left_mouse_button_down) {
             this.left_mouse_button_down = false;
             this.left_mouse_button_released = true;
@@ -446,8 +351,8 @@ var MouseInputModule = /** @class */ (function () {
             this.right_mouse_button_down = false;
             this.right_mouse_button_released = true;
         }
-    };
-    MouseInputModule.prototype.scroll = function (event) {
+    }
+    scroll(event) {
         this.pointer.set_position(event.clientX, event.clientY);
         if (os.is_mac) {
             // User is pinching
@@ -478,15 +383,11 @@ var MouseInputModule = /** @class */ (function () {
                 this.scroll_delta = event.deltaY / Math.abs(event.deltaY);
             }
         }
-    };
-    Object.defineProperty(MouseInputModule.prototype, "zoom_delta", {
-        get: function () {
-            return this.scroll_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MouseInputModule.prototype.clear = function () {
+    }
+    get zoom_delta() {
+        return this.scroll_delta;
+    }
+    clear() {
         this.left_mouse_button_pressed = false;
         this.left_mouse_button_released = false;
         this.pointer.pressed = false;
@@ -497,23 +398,17 @@ var MouseInputModule = /** @class */ (function () {
         this.middle_mouse_button_released = false;
         this.scroll_delta = 0;
         this.update_previous_pointer_pos();
-    };
-    Object.defineProperty(MouseInputModule.prototype, "pointer_pos_delta", {
-        get: function () {
-            return this.pointer.position_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MouseInputModule.prototype.update_previous_pointer_pos = function () {
+    }
+    get pointer_pos_delta() {
+        return this.pointer.position_delta;
+    }
+    update_previous_pointer_pos() {
         this.pointer.reset_previous_position();
-    };
-    return MouseInputModule;
-}());
+    }
+}
 
-var Region = /** @class */ (function () {
-    function Region(region_element) {
-        var _this = this;
+class Region {
+    constructor(region_element) {
         this.region_element = region_element;
         this.bounds = {
             x: 0,
@@ -521,53 +416,51 @@ var Region = /** @class */ (function () {
             width: 1,
             height: 1
         };
-        this.observer = new IntersectionObserver(function (entries) {
-            for (var _i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
-                var entry = entries_1[_i];
-                var bounds = entry.boundingClientRect;
-                _this.bounds.x = bounds.left;
-                _this.bounds.y = bounds.top;
-                _this.bounds.width = bounds.width;
-                _this.bounds.height = bounds.height;
+        this.observer = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                const bounds = entry.boundingClientRect;
+                this.bounds.x = bounds.left;
+                this.bounds.y = bounds.top;
+                this.bounds.width = bounds.width;
+                this.bounds.height = bounds.height;
             }
-            _this.observer.disconnect();
+            this.observer.disconnect();
         });
     }
-    Region.prototype.update = function () {
+    update() {
         this.observer.observe(this.region_element);
-    };
-    Region.prototype.check_for_legal_bounds = function () {
+    }
+    check_for_legal_bounds() {
         if (this.bounds.width === 0 || this.bounds.height === 0) {
             console.error('Cannot get normalized mouse position for target element due to the element having 0 width or height', this.dom_element, this.bounds);
         }
-    };
-    Region.prototype.transform_pos_to_subregion = function (pos) {
-        var vec = new Vector2();
+    }
+    transform_pos_to_subregion(pos) {
+        const vec = new Vector2();
         vec.copy(pos);
         vec.x -= this.bounds.x;
         vec.y -= this.bounds.y;
         return vec;
-    };
-    Region.prototype.transform_pos_to_NDC = function (pos) {
+    }
+    transform_pos_to_NDC(pos) {
         this.check_for_legal_bounds();
-        var vec = this.transform_pos_to_subregion(pos);
+        const vec = this.transform_pos_to_subregion(pos);
         vec.x = (vec.x / this.bounds.width) * 2 - 1;
         vec.y = (1 - (vec.y / this.bounds.height)) * 2 - 1;
         return vec;
-    };
-    Region.prototype.transform_dir_to_NDC = function (dir) {
-        var vec = new Vector2();
+    }
+    transform_dir_to_NDC(dir) {
+        const vec = new Vector2();
         vec.copy(dir);
         dir.x /= this.bounds.width;
         dir.y /= this.bounds.height;
         return dir;
-    };
-    return Region;
-}());
+    }
+}
 
 // import Logger from './utilities/Logger';
-var TouchInputModule = /** @class */ (function () {
-    function TouchInputModule(region) {
+class TouchInputModule {
+    constructor(region) {
         this.region = region;
         this.left_mouse_button_pressed = false;
         this.left_mouse_button_down = false;
@@ -589,121 +482,81 @@ var TouchInputModule = /** @class */ (function () {
         // this.update_pointer(6, 25, 25)
         // this.pointers[0].distance_to(this.pointers[1])
     }
-    TouchInputModule.prototype.get_pointer = function (i) {
+    get_pointer(i) {
         if (this.pointers[i] !== undefined) {
             return this.pointers[i];
         }
         else {
             return this.default_pointer;
         }
-    };
-    Object.defineProperty(TouchInputModule.prototype, "is_touchscreen", {
-        get: function () {
-            return true;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "scroll_delta", {
-        get: function () {
-            if (this.pointers.length > 0) {
-                return this.get_primary_pointer().position_delta.y * 0.03;
-            }
-            return 0;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TouchInputModule.prototype.get_primary_pointer = function () {
+    }
+    get is_touchscreen() {
+        return true;
+    }
+    get scroll_delta() {
+        if (this.pointers.length > 0) {
+            return this.get_primary_pointer().position_delta.y * 0.03;
+        }
+        return 0;
+    }
+    get_primary_pointer() {
         return this.get_pointer(0);
-    };
-    Object.defineProperty(TouchInputModule.prototype, "pointer_pos_delta", {
-        get: function () {
-            var position = new Vector2();
-            for (var i = 0; i < this.pointers.length; i++) {
-                position.add(this.pointers[i].position_delta());
-            }
-            position.divideScalar(Math.max(1, this.pointers.length));
-            return position;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "pointer_count", {
-        get: function () {
-            return this.pointers.length;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "pointer_center", {
-        get: function () {
-            var center = new Vector2();
-            for (var i = 0; i < this.pointers.length; i++) {
-                center.add(this.pointers[i].position);
-            }
-            center.divideScalar(Math.max(1, this.pointers.length));
-            return center;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "previous_pointer_center", {
-        get: function () {
-            var center = new Vector2();
-            for (var i = 0; i < this.pointers.length; i++) {
-                center.add(this.pointers[i].previous_position);
-            }
-            center.divideScalar(Math.max(1, this.pointers.length));
-            return center;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "pointer_center_NDC", {
-        get: function () {
-            var center = this.pointer_center;
-            return this.region.transform_pos_to_NDC(center);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "previous_pointer_center_NDC", {
-        get: function () {
-            var center = this.previous_pointer_center;
-            return this.region.transform_pos_to_NDC(center);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "pointer_center_delta", {
-        get: function () {
-            var current_center = this.pointer_center;
-            var prev_center = this.previous_pointer_center;
-            return current_center.clone().sub(prev_center);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TouchInputModule.prototype, "pointer_center_NDC_delta", {
-        get: function () {
-            var center = this.pointer_center_NDC;
-            var prev_center = this.previous_pointer_center_NDC;
-            return center.sub(prev_center);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TouchInputModule.prototype.update_pointer_separation = function () {
+    }
+    get pointer_pos_delta() {
+        const position = new Vector2();
+        for (let i = 0; i < this.pointers.length; i++) {
+            position.add(this.pointers[i].position_delta());
+        }
+        position.divideScalar(Math.max(1, this.pointers.length));
+        return position;
+    }
+    get pointer_count() {
+        return this.pointers.length;
+    }
+    get pointer_center() {
+        const center = new Vector2();
+        for (let i = 0; i < this.pointers.length; i++) {
+            center.add(this.pointers[i].position);
+        }
+        center.divideScalar(Math.max(1, this.pointers.length));
+        return center;
+    }
+    get previous_pointer_center() {
+        const center = new Vector2();
+        for (let i = 0; i < this.pointers.length; i++) {
+            center.add(this.pointers[i].previous_position);
+        }
+        center.divideScalar(Math.max(1, this.pointers.length));
+        return center;
+    }
+    get pointer_center_NDC() {
+        const center = this.pointer_center;
+        return this.region.transform_pos_to_NDC(center);
+    }
+    get previous_pointer_center_NDC() {
+        const center = this.previous_pointer_center;
+        return this.region.transform_pos_to_NDC(center);
+    }
+    get pointer_center_delta() {
+        const current_center = this.pointer_center;
+        const prev_center = this.previous_pointer_center;
+        return current_center.clone().sub(prev_center);
+    }
+    get pointer_center_NDC_delta() {
+        const center = this.pointer_center_NDC;
+        const prev_center = this.previous_pointer_center_NDC;
+        return center.sub(prev_center);
+    }
+    update_pointer_separation() {
         if (this.pointers.length === 2) {
-            var p0 = this.pointers[0];
-            var p1 = this.pointers[1];
-            var distance = p0.distance_to(p1);
-            var previous_distance = p0.previous_distance_to(p1);
+            const p0 = this.pointers[0];
+            const p1 = this.pointers[1];
+            const distance = p0.distance_to(p1);
+            const previous_distance = p0.previous_distance_to(p1);
             if (this.previous_separation_distance === undefined) {
                 this.previous_separation_distance = distance;
             }
-            var sensitivity = 0.1;
+            const sensitivity = 0.1;
             this.zoom_delta = -(distance - previous_distance) * sensitivity;
             this.previous_separation_distance = distance;
         }
@@ -711,14 +564,14 @@ var TouchInputModule = /** @class */ (function () {
             this.previous_separation_distance = undefined;
             this.zoom_delta = 0;
         }
-    };
-    TouchInputModule.prototype.pointers_moving_away_from_each_other = function () {
+    }
+    pointers_moving_away_from_each_other() {
         if (this.pointers.length !== 2) {
             return false;
         }
-    };
-    TouchInputModule.prototype.update_pointer = function (pointer_id, x, y) {
-        var p = this.pointers.find(function (pointer) { return pointer.id === pointer_id; });
+    }
+    update_pointer(pointer_id, x, y) {
+        let p = this.pointers.find((pointer) => pointer.id === pointer_id);
         if (p === undefined) {
             p = new Pointer(pointer_id, x, y, this.region);
             this.pointers.push(p);
@@ -734,33 +587,33 @@ var TouchInputModule = /** @class */ (function () {
         this.update_pointer_separation();
         // console.log(p)
         return p;
-    };
-    TouchInputModule.prototype.remove_pointer = function (pointer_id) {
-        var index = this.pointers.findIndex(function (p) { return p.id === pointer_id; });
+    }
+    remove_pointer(pointer_id) {
+        const index = this.pointers.findIndex((p) => p.id === pointer_id);
         if (index !== undefined) {
             this.pointers.splice(index, 1);
         }
         this.update_pointer_separation();
-    };
-    TouchInputModule.prototype.is_primary_pointer = function (pointer) {
+    }
+    is_primary_pointer(pointer) {
         return this.pointers[0] === pointer;
-    };
-    TouchInputModule.prototype.pointer_down = function (event) {
-        var touches = event.changedTouches;
-        for (var i = 0; i < touches.length; i++) {
-            var touch = touches[i];
-            var p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+    }
+    pointer_down(event) {
+        const touches = event.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
             if (this.is_primary_pointer(p)) {
                 this.left_mouse_button_pressed = true;
                 this.left_mouse_button_down = true;
             }
         }
-    };
-    TouchInputModule.prototype.pointer_up = function (event) {
-        var touches = event.changedTouches;
-        for (var i = 0; i < touches.length; i++) {
-            var touch = touches[i];
-            var p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+    }
+    pointer_up(event) {
+        const touches = event.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
             p.released = true;
             if (this.is_primary_pointer(p)) {
                 this.left_mouse_button_released = true;
@@ -768,22 +621,22 @@ var TouchInputModule = /** @class */ (function () {
             }
             this.remove_pointer(p.id);
         }
-    };
-    TouchInputModule.prototype.pointer_move = function (event) {
-        var touches = event.changedTouches;
-        for (var i = 0; i < touches.length; i++) {
-            var touch = touches[i];
+    }
+    pointer_move(event) {
+        const touches = event.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
             this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
         }
-    };
-    TouchInputModule.prototype.pointer_cancel = function (event) {
+    }
+    pointer_cancel(event) {
         this.pointer_out(event);
-    };
-    TouchInputModule.prototype.pointer_out = function (event) {
-        var touches = event.changedTouches;
-        for (var i = 0; i < touches.length; i++) {
-            var touch = touches[i];
-            var p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
+    }
+    pointer_out(event) {
+        const touches = event.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const p = this.update_pointer(touch.identifier, touch.clientX, touch.clientY);
             p.released = true;
             p.down = false;
             if (this.left_mouse_button_down && this.is_primary_pointer(p)) {
@@ -792,23 +645,20 @@ var TouchInputModule = /** @class */ (function () {
             }
             this.remove_pointer(p.id);
         }
-    };
-    TouchInputModule.prototype.clear = function () {
+    }
+    clear() {
         this.left_mouse_button_pressed = false;
         this.left_mouse_button_released = false;
         this.zoom_delta = 0;
-        for (var i = 0; i < this.pointers.length; i++) {
+        for (let i = 0; i < this.pointers.length; i++) {
             this.pointers[i].reset_previous_position();
             this.pointers[i].pressed = false;
         }
-    };
-    return TouchInputModule;
-}());
-
-var InputController = /** @class */ (function () {
-    function InputController() {
     }
-    InputController.prototype.init = function (dom_element, sub_region_element) {
+}
+
+class InputController {
+    init(dom_element, sub_region_element = undefined) {
         this.dom_element = dom_element;
         this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
         this.region = new Region(this.sub_region_element);
@@ -819,8 +669,8 @@ var InputController = /** @class */ (function () {
         this.touch_cooldown = new Date() - 1000;
         os.init();
         this.bind_events();
-    };
-    InputController.prototype.bind_events = function () {
+    }
+    bind_events() {
         this.__binded_on_wheel = this.on_wheel.bind(this);
         this.dom_element.addEventListener('wheel', this.__binded_on_wheel, { passive: true });
         this.__binded_on_touchstart = this.on_touchstart.bind(this);
@@ -839,8 +689,8 @@ var InputController = /** @class */ (function () {
         this.dom_element.addEventListener('mouseup', this.__binded_on_mouseup, false);
         this.__binded_on_mouseleave = this.on_mouseleave.bind(this);
         this.dom_element.addEventListener('mouseleave', this.__binded_on_mouseleave, false);
-    };
-    InputController.prototype.unbind_events = function () {
+    }
+    unbind_events() {
         this.dom_element.removeEventListener('wheel', this.__binded_on_wheel, { passive: true });
         this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart, { passive: true });
         this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove, { passive: true });
@@ -850,257 +700,160 @@ var InputController = /** @class */ (function () {
         this.dom_element.removeEventListener('mousemove', this.__binded_on_mousemove, false);
         this.dom_element.removeEventListener('mouseup', this.__binded_on_mouseup, false);
         this.dom_element.removeEventListener('mouseleave', this.__binded_on_mouseleave, false);
-    };
-    InputController.prototype.on_wheel = function (event) {
+    }
+    on_wheel(event) {
         this.mouse_input_module.scroll(event);
         this.set_mouse_input_active();
-    };
-    InputController.prototype.on_touchstart = function (event) {
+    }
+    on_touchstart(event) {
         this.touch_input_module.pointer_down(event);
         this.set_touch_input_active();
-    };
-    InputController.prototype.on_touchmove = function (event) {
+    }
+    on_touchmove(event) {
         this.touch_input_module.pointer_move(event);
         this.set_touch_input_active();
-    };
-    InputController.prototype.on_touchcancel = function (event) {
+    }
+    on_touchcancel(event) {
         this.touch_input_module.pointer_cancel(event);
         this.set_touch_input_active();
-    };
-    InputController.prototype.on_touchend = function (event) {
+    }
+    on_touchend(event) {
         this.touch_input_module.pointer_up(event);
         this.set_touch_input_active();
-    };
-    InputController.prototype.on_mousedown = function (event) {
+    }
+    on_mousedown(event) {
         if (this.mouse_input_allowed()) {
             this.mouse_input_module.pointer_down(event);
             this.set_mouse_input_active();
         }
-    };
-    InputController.prototype.on_mousemove = function (event) {
+    }
+    on_mousemove(event) {
         if (this.mouse_input_allowed()) {
             this.mouse_input_module.pointer_move(event);
             this.set_mouse_input_active();
         }
-    };
-    InputController.prototype.on_mouseup = function (event) {
+    }
+    on_mouseup(event) {
         if (this.mouse_input_allowed()) {
             this.mouse_input_module.pointer_up(event);
             this.set_mouse_input_active();
         }
-    };
-    InputController.prototype.on_mouseleave = function (event) {
+    }
+    on_mouseleave(event) {
         this.mouse_input_module.pointer_out(event);
         this.set_mouse_input_active();
-    };
-    InputController.prototype.clear = function () {
+    }
+    clear() {
         this.region.update();
         this.touch_input_module.clear();
         this.mouse_input_module.clear();
-    };
-    InputController.prototype.mouse_input_allowed = function () {
+    }
+    mouse_input_allowed() {
         // @ts-expect-error TS(2362): The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
         return (new Date() - this.touch_cooldown) / 1000 > 0.75;
-    };
-    InputController.prototype.set_mouse_input_active = function () {
+    }
+    set_mouse_input_active() {
         this.active_input_module = this.mouse_input_module;
-    };
-    InputController.prototype.set_touch_input_active = function () {
+    }
+    set_touch_input_active() {
         this.active_input_module = this.touch_input_module;
         this.touch_cooldown = new Date();
-    };
-    Object.defineProperty(InputController.prototype, "left_mouse_button_pressed", {
-        get: function () {
-            return this.active_input_module.left_mouse_button_pressed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "left_mouse_button_down", {
-        get: function () {
-            return this.active_input_module.left_mouse_button_down;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "left_mouse_button_released", {
-        get: function () {
-            return this.active_input_module.left_mouse_button_released;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "right_mouse_button_pressed", {
-        get: function () {
-            return this.mouse_input_module.right_mouse_button_pressed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "right_mouse_button_down", {
-        get: function () {
-            return this.mouse_input_module.right_mouse_button_down;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "right_mouse_button_released", {
-        get: function () {
-            return this.mouse_input_module.right_mouse_button_released;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "middle_mouse_button_pressed", {
-        get: function () {
-            return this.mouse_input_module.middle_mouse_button_pressed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "middle_mouse_button_down", {
-        get: function () {
-            return this.mouse_input_module.middle_mouse_button_down;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "middle_mouse_button_released", {
-        get: function () {
-            return this.mouse_input_module.middle_mouse_button_released;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "is_touchscreen", {
-        get: function () {
-            return this.active_input_module.is_touchscreen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "scroll_delta", {
-        get: function () {
-            return this.active_input_module.scroll_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "zoom_delta", {
-        get: function () {
-            return this.active_input_module.zoom_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_count", {
-        get: function () {
-            return this.active_input_module.pointer_count;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_is_within_bounds", {
-        get: function () {
-            var ndc = this.NDC;
-            return ndc.x >= -1 && ndc.x <= 1 &&
-                ndc.y >= -1 && ndc.y <= 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InputController.prototype.pointer_is_over_element = function (elem) {
-        var rect = elem.getBoundingClientRect();
-        var pos = this.pointer_pos;
+    }
+    get left_mouse_button_pressed() {
+        return this.active_input_module.left_mouse_button_pressed;
+    }
+    get left_mouse_button_down() {
+        return this.active_input_module.left_mouse_button_down;
+    }
+    get left_mouse_button_released() {
+        return this.active_input_module.left_mouse_button_released;
+    }
+    get right_mouse_button_pressed() {
+        return this.mouse_input_module.right_mouse_button_pressed;
+    }
+    get right_mouse_button_down() {
+        return this.mouse_input_module.right_mouse_button_down;
+    }
+    get right_mouse_button_released() {
+        return this.mouse_input_module.right_mouse_button_released;
+    }
+    get middle_mouse_button_pressed() {
+        return this.mouse_input_module.middle_mouse_button_pressed;
+    }
+    get middle_mouse_button_down() {
+        return this.mouse_input_module.middle_mouse_button_down;
+    }
+    get middle_mouse_button_released() {
+        return this.mouse_input_module.middle_mouse_button_released;
+    }
+    get is_touchscreen() {
+        return this.active_input_module.is_touchscreen;
+    }
+    get scroll_delta() {
+        return this.active_input_module.scroll_delta;
+    }
+    get zoom_delta() {
+        return this.active_input_module.zoom_delta;
+    }
+    get pointer_count() {
+        return this.active_input_module.pointer_count;
+    }
+    get pointer_is_within_bounds() {
+        const ndc = this.NDC;
+        return ndc.x >= -1 && ndc.x <= 1 &&
+            ndc.y >= -1 && ndc.y <= 1;
+    }
+    pointer_is_over_element(elem) {
+        const rect = elem.getBoundingClientRect();
+        const pos = this.pointer_pos;
         return pos.x > rect.left &&
             pos.x < rect.left + rect.width &&
             pos.y > rect.top &&
             pos.y < rect.top + rect.height;
-    };
-    Object.defineProperty(InputController.prototype, "pointers", {
-        get: function () {
-            return this.active_input_module.pointers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_pos", {
-        get: function () {
-            return this.get_pointer_pos(0);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_pos_delta", {
-        get: function () {
-            return this.get_pointer_pos_delta(0);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "NDC", {
-        get: function () {
-            return this.get_pointer_NDC(0);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "NDC_delta", {
-        get: function () {
-            return this.get_pointer_NDC_delta(0);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_center", {
-        get: function () {
-            return this.active_input_module.pointer_center;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_center_delta", {
-        get: function () {
-            return this.active_input_module.pointer_center_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_center_NDC", {
-        get: function () {
-            return this.active_input_module.pointer_center_NDC;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InputController.prototype, "pointer_center_NDC_delta", {
-        get: function () {
-            return this.active_input_module.pointer_center_NDC_delta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InputController.prototype.get_pointer_pos = function (index) {
-        if (index === void 0) { index = 0; }
+    }
+    get pointers() {
+        return this.active_input_module.pointers;
+    }
+    get pointer_pos() {
+        return this.get_pointer_pos(0);
+    }
+    get pointer_pos_delta() {
+        return this.get_pointer_pos_delta(0);
+    }
+    get NDC() {
+        return this.get_pointer_NDC(0);
+    }
+    get NDC_delta() {
+        return this.get_pointer_NDC_delta(0);
+    }
+    get pointer_center() {
+        return this.active_input_module.pointer_center;
+    }
+    get pointer_center_delta() {
+        return this.active_input_module.pointer_center_delta;
+    }
+    get pointer_center_NDC() {
+        return this.active_input_module.pointer_center_NDC;
+    }
+    get pointer_center_NDC_delta() {
+        return this.active_input_module.pointer_center_NDC_delta;
+    }
+    get_pointer_pos(index = 0) {
         return this.active_input_module.get_pointer(index).position;
-    };
-    InputController.prototype.get_pointer_pos_delta = function (index) {
-        if (index === void 0) { index = 0; }
+    }
+    get_pointer_pos_delta(index = 0) {
         return this.active_input_module.get_pointer(index).position_delta;
-    };
-    InputController.prototype.get_pointer_NDC = function (index) {
-        if (index === void 0) { index = 0; }
+    }
+    get_pointer_NDC(index = 0) {
         return this.active_input_module.get_pointer(index).NDC;
-    };
-    InputController.prototype.get_pointer_NDC_delta = function (index) {
-        if (index === void 0) { index = 0; }
+    }
+    get_pointer_NDC_delta(index = 0) {
         return this.active_input_module.get_pointer(index).NDC_delta;
-    };
-    InputController.prototype.dispose = function () {
+    }
+    dispose() {
         this.unbind_events();
-    };
-    return InputController;
-}());
+    }
+}
 
 exports.InputController = InputController;
 exports.Vector2 = Vector2;
