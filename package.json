@@ -20,7 +20,7 @@
     "config-hooks": "git config core.hooksPath git_hooks",
     "create-tag": "node tasks/app/create_tag.mjs",
     "fix-syntax": "npx eslint src --fix || echo 'Done.'",
-    "generate-types": "npx -p typescript tsc src/* --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "generate-types": "npx -p typescript tsc",
     "upload": "yarn build && npm publish && yarn create-tag"
   },
   "repository": {
