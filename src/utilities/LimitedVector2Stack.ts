@@ -12,7 +12,7 @@ class LimitedVector2Stack extends LimitedStack
     this.average = new Vector2();
   }
 
-  set_from_stack(vector2_stack: any)
+  set_from_stack(vector2_stack: LimitedVector2Stack)
   {
     for (let i = 0; i < this.array.length; i++)
     {
@@ -21,7 +21,7 @@ class LimitedVector2Stack extends LimitedStack
     this.update_average();
   }
 
-  push(elem: any)
+  push(elem: Vector2)
   {
     super.push(elem);
 
