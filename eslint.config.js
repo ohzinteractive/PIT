@@ -7,13 +7,23 @@ export default [
   js.configs.recommended,
 
   // TypeScript rules
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked.map(config => ({
+    ...config,
+    languageOptions: {
+      ...config.languageOptions,
+      parserOptions: {
+        ...config.languageOptions?.parserOptions,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  })),
 
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
-        project: true // uses tsconfig.json
+        project: true, // uses tsconfig.json
+        tsconfigRootDir: import.meta.dirname
       }
     },
     rules: {
@@ -25,7 +35,7 @@ export default [
         'warn',
         { argsIgnorePattern: '^_' }
       ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
       // Code style rules (migrated from .eslintrc.cjs)
