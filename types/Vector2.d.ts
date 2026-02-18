@@ -1,24 +1,51 @@
 declare class Vector2 {
-    x: any;
-    y: any;
+    x: number;
+    y: number;
     static isVector2: boolean;
     constructor(x?: number, y?: number);
-    set(x: any, y: any): this;
-    clone(): any;
-    copy(v: any): this;
-    add(v: any): this;
-    sub(v: any): this;
-    multiplyScalar(scalar: any): this;
-    divide(v: any): this;
-    divideScalar(scalar: any): this;
-    dot(v: any): number;
-    cross(v: any): number;
+    set(x: number, y: number): this;
+    clone(): Vector2;
+    copy(v: {
+        x: number;
+        y: number;
+    }): this;
+    add(v: {
+        x: number;
+        y: number;
+    }): this;
+    sub(v: {
+        x: number;
+        y: number;
+    }): this;
+    multiplyScalar(scalar: number): this;
+    divide(v: {
+        x: number;
+        y: number;
+    }): this;
+    divideScalar(scalar: number): this;
+    dot(v: {
+        x: number;
+        y: number;
+    }): number;
+    cross(v: {
+        x: number;
+        y: number;
+    }): number;
     lengthSq(): number;
     length(): number;
     normalize(): this;
     angle(): number;
-    distanceTo(v: any): number;
-    distanceToSquared(v: any): number;
-    lerp(v: any, alpha: any): this;
+    distanceTo(v: {
+        x: number;
+        y: number;
+    }): number;
+    distanceToSquared(v: {
+        x: number;
+        y: number;
+    }): number;
+    lerp(v: {
+        x: number;
+        y: number;
+    }, alpha: number): this;
 }
 export { Vector2 };

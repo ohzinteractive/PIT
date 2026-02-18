@@ -1,5 +1,5 @@
 declare class MathUtilities {
-    static clamp(value: any, min: any, max: any): number;
-    static is_int(n: any): boolean;
+    static clamp(value: number, min: number, max: number): number;
+    static is_int(n: number): boolean;
 }
 export { MathUtilities };
