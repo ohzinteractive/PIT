@@ -1,7 +1,9 @@
+import type { Vector2 } from "../index";
+
 class LimitedStack
 {
-  array: any;
-  max_size: any;
+  array: Vector2[];
+  max_size: number;
   
   constructor(max_size = 1)
   {
@@ -17,10 +19,10 @@ class LimitedStack
 
   length()
   {
-    return this.array.length();
+    return this.array.length;
   }
 
-  set_from_stack(stack: any)
+  set_from_stack(stack: LimitedStack)
   {
     for (let i = 0; i < this.array.length; i++)
     {
@@ -28,7 +30,7 @@ class LimitedStack
     }
   }
 
-  push(elem: any)
+  push(elem: Vector2)
   {
     this.array.unshift(elem);
     if (this.array.length > this.max_size)

@@ -1,18 +1,19 @@
+import type { Region } from './Region';
 import { Vector2 } from './Vector2';
 import { LimitedVector2Stack } from './utilities/LimitedVector2Stack';
 // import Logger from './utilities/Logger';
 
 class Pointer
 {
-  down: any;
-  id: any;
-  position_array: any;
-  pressed: any;
-  previous_position_array: any;
-  region: any;
-  released: any;
+  down: boolean;
+  id: number;
+  position_array: LimitedVector2Stack;
+  pressed: boolean;
+  previous_position_array: LimitedVector2Stack;
+  region: Region;
+  released: boolean;
 
-  constructor(id: any, x: any, y: any, region: any)
+  constructor(id: number, x: number, y: number, region: Region)
   {
     this.region = region;
     this.id = id;
@@ -55,17 +56,17 @@ class Pointer
     return delta;
   }
 
-  distance_to(pointer: any)
+  distance_to(pointer: Pointer)
   {
     return this.position_array.average.distanceTo(pointer.position_array.average);
   }
 
-  previous_distance_to(pointer: any)
+  previous_distance_to(pointer: Pointer)
   {
     return this.previous_position_array.average.distanceTo(pointer.previous_position_array.average);
   }
 
-  set_position(x: any, y: any)
+  set_position(x: number, y: number)
   {
     this.previous_position_array.push(this.position_array.get_first().clone());
     this.position_array.push(new Vector2(x, y));

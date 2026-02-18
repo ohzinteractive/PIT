@@ -1,7 +1,7 @@
 class Vector2
 {
-  x: any;
-  y: any;
+  x: number;
+  y: number;
   
   static isVector2: boolean = true;
   
@@ -11,7 +11,7 @@ class Vector2
     this.y = y;
   }
 
-  set(x: any, y: any)
+  set(x: number, y: number)
   {
     this.x = x;
     this.y = y;
@@ -21,11 +21,10 @@ class Vector2
 
   clone()
   {
-    // @ts-expect-error TS(2351): This expression is not constructable.
-    return new this.constructor(this.x, this.y);
+    return new Vector2(this.x, this.y);
   }
 
-  copy(v: any)
+  copy(v: { x: number; y: number })
   {
     this.x = v.x;
     this.y = v.y;
@@ -33,7 +32,7 @@ class Vector2
     return this;
   }
 
-  add(v: any)
+  add(v: { x: number; y: number })
   {
     this.x += v.x;
     this.y += v.y;
@@ -41,7 +40,7 @@ class Vector2
     return this;
   }
 
-  sub(v: any)
+  sub(v: { x: number; y: number })
   {
     this.x -= v.x;
     this.y -= v.y;
@@ -49,7 +48,7 @@ class Vector2
     return this;
   }
 
-  multiplyScalar(scalar: any)
+  multiplyScalar(scalar: number)
   {
     this.x *= scalar;
     this.y *= scalar;
@@ -57,7 +56,7 @@ class Vector2
     return this;
   }
 
-  divide(v: any)
+  divide(v: { x: number; y: number })
   {
     this.x /= v.x;
     this.y /= v.y;
@@ -65,17 +64,17 @@ class Vector2
     return this;
   }
 
-  divideScalar(scalar: any)
+  divideScalar(scalar: number)
   {
     return this.multiplyScalar(1 / scalar);
   }
 
-  dot(v: any)
+  dot(v: { x: number; y: number })
   {
     return this.x * v.x + this.y * v.y;
   }
 
-  cross(v: any)
+  cross(v: { x: number; y: number })
   {
     return this.x * v.y - this.y * v.x;
   }
@@ -104,18 +103,18 @@ class Vector2
     return angle;
   }
 
-  distanceTo(v: any)
+  distanceTo(v: { x: number; y: number })
   {
     return Math.sqrt(this.distanceToSquared(v));
   }
 
-  distanceToSquared(v: any)
+  distanceToSquared(v: { x: number; y: number })
   {
     const dx = this.x - v.x; const dy = this.y - v.y;
     return dx * dx + dy * dy;
   }
 
-  lerp(v: any, alpha: any)
+  lerp(v: { x: number; y: number }, alpha: number)
   {
     this.x += (v.x - this.x) * alpha;
     this.y += (v.y - this.y) * alpha;

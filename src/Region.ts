@@ -1,13 +1,14 @@
+import type { Rect } from './Rect';
 import { Vector2 } from './Vector2';
 
 class Region
 {
-  bounds: any;
-  dom_element: any;
-  observer: any;
-  region_element: any;
+  bounds: Rect;
+  dom_element: HTMLElement;
+  observer: IntersectionObserver;
+  region_element: HTMLElement;
   
-  constructor(region_element: any)
+  constructor(region_element: HTMLElement)
   {
     this.region_element = region_element;
     this.bounds = {
@@ -44,7 +45,7 @@ class Region
     }
   }
 
-  transform_pos_to_subregion(pos: any)
+  transform_pos_to_subregion(pos: Vector2)
   {
     const vec = new Vector2();
     vec.copy(pos);
@@ -55,7 +56,7 @@ class Region
     return vec;
   }
 
-  transform_pos_to_NDC(pos: any)
+  transform_pos_to_NDC(pos: Vector2)
   {
     this.check_for_legal_bounds();
     const vec = this.transform_pos_to_subregion(pos);
@@ -65,7 +66,7 @@ class Region
     return vec;
   }
 
-  transform_dir_to_NDC(dir: any)
+  transform_dir_to_NDC(dir: Vector2)
   {
     const vec = new Vector2();
     vec.copy(dir);

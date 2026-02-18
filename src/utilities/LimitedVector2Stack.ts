@@ -3,7 +3,7 @@ import { LimitedStack } from './LimitedStack';
 
 class LimitedVector2Stack extends LimitedStack
 {
-  average: any;
+  average: Vector2;
   
   constructor(max_size = 1)
   {

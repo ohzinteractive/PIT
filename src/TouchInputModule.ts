@@ -1,20 +1,21 @@
 import { Pointer } from './Pointer';
+import type { Region } from './Region';
 import { Vector2 } from './Vector2';
 // import Logger from './utilities/Logger';
 
 class TouchInputModule
 {
-  default_pointer: any;
-  left_mouse_button_down: any;
-  left_mouse_button_pressed: any;
-  left_mouse_button_released: any;
-  pointers: any;
-  previous_primary_pointer_pos: any;
-  previous_separation_distance: any;
-  region: any;
-  zoom_delta: any;
+  default_pointer: Pointer;
+  left_mouse_button_down: boolean;
+  left_mouse_button_pressed: boolean;
+  left_mouse_button_released: boolean;
+  pointers: Pointer[];
+  previous_primary_pointer_pos: Vector2;
+  previous_separation_distance: number | undefined;
+  region: Region;
+  zoom_delta: number;
 
-  constructor(region: any)
+  constructor(region: Region)
   {
     this.region = region;
     this.left_mouse_button_pressed  = false;
@@ -43,7 +44,7 @@ class TouchInputModule
     // this.pointers[0].distance_to(this.pointers[1])
   }
 
-  get_pointer(i: any)
+  get_pointer(i: number)
   {
     if (this.pointers[i] !== undefined)
     {
@@ -225,7 +226,7 @@ class TouchInputModule
     return this.pointers[0] === pointer;
   }
 
-  pointer_down(event: any)
+  pointer_down(event: TouchEvent)
   {
     const touches = event.changedTouches;
 
@@ -242,7 +243,7 @@ class TouchInputModule
     }
   }
 
-  pointer_up(event: any)
+  pointer_up(event: TouchEvent)
   {
     const touches = event.changedTouches;
 
@@ -261,7 +262,7 @@ class TouchInputModule
     }
   }
 
-  pointer_move(event: any)
+  pointer_move(event: TouchEvent)
   {
     const touches = event.changedTouches;
 
@@ -272,12 +273,12 @@ class TouchInputModule
     }
   }
 
-  pointer_cancel(event: any)
+  pointer_cancel(event: TouchEvent)
   {
     this.pointer_out(event);
   }
 
-  pointer_out(event: any)
+  pointer_out(event: TouchEvent)
   {
     const touches = event.changedTouches;
 

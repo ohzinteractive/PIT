@@ -14,15 +14,16 @@ class InputController
   __binded_on_touchmove: any;
   __binded_on_touchstart: any;
   __binded_on_wheel: any;
-  active_input_module: any;
-  dom_element: any;
-  mouse_input_module: any;
-  region: any;
-  sub_region_element: any;
-  touch_cooldown: any;
-  touch_input_module: any;
+  
+  active_input_module: MouseInputModule | TouchInputModule;
+  dom_element: HTMLElement;
+  mouse_input_module: MouseInputModule;
+  region: Region;
+  sub_region_element: HTMLElement;
+  touch_cooldown: Date;
+  touch_input_module: TouchInputModule;
 
-  init(dom_element: any, sub_region_element: any)
+  init(dom_element: HTMLElement, sub_region_element: HTMLElement | undefined = undefined)
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;
@@ -79,37 +80,37 @@ class InputController
     this.dom_element.removeEventListener('mouseleave', this.__binded_on_mouseleave, false);
   }
 
-  on_wheel(event: any)
+  on_wheel(event: WheelEvent)
   {
     this.mouse_input_module.scroll(event);
     this.set_mouse_input_active();
   }
 
-  on_touchstart(event: any)
+  on_touchstart(event: TouchEvent)
   {
     this.touch_input_module.pointer_down(event);
     this.set_touch_input_active();
   }
 
-  on_touchmove(event: any)
+  on_touchmove(event: TouchEvent)
   {
     this.touch_input_module.pointer_move(event);
     this.set_touch_input_active();
   }
 
-  on_touchcancel(event: any)
+  on_touchcancel(event: TouchEvent)
   {
     this.touch_input_module.pointer_cancel(event);
     this.set_touch_input_active();
   }
 
-  on_touchend(event: any)
+  on_touchend(event: TouchEvent)
   {
     this.touch_input_module.pointer_up(event);
     this.set_touch_input_active();
   }
 
-  on_mousedown(event: any)
+  on_mousedown(event: MouseEvent)
   {
     if (this.mouse_input_allowed())
     {
@@ -118,7 +119,7 @@ class InputController
     }
   }
 
-  on_mousemove(event: any)
+  on_mousemove(event: MouseEvent)
   {
     if (this.mouse_input_allowed())
     {
@@ -127,7 +128,7 @@ class InputController
     }
   }
 
-  on_mouseup(event: any)
+  on_mouseup(event: MouseEvent)
   {
     if (this.mouse_input_allowed())
     {
@@ -136,7 +137,7 @@ class InputController
     }
   }
 
-  on_mouseleave(event: any)
+  on_mouseleave(event: MouseEvent)
   {
     this.mouse_input_module.pointer_out(event);
     this.set_mouse_input_active();
@@ -239,7 +240,7 @@ class InputController
             ndc.y >= -1 && ndc.y <= 1;
   }
 
-  pointer_is_over_element(elem: any)
+  pointer_is_over_element(elem: HTMLElement)
   {
     const rect = elem.getBoundingClientRect();
     const pos = this.pointer_pos;
