@@ -16,14 +16,14 @@ class InputController
   __binded_on_wheel: any;
   
   active_input_module: MouseInputModule | TouchInputModule;
-  dom_element: HTMLElement;
+  dom_element: Element;
   mouse_input_module: MouseInputModule;
   region: Region;
-  sub_region_element: HTMLElement;
+  sub_region_element: Element;
   touch_cooldown: Date;
   touch_input_module: TouchInputModule;
 
-  init(dom_element: HTMLElement, sub_region_element: HTMLElement | undefined = undefined)
+  init(dom_element: Element, sub_region_element: Element | undefined = undefined)
   {
     this.dom_element = dom_element;
     this.sub_region_element = sub_region_element === undefined ? dom_element : sub_region_element;

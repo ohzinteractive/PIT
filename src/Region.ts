@@ -4,11 +4,11 @@ import { Vector2 } from './Vector2';
 class Region
 {
   bounds: Rect;
-  dom_element: HTMLElement;
+  dom_element: Element;
   observer: IntersectionObserver;
-  region_element: HTMLElement;
+  region_element: Element;
   
-  constructor(region_element: HTMLElement)
+  constructor(region_element: Element)
   {
     this.region_element = region_element;
     this.bounds = {
