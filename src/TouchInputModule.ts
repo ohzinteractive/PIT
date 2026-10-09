@@ -81,7 +81,7 @@ class TouchInputModule
 
     for (let i = 0; i < this.pointers.length; i++)
     {
-      position.add(this.pointers[i].position_delta());
+      position.add(this.pointers[i].position_delta);
     }
 
     position.divideScalar(Math.max(1, this.pointers.length));

@@ -67,12 +67,12 @@ class InputController
 
   unbind_events()
   {
-    this.dom_element.removeEventListener('wheel', this.__binded_on_wheel, { passive: true });
+    this.dom_element.removeEventListener('wheel', this.__binded_on_wheel);
 
-    this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart, { passive: true });
-    this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove, { passive: true });
-    this.dom_element.removeEventListener('touchcancel', this.__binded_on_touchcancel, { passive: true });
-    this.dom_element.removeEventListener('touchend', this.__binded_on_touchend, { passive: true });
+    this.dom_element.removeEventListener('touchstart', this.__binded_on_touchstart);
+    this.dom_element.removeEventListener('touchmove', this.__binded_on_touchmove);
+    this.dom_element.removeEventListener('touchcancel', this.__binded_on_touchcancel);
+    this.dom_element.removeEventListener('touchend', this.__binded_on_touchend);
 
     this.dom_element.removeEventListener('mousedown', this.__binded_on_mousedown, false);
     this.dom_element.removeEventListener('mousemove', this.__binded_on_mousemove, false);
